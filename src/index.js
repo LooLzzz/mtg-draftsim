@@ -1,16 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
-import Dashboard from './Dashboard/Dashboard'
+import { Main, Header, Footer } from './Components/'
+// import { Dashboard } from './Components/'
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
-  <React.StrictMode>
-    {/* <Dashboard /> */}
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+  (
+    <React.StrictMode>
+      {/* <Dashboard />*/}
+
+      <Header className="header" />
+      <Main className="main" />
+      <Footer className="footer" />
+    </React.StrictMode>
+  ), document.getElementById('root')
 );
 
 // If you want your app to work offline and load faster, you can change
