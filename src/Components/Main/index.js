@@ -8,6 +8,7 @@ class Main extends Component
     {
         super(props);
         this.state = {
+            className: props.className,
             ...props
         };
     }

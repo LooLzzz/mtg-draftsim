@@ -1,20 +1,23 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import { Main, Header, Footer } from './Components/'
+import './App.css'
+import { Main, Layout } from './Components/'
 // import { Dashboard } from './Components/'
 import * as serviceWorker from './serviceWorker';
+import { CssBaseline } from '@material-ui/core';
+
 
 ReactDOM.render(
-  (
-    <React.StrictMode>
-      {/* <Dashboard />*/}
+    (
+        <React.StrictMode>
+            <CssBaseline />
 
-      <Header className="header" />
-      <Main className="main" />
-      <Footer className="footer" />
-    </React.StrictMode>
-  ), document.getElementById('root')
+            <Layout>
+                <Main />
+            </Layout>
+        </React.StrictMode>
+    ), document.getElementById('root')
 );
 
 // If you want your app to work offline and load faster, you can change

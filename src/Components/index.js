@@ -1,11 +1,9 @@
 // import Dashboard from './Dashboard/Dashboard'
 import Main from './Main'
-import Header from './Header'
-import Footer  from './Footer'
+import Layout from './Layout'
 
 export {
     // Dashboard,
     Main,
-    Header,
-    Footer,
+    Layout,
 }

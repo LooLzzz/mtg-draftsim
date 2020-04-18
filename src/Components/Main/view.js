@@ -1,13 +1,14 @@
 import React from 'react';
+import './style.css'
 
 //this is the view logic
 //using passed {...props}
 function View(props) {
     return (
-        <main>
+        <main className={props.className}>
             <div>
                 <p>
-                    { props.value }
+                    hello im class { props.className }
                 </p>
             </div>
         </main>
