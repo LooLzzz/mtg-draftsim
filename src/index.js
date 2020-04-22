@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import './App.css'
-import { Main, Layout } from './Components/'
+import { Main, Layout } from './Components'
 // import { Dashboard } from './Components/'
 import * as serviceWorker from './serviceWorker';
 import { CssBaseline } from '@material-ui/core';
@@ -10,13 +10,13 @@ import { CssBaseline } from '@material-ui/core';
 
 ReactDOM.render(
     (
-        <React.StrictMode>
+        <div>
             <CssBaseline />
 
-            <Layout>
+            <Layout title="mtg-draftsim">
                 <Main />
             </Layout>
-        </React.StrictMode>
+        </div>
     ), document.getElementById('root')
 );
 

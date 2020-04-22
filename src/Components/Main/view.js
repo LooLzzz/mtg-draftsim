@@ -5,13 +5,11 @@ import './style.css'
 //using passed {...props}
 function View(props) {
     return (
-        <main className={props.className}>
-            <div>
-                <p>
-                    hello im class { props.className }
-                </p>
-            </div>
-        </main>
+        <div>
+            <p>
+                hello im class { props.className }
+            </p>
+        </div>
     )
 }
 
