@@ -103,7 +103,7 @@ export default class MtgObject
     {
         //create {this.allCards.byRarity} for easier booster logic
         this.allCards.bulk.forEach(card => {
-            if (card.type_line.toLowerCase().includes('basic land')) //basic land
+            if (card.type_line.toLowerCase().includes('land') && card.rarity === 'common') //basic land
                 this.allCards.sorted.basic_land.push(card);
             else
                 this.allCards.sorted[card.rarity].push(card);
@@ -164,7 +164,7 @@ export default class MtgObject
 
             cards.forEach(card =>
             {
-                if (card.type_line.toLowerCase().includes('basic land')) //basic land
+                if (card.type_line.toLowerCase().includes('land') && card.rarity === 'common') //common lands
                     obj.land.push(card);
                 else if (card.colors.length === 0) //colorless
                     obj.colorless.push(card);
@@ -173,13 +173,23 @@ export default class MtgObject
                 else //mono colored
                     obj[card.colors[0]].push(card);
             });
+            obj.land.sort( (a,b) => {
+                let aSize = 0;
+                let bSize = 0;
+                
+                a.color_identity.forEach(value => aSize+=value.charCodeAt(0));
+                b.color_identity.forEach(value => bSize+=value.charCodeAt(0));
+
+                return aSize - bSize;
+            });
             break;
         }
         
         //sort by cmc
         Object.entries(obj).forEach(
-            ([key, value]) => value.sort(
-                (a,b) => (a.cmc - b.cmc)))
+            ([key, value]) =>
+                value.sort( (a,b) => (
+                    a.cmc - b.cmc)))
 
         //object to array
         let res = [];
