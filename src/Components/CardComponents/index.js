@@ -1,7 +1,9 @@
-import CardBox from './CardBox.js'
-import CardCol from './CardCol.js'
+import CardBox from './CardBox'
+import CardCol from './CardCol'
+import MtgObject from './MtgObject'
 
 export {
     CardBox,
     CardCol,
+    MtgObject,
 }

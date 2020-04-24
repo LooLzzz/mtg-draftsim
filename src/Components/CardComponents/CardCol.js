@@ -8,52 +8,37 @@ const cardHeight = 370;
 
 export default class CardCol extends Component
 {
-    constructor(props)
-    {
-        super(props);
-        this.state = {
-            ...props,
-        }
-    }
-
-    componentDidUpdate(newProps)
-    {
-        if (this.state !== newProps.cards)
-            this.setState({cards: newProps.cards});
-    }
-
-    handleClick(e, i)
-    {
-        // console.log(this.state.cards[i]);
-    }
+    // constructor(props)
+    // {
+    //     super(props);
+    //     this.state = {
+    //         ...props,
+    //     }
+    // }
 
     render()
     {
         return (
             <ul
-                className='col'
+                className = 'col'
                 style = {{
                     marginBlockStart: cardHeight * fact * 0.89,
+                    display: this.props.cards.length===0 ? 'none' : 'flex',
                 }}
             >
                 {
-
-                    this.state.cards.map(( (card, i) => (
+                    this.props.cards?.map(( (card, i) => (
                         <li
-                            onClick = { e => this.handleClick(e, i) }
+                            onClick = { e => this.props.handleClick(e, i, this.props.colId) }
                             key = {i}
                             className = 'item'
                             style = {{
                                 backgroundImage: `url(${card.image_uris.normal})`,
-                                // backgroundSize: 'contain',
-                                // backgroundRepeat: 'no-repeat',
                                 height: cardHeight * fact,
                                 width: cardWidth * fact,
-                                // width: '100%',
                                 marginTop: -cardHeight * fact * 0.89,
                             }}
-                        />
-                    )))
+                        />)))
                 }
 
                 {/* <CardBox cardData = {} /> */}
