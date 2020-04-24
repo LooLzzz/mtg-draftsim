@@ -43,7 +43,7 @@ export default class MtgObject
         this.pool = [];
     }
 
-    generateSet(setId, numOfBoosters, component)
+    generateSet(setId, numOfBoosters, sortBy, component)
     {
         this.setId = setId;
         getAllCardsFromSet(setId).then(fullList => {
@@ -51,7 +51,7 @@ export default class MtgObject
             this.pool = this.generatePool(numOfBoosters);
             
             component.setState({
-                cols: MtgObject.sortCardsToColumns(component.state.mtgObj.pool, 'color'),
+                cols: MtgObject.sortToColumns(component.state.mtgObj.pool, sortBy),
             });
         });
     }
@@ -143,58 +143,152 @@ export default class MtgObject
      * @param sortBy accepts 'color', 'type', 'rarity'
      * @returns [[col1], [col2], ...] where 'col' is array of JSON cards
      */
-    static sortCardsToColumns(cards, sortBy)
+    static sortToColumns(cards, sortBy)
     {
-        let obj = {};
+        let res = {};
 
         switch (sortBy)
         {
             default: //default is sort by color
             case 'color':
-                obj = {
-                R: [],
-                G: [],
-                B: [],
-                U: [],
-                W: [],
-                multiColored: [],
-                colorless: [],
-                land: [],
-            };
+                res = MtgObject.sortToColumnsByColor(cards);
+                break;
 
-            cards.forEach(card =>
-            {
-                if (card.type_line.toLowerCase().includes('land') && card.rarity === 'common') //common lands
-                    obj.land.push(card);
-                else if (card.colors.length === 0) //colorless
-                    obj.colorless.push(card);
-                else if (card.colors.length > 1) //multi colored
-                    obj.multiColored.push(card)
-                else //mono colored
-                    obj[card.colors[0]].push(card);
-            });
-            obj.land.sort( (a,b) => {
-                let aSize = 0;
-                let bSize = 0;
-                
-                a.color_identity.forEach(value => aSize+=value.charCodeAt(0));
-                b.color_identity.forEach(value => bSize+=value.charCodeAt(0));
-
-                return aSize - bSize;
-            });
-            break;
+            case 'rarity':
+                res = MtgObject.sortToColumnsByRarity(cards);
+                break;
         }
-        
-        //sort by cmc
-        Object.entries(obj).forEach(
-            ([key, value]) =>
-                value.sort( (a,b) => (
-                    a.cmc - b.cmc)))
+        //res is an object right now        
 
-        //object to array
-        let res = [];
-        Object.entries(obj).forEach(
-            ([key, value]) => res.push(value))
+        //convert 'res' from object to array
+        let obj = res;
+        res = [];
+        Object.entries(obj).forEach( ([key, value]) =>
+            res.push(value)
+        )
+
+        return res;
+    }
+
+    /**
+     * @returns returns an object containing arrays of different kinds
+     */
+    static sortToColumnsByRarity(cards)
+    {
+        let res = {
+            mythic: [],
+            rare: [],
+            uncommon: [],
+            common: [],
+            basic_land: [],
+        };
+
+        cards.forEach(card =>
+        {
+            if (card.type_line.toLowerCase().includes('land') && card.rarity === 'common') //common lands
+                res.basic_land.push(card);
+            else
+                res[card.rarity].push(card);
+        });
+        
+        res.basic_land.sort( (a, b) => {
+            let aSize = 0;
+            let bSize = 0;
+            
+            a.color_identity.forEach(value => (
+                aSize += value.charCodeAt(0)
+            ));
+            b.color_identity.forEach(value => (
+                bSize += value.charCodeAt(0)
+            ));
+
+            return aSize - bSize;
+        });
+
+        //col sorting
+        //main sort: color
+        //sub sort: cmc
+        Object.entries(res).forEach( ([key, value]) => {
+            if (key === 'basic_land')
+                value.sort( (a, b) => {
+                    let aSize = 0;
+                    let bSize = 0;
+                    
+                    a.color_identity.forEach(value => (
+                        aSize += value.charCodeAt(0)
+                    ));
+                    b.color_identity.forEach(value => (
+                        bSize += value.charCodeAt(0)
+                    ));
+
+                    return aSize - bSize;
+                })
+            else //not basic land
+                value.sort( (a, b) => {
+                    let aSize = 0;
+                    let bSize = 0;
+                    
+                    a.colors.forEach(value => (
+                        aSize += value.charCodeAt(0)
+                    ));
+                    b.colors.forEach(value => (
+                        bSize += value.charCodeAt(0)
+                    ));
+
+                    return aSize - bSize;
+                })
+        })
+
+        return res;
+    }
+
+    /**
+     * @returns returns an object containing arrays of different kinds
+     */
+    static sortToColumnsByColor(cards)
+    {
+        let res = {
+            R: [],
+            G: [],
+            B: [],
+            U: [],
+            W: [],
+            multiColored: [],
+            colorless: [],
+            basic_land: [],
+        };
+
+        cards.forEach(card =>
+        {
+            if (card.type_line.toLowerCase().includes('land') && card.rarity === 'common') //common lands
+                res.basic_land.push(card);
+            else if (card.colors.length === 0) //colorless
+                res.colorless.push(card);
+            else if (card.colors.length > 1) //multi colored
+                res.multiColored.push(card)
+            else //if (card.color.length === 1) //mono colored
+                res[card.colors[0]].push(card);
+        });
+        
+        res.basic_land.sort( (a, b) => {
+            let aSize = 0;
+            let bSize = 0;
+            
+            a.color_identity.forEach(value => (
+                aSize += value.charCodeAt(0)
+            ));
+            b.color_identity.forEach(value => (
+                bSize += value.charCodeAt(0)
+            ));
+
+            return aSize - bSize;
+        });
+
+        //sort by cmc
+        Object.entries(res).forEach( ([key, value]) =>
+            value.sort( (a, b) => (
+                a.cmc - b.cmc
+            )))
 
         return res;
     }
@@ -203,9 +297,9 @@ export default class MtgObject
      * sorts col by color and then by cmc
      * @param col column to sort
      */
-    static sortCol(col)
+    static sortDeck(col)
     {
-        let temp = MtgObject.sortCardsToColumns(col, 'color');
+        let temp = MtgObject.sortToColumns(col, 'color');
 
         col = [];
         temp.forEach(item => {
