@@ -9,8 +9,7 @@ const cardWidth = 265;
 const cardHeight = 370;
 
 /**
- * inputs:
- * { setId }
+ * @param setId
  */
 class Main extends Component
 {
@@ -22,20 +21,14 @@ class Main extends Component
             className: props.className,
             mtgObj: new MtgObject(),
             cols: [],
+            sortBy: 'color', //TODO add option to change 'sortBy'
         };
     }
     
     componentDidMount()
     {
-        // getAllCardsFromSet(this.state.setId).then(fullList => {
-        //     this.setState({
-        //         cards: sortCardsBy(fullList.splice(0, 85), 'color'), //TODO change this
-        //         // cards: sortCardsBy(fullList, 'color'),
-        //     });
-        // });
-
-        this.state.mtgObj.generateSet('iko', 6, this);  //TODO add option to choose 'setId'
-                                                        //TODO add option to choose 'numOfBoosters'
+        this.state.mtgObj.generateSet('iko', 6, this.state.sortBy, this);  //TODO add option to choose 'setId'
+                                                                           //TODO add option to choose 'numOfBoosters'
     }
 
     handlePoolClick(e, i, colId)
@@ -48,7 +41,9 @@ class Main extends Component
             mtgObj.removeCardFromPool(clickedCard); //remove the card from the pool itself
             mtgObj.deck.push(clickedCard); //add the card to the deck
 
-            mtgObj.deck = MtgObject.sortCol(mtgObj.deck); //sort the deck by 'color->cmc'
+            mtgObj.deck = MtgObject.sortDeck(mtgObj.deck); //sort the deck by 'color->cmc'
+
+            console.log('clicked card:', clickedCard); //DEBUG
 
             return {
                 mtgObj: mtgObj,
@@ -65,7 +60,9 @@ class Main extends Component
             let clickedCard = mtgObj.deck.splice(i, 1)[0]; //remove the card from the deck
             mtgObj.pool.push(clickedCard); //add the card to the pool
 
-            let cols = MtgObject.sortCardsToColumns(mtgObj.pool, 'color');
+            let cols = MtgObject.sortToColumns(mtgObj.pool, this.state.sortBy);
+
+            console.log('clicked card:', clickedCard); //DEBUG
 
             return {
                 mtgObj: mtgObj,
