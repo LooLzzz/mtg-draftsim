@@ -71,14 +71,18 @@ export default class MtgObject
         for (let i = 0; i < count.common; i++)
         {
             let randIndex = Math.floor(Math.random() * (this.allCards.sorted.common.length-1));
-            booster.push(this.allCards.sorted.common[randIndex]);
+            let card = this.allCards.sorted.common[randIndex];
+            card.foil = false;
+            booster.push(card);
         }
 
         //uncommon
         for (let i = 0; i < count.uncommon; i++)
         {
             let randIndex = Math.floor(Math.random() * (this.allCards.sorted.uncommon.length-1));
-            booster.push(this.allCards.sorted.uncommon[randIndex]);
+            let card = this.allCards.sorted.uncommon[randIndex];
+            card.foil = false;
+            booster.push(card);
         }
 
         //rare or mythic
@@ -86,14 +90,29 @@ export default class MtgObject
         for (let i = 0; i < count.rare_mythic; i++)
         {
             let randIndex = Math.floor(Math.random() * (rare_mythic.length-1));
-            booster.push(rare_mythic[randIndex]);
+            let card = rare_mythic[randIndex];
+            card.foil = false;
+            booster.push(card);
         }
 
         //basic land
         for (let i = 0; i < count.basic_land; i++)
         {
-            let randIndex = Math.floor(Math.random() * (this.allCards.sorted.basic_land.length-1));
-            booster.push(this.allCards.sorted.basic_land[randIndex]);
+            //0.25 chance for foil
+            if (Math.random() <= 0.25)
+            {
+                let randIndex = Math.floor(Math.random() * (this.allCards.bulk.length-1));
+                let card = this.allCards.bulk[randIndex];
+                card.foil = true;
+                booster.push(card);
+            }
+            else //not foil
+            {
+                let randIndex = Math.floor(Math.random() * (this.allCards.sorted.basic_land.length-1));
+                let card = this.allCards.sorted.basic_land[randIndex];
+                card.foil = false;
+                booster.push(card);
+            }
         }
 
         return booster;
