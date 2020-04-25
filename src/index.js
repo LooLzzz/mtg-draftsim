@@ -14,10 +14,11 @@ ReactDOM.render(
             <CssBaseline />
 
             <Layout title="mtg-draftsim">
-                <Main />
+                <Main setId='iko' />
             </Layout>
         </div>
-    ), document.getElementById('root')
+    )
+    ,document.getElementById('root')
 );
 
 // If you want your app to work offline and load faster, you can change
