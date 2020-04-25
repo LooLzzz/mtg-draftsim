@@ -58,6 +58,7 @@ export default class MtgObject
 
     generateBooster()
     {
+        let booster = [];
         let count = {
             common: 10,
             uncommon: 3,
@@ -65,7 +66,19 @@ export default class MtgObject
             basic_land: 1,
         }
 
-        let booster = [];
+        //0.25 chance for foil
+        if (Math.random() <= 0.25)
+        {
+            let randIndex = Math.floor(Math.random() * (this.allCards.bulk.length-1));
+            let card = this.allCards.bulk[randIndex];
+            card.foil = true;
+            booster.push(card);
+
+            if (card.type_line.toLowerCase().includes('land') && card.rarity === 'common') //common lands
+                count.basic_land--;
+            else
+                count.common--;
+        }
         
         //common
         for (let i = 0; i < count.common; i++)
@@ -98,21 +111,10 @@ export default class MtgObject
         //basic land
         for (let i = 0; i < count.basic_land; i++)
         {
-            //0.25 chance for foil
-            if (Math.random() <= 0.25)
-            {
-                let randIndex = Math.floor(Math.random() * (this.allCards.bulk.length-1));
-                let card = this.allCards.bulk[randIndex];
-                card.foil = true;
-                booster.push(card);
-            }
-            else //not foil
-            {
-                let randIndex = Math.floor(Math.random() * (this.allCards.sorted.basic_land.length-1));
-                let card = this.allCards.sorted.basic_land[randIndex];
-                card.foil = false;
-                booster.push(card);
-            }
+            let randIndex = Math.floor(Math.random() * (this.allCards.sorted.basic_land.length-1));
+            let card = this.allCards.sorted.basic_land[randIndex];
+            card.foil = false;
+            booster.push(card);
         }
 
         return booster;
