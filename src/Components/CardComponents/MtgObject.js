@@ -77,7 +77,7 @@ export default class MtgObject
             if (card.type_line.toLowerCase().includes('land') && card.rarity === 'common') //common lands
                 count.basic_land--;
             else
-                count.common--;
+               count.common--;
         }
         
         //common
@@ -232,31 +232,31 @@ export default class MtgObject
         Object.entries(res).forEach( ([key, value]) => {
             if (key === 'basic_land')
                 value.sort( (a, b) => {
-                    let aSize = 0;
-                    let bSize = 0;
+                    let aColorVal = 0;
+                    let bColorVal = 0;
                     
                     a.color_identity.forEach(value => (
-                        aSize += value.charCodeAt(0)
+                        aColorVal += value.charCodeAt(0)
                     ));
                     b.color_identity.forEach(value => (
-                        bSize += value.charCodeAt(0)
+                        bColorVal += value.charCodeAt(0)
                     ));
 
-                    return aSize - bSize;
+                    return aColorVal - bColorVal;
                 })
             else //not basic land
                 value.sort( (a, b) => {
-                    let aSize = 0;
-                    let bSize = 0;
+                    let aColorVal = 0;
+                    let bColorVal = 0;
                     
                     a.colors.forEach(value => (
-                        aSize += value.charCodeAt(0)
+                        aColorVal += value.charCodeAt(0)
                     ));
                     b.colors.forEach(value => (
-                        bSize += value.charCodeAt(0)
+                        bColorVal += value.charCodeAt(0)
                     ));
 
-                    return aSize - bSize;
+                    return (aColorVal - bColorVal) === 0 ? (a.cmc - b.cmc) : (aColorVal - bColorVal);
                 })
         })
 

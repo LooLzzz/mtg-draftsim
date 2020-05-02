@@ -7,14 +7,6 @@ const cardHeight = 370;
 
 export default class CardCol extends Component
 {
-    // constructor(props)
-    // {
-    //     super(props);
-    //     this.state = {
-    //         ...props,
-    //     }
-    // }
-
     render()
     {
         return (

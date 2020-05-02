@@ -7,14 +7,14 @@ import { Main, Layout } from './Components'
 import * as serviceWorker from './serviceWorker';
 import { CssBaseline } from '@material-ui/core';
 
-
 ReactDOM.render(
     (
         <div>
             <CssBaseline />
 
             <Layout title="mtg-draftsim">
-                <Main setId='iko' />
+                {/* <Main setId='iko' /> */}
+                <Main />
             </Layout>
         </div>
     )
