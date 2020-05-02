@@ -1,6 +1,5 @@
 
 import React, { Component } from 'react'
-// import { Card } from '@material-ui/core'
 import { CardCol, MtgObject } from 'Components'
 import View from './view'
 
@@ -20,7 +19,6 @@ class Main extends Component
             ...props,
             mtgObj: new MtgObject(),
             cols: [],
-            sortBy: 'color', //TODO add option to change 'sortBy'
             hoverCard: null,
             hoverCardMarginLeft: 0,
             windowWidth: 0,
@@ -30,11 +28,25 @@ class Main extends Component
     
     componentDidMount()
     {
+        let params = new URLSearchParams(window.location.search);
+        
+        this.setState({
+            setId: params.get('setid') ? params.get('setid') : 'iko',
+            sortBy: params.get('sortby') ? params.get('sortby') : 'color',
+        });
+
         this.updateWindowDimensions();
         window.addEventListener('resize', this.updateWindowDimensions.bind(this));
-        
-        this.state.mtgObj.generateSet(this.state.setId, 6, this.state.sortBy, this);  //TODO add option to choose 'setId'
-                                                                                      //TODO add option to choose 'numOfBoosters'
+    }
+
+    componentDidUpdate(prevProps, prevState)
+    {
+        //TODO add option to choose 'setId'
+        //TODO add option to choose 'sortBy'
+        //TODO add option to choose 'numOfBoosters'
+
+        if (prevState.setId !== this.state.setId)
+            this.state.mtgObj.generateSet(this.state.setId, 6, this.state.sortBy, this);
     }
     
     updateWindowDimensions()
