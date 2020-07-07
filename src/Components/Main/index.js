@@ -30,6 +30,8 @@ class Main extends Component
     {
         let params = new URLSearchParams(window.location.search);
         
+        //TODO add routes for set name
+
         this.setState({
             setId: params.get('setid') ? params.get('setid') : 'iko',
             sortBy: params.get('sortby') ? params.get('sortby') : 'color',
