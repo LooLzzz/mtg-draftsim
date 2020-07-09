@@ -152,7 +152,6 @@ class Main extends Component
     render()
     {  
         return(
-            // <View {...this.state} />
             <div
                 className = "container-main"
                 onMouseMove = {e => this.handleMainMouseMove(e)}
