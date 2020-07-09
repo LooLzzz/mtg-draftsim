@@ -28,9 +28,9 @@ class Main extends Component
     
     componentDidMount()
     {
+        // let path = window.location.pathname.substring(1)
         let params = new URLSearchParams(window.location.search);
-        
-        //TODO add routes for set name
+        // console.log(path)
 
         this.setState({
             setId: params.get('setid') ? params.get('setid') : 'iko',
