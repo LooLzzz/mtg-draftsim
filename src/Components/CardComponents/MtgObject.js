@@ -29,6 +29,7 @@ export default class MtgObject
     constructor()
     {
         this.setId = '';
+        this.sortBy = 'color';
         this.allCards = {
             bulk: [],
             sorted: { //for easier booster logic
@@ -178,15 +179,22 @@ export default class MtgObject
             case 'rarity':
                 res = MtgObject.sortToColumnsByRarity(cards);
                 break;
+            
+            case 'cmc':
+                res = MtgObject.sortToColumnsByCmc(cards);
+                break;
         }
         //res is an object right now        
 
         //convert 'res' from object to array
         let obj = res;
         res = [];
-        Object.entries(obj).forEach( ([key, value]) =>
-            res.push(value)
-        )
+        Object.entries(obj).forEach( ([key, value]) => {
+            if (key === 'lands' && sortBy === 'cmc')
+                res.splice(0, 0, value);
+            else
+                res.push(value)
+        })
 
         return res;
     }
@@ -310,6 +318,52 @@ export default class MtgObject
             value.sort( (a, b) => (
                 a.cmc - b.cmc
             )))
+
+        return res;
+    }
+
+    static sortToColumnsByCmc(cards)
+    {
+        let res = {
+            'lands': [],
+            0: [],
+            1: [],
+            2: [],
+            3: [],
+            4: [],
+            5: [],
+            6: [],
+            '7+': []
+        };
+
+        cards.forEach(card =>
+        {
+            if (card.type_line.toLowerCase().includes('land'))
+                res['lands'].push(card);
+            else if (card.cmc < 7)
+                res[card.cmc].push(card);
+            else
+                res['7+'].push(card);
+        });
+        
+        //col sorting
+        //main sort: color
+        //sub sort: cmc
+        Object.entries(res).forEach( ([key, value]) => {
+            value.sort( (a, b) => {
+                let aColorVal = 0;
+                let bColorVal = 0;
+                
+                a.colors.forEach(value => (
+                    aColorVal += value.charCodeAt(0)
+                ));
+                b.colors.forEach(value => (
+                    bColorVal += value.charCodeAt(0)
+                ));
+
+                return aColorVal - bColorVal;
+            })
+        })
 
         return res;
     }
