@@ -1,42 +1,43 @@
 import React, { useState } from 'react';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import { Drawer, CssBaseline, AppBar, Toolbar, List, Typography, Divider, IconButton, ListItemIcon, ListItemText } from '@material-ui/core';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ListItem from '@material-ui/core/ListItem';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
-import MenuIcon from '@material-ui/icons/Menu';
-
+import { AppBar, Toolbar, Typography } from '@material-ui/core';
 import getStyles from './styles'
+// import { List, Drawer, Divider, IconButton, ListItemIcon, ListItemText } from '@material-ui/core';
+// import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+// import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+// import ListItem from '@material-ui/core/ListItem';
+// import InboxIcon from '@material-ui/icons/MoveToInbox';
+// import MailIcon from '@material-ui/icons/Mail';
+// import MenuIcon from '@material-ui/icons/Menu';
+// import { Link } from 'react-router-dom';
+
 const useStyles = makeStyles((theme) => getStyles(theme));
 
 export default function Layout(props)
 {
     const classes = useStyles();
     const theme = useTheme();
-    const [open, setOpen] = useState(false);
+    // const [open, setOpen] = useState(false);
 
-    const handleDrawerToggle = () =>
-    {
-        setOpen(!open);
-    };
+    // const handleDrawerToggle = () =>
+    // {
+    //     setOpen(!open);
+    // };
 
     return (
         <div className={classes.root}>
-            <CssBaseline />
             <AppBar
-                position="fixed"
+                position="absolute"
                 className={clsx(
                     {
                         [classes.appBar]: true, //always
-                        [classes.appBarShift]: open, //only when (open===true)
+                        // [classes.appBarShift]: open, //only when (open===true)
                     }
                 )}
             >
                 <Toolbar>
-                    <IconButton
+                    {/* <IconButton
                         color="inherit"
                         aria-label="open drawer"
                         onClick={handleDrawerToggle}
@@ -49,13 +50,13 @@ export default function Layout(props)
                         )}
                     >
                         <MenuIcon />
-                    </IconButton>
+                    </IconButton> */}
                     <Typography variant="h6" noWrap>
-                        {props.title}
+                        {props.text}
                     </Typography>
                 </Toolbar>
             </AppBar>
-            <Drawer
+            {/* <Drawer
                 className={classes.drawer}
                 variant="persistent"
                 anchor="left"
@@ -76,17 +77,26 @@ export default function Layout(props)
                         </ListItem>
                     ))}
                 </List>
-            </Drawer>
+            </Drawer> */}
             <main
                 className={clsx(
                     {
+                        // [classes.contentShift]: open,
                         [classes.content]: true,
-                        [classes.contentShift]: open,
                     })}
             >
-                <div className={classes.drawerHeader} />
-                {props.children}
+                <div className={classes.contentSpacer} /> {/*top spacer*/}
+                { props.children }
+                <div className={classes.contentSpacer} /> {/*bottom spacer*/}
             </main>
+            <AppBar
+                position="fixed"
+                className={clsx({[classes.bottomAppBar]: true})}
+            >
+                <Toolbar variant="dense">
+                    
+                </Toolbar>
+            </AppBar>
         </div>
     );
 }
