@@ -1,25 +1,26 @@
-import React from 'react'
+import React, { Component } from 'react'
 import clsx from 'clsx';
-import { makeStyles } from '@material-ui/core/styles';
-import { AppBar, Button, Card, CardActionArea, CardActions, CardContent, CardHeader, CardMedia, Grid, Paper, Toolbar, Typography } from '@material-ui/core';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
+import { Card, CardActionArea, CardContent, CardHeader, CardMedia, Grid, Typography } from '@material-ui/core';
 import { useHistory } from "react-router-dom";
 import getStyles from './styles'
 
-const useStyles = makeStyles((theme) => getStyles(theme));
+const useStylesHOC = makeStyles((theme) => getStyles(theme));
+const useStylesLOC = (theme) => getStyles(theme)
 
 function MediaCard(props)
 {    
-    const styles = useStyles();
+    const classes = useStylesHOC();
     let hist = useHistory();
 
     return(
-        <Card className = {styles.card}>
+        <Card className = {classes.card}>
             <CardActionArea 
                 onClick={event => hist.push(props.link)}
             >
                 {/* <CardHeader title = {props.title} /> */}
                 <CardMedia
-                    className = {styles.media}
+                    className = {classes.media}
                     image = {require(`../../Resources/images/${props.id}.jpg`)}
                 />
                 <CardContent>
@@ -32,10 +33,13 @@ function MediaCard(props)
     )
 }
 
-function Main(props)
+class Main extends Component
 {
-    const styles = useStyles();
-    let items = [
+    constructor(props)
+    {        
+        super(props)
+        props.setTitle('Main')
+        this.items = [
         {
             title: 'to Draftsim',
             link: '/draftsim',
@@ -43,18 +47,21 @@ function Main(props)
         {
             title: 'to Collection',
             link: '/collection',
-        }
-    ]
-    
-    return(
+        }];
+    }
+
+    render()
+    {
+        const { classes } = this.props;
+        return (
         // <div style={{height: '80vh', verticalAlign: 'middle'}}>
-            <Grid container spacing={2} className={styles.root}>
+            <Grid container spacing={2} className={classes.root}>
                 <Grid item xs={12}>
-                    <Grid container className={styles.item} justify="space-evenly" spacing={2}>
-                        {items.map((item, i) => (
+                    <Grid container className={classes.item} justify="space-evenly" spacing={2}>
+                        {this.items.map((item, i) => (
                             <Grid item key={i} xs={6}>
                                 <MediaCard
-                                    className = { styles.item }
+                                    className = { classes.item }
                                     id = { i }
                                     { ...item }
                                 />
@@ -62,23 +69,10 @@ function Main(props)
                         ))}
                     </Grid>
                 </Grid>
-                
-                {/*
-                //DEBUG
-                <Grid container>
-                    <Grid item>
-                        <Button
-                            onClick = {() => props.test('from inside')}
-                        >
-                            asd
-                        </Button>
-                    </Grid>
-                </Grid>
-                //DEBUG
-                */}
-                
             </Grid>
         // </div>
-    )
+        )
+    }
 }
-export default Main;
+
+export default withStyles(useStylesLOC)(Main)

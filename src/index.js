@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import './index.css';
@@ -9,32 +9,56 @@ import 'fontsource-roboto';
 // import { Dashboard } from './Components/'
 // import * as serviceWorker from './serviceWorker';
 
-let txt = 'mtg-draftsim'
+
+class CustomRouter extends Component
+{
+    // const [title, setTitle ] = useState('mtg-draftsim')
+    constructor(props)
+    {
+        super()
+        this.state = {
+            title: 'Main',
+            setTitle: (newTitle) => {
+                this.setState({title: newTitle})
+                return newTitle
+            }
+        }
+    }
+    
+    render() {
+        return (
+        <Router>
+            <Switch>
+                <Layout text={this.state.title}>
+                    <Route exact
+                        path = "/"
+                        render = {
+                            () => <Main res='' setTitle={this.state.setTitle.bind(this)} titleRef={this.state.titleRef} />
+                        }
+                    />
+                    <Route
+                        path = "/draftsim"
+                        render = {
+                            () => <DraftsimMain setTitle={this.state.setTitle.bind(this)} titleRef={this.state.titleRef} />
+                        }
+                    />
+                    {/* <Route
+                        path = "/collection"
+                        render = {
+                            () => <CardCollection setTitle={setTitle} />
+                        }
+                    /> */}
+                </Layout>
+            </Switch>
+        </Router>
+    )}
+}
 
 ReactDOM.render(
     (
         <div>
             <CssBaseline />
-
-            <Router>
-                <Switch>
-                    <Layout text={txt}>
-                        <Route exact
-                            path = "/"
-                            render = {
-                                () => <Main />
-                            }
-                        />
-                        <Route
-                            path = "/draftsim"
-                            render = {
-                                () => <DraftsimMain />
-                            }
-                        />
-                        {/* <Route path="/collection" component={MyCollection} parent={this} /> */}
-                    </Layout>
-                </Switch>
-            </Router>
+            <CustomRouter />
         </div>
     )
     ,document.getElementById('root')
