@@ -1,7 +1,7 @@
 import React from 'react'
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
-import { AppBar, Card, CardActionArea, CardActions, CardContent, CardHeader, CardMedia, Grid, Paper, Toolbar, Typography } from '@material-ui/core';
+import { AppBar, Button, Card, CardActionArea, CardActions, CardContent, CardHeader, CardMedia, Grid, Paper, Toolbar, Typography } from '@material-ui/core';
 import { useHistory } from "react-router-dom";
 import getStyles from './styles'
 
@@ -34,8 +34,6 @@ function MediaCard(props)
 
 function Main(props)
 {
-    console.log(props.test)
-
     const styles = useStyles();
     let items = [
         {
@@ -64,6 +62,21 @@ function Main(props)
                         ))}
                     </Grid>
                 </Grid>
+                
+                {/*
+                //DEBUG
+                <Grid container>
+                    <Grid item>
+                        <Button
+                            onClick = {() => props.test('from inside')}
+                        >
+                            asd
+                        </Button>
+                    </Grid>
+                </Grid>
+                //DEBUG
+                */}
+                
             </Grid>
         // </div>
     )

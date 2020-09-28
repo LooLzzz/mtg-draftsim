@@ -51,7 +51,7 @@ export default function Layout(props)
                     >
                         <MenuIcon />
                     </IconButton> */}
-                    <Typography variant="h6" noWrap>
+                    <Typography noWrap variant="h6">
                         {props.text}
                     </Typography>
                 </Toolbar>
