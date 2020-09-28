@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import './index.css';
@@ -9,6 +9,8 @@ import 'fontsource-roboto';
 // import { Dashboard } from './Components/'
 // import * as serviceWorker from './serviceWorker';
 
+let txt = 'mtg-draftsim'
+
 ReactDOM.render(
     (
         <div>
@@ -16,17 +18,17 @@ ReactDOM.render(
 
             <Router>
                 <Switch>
-                    <Layout text='mtg-draftsim'>
+                    <Layout text={txt}>
                         <Route exact
                             path = "/"
                             render = {
-                                (props) => <Main />
+                                () => <Main />
                             }
                         />
                         <Route
                             path = "/draftsim"
                             render = {
-                                (props) => <DraftsimMain {...props} parent={this} />
+                                () => <DraftsimMain />
                             }
                         />
                         {/* <Route path="/collection" component={MyCollection} parent={this} /> */}
