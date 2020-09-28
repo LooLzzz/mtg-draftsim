@@ -24,6 +24,8 @@ class DraftsimMain extends Component
             windowWidth: 0,
             windowHeight: 0,
         };
+
+        props.setTitle('Draftsim')
     }
     
     componentDidMount()
