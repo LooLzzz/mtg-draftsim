@@ -40,7 +40,7 @@ class Layout extends Component
             this.setState({
                 currentTab: url,
             })
-            this.props.history.push('/' + url)
+            return this.props.history.push('/' + url)
         }
     }
 
@@ -89,7 +89,7 @@ class Layout extends Component
                             <Tab
                                 key = { i }
                                 label = { item.label }
-                                onClick = { (event) => this.handleClick(event, item.url) }
+                                onClick = { (event) => (this.handleClick(event, item.url)) }
                             />
                         ))}
                     </Tabs>

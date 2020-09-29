@@ -15,43 +15,48 @@ class CustomRouter extends Component
         super()
         this.state = {
             title: 'Main',
-            setTitle: (newTitle) => {
-                this.setState({title: newTitle})
-                return newTitle
-            }
         }
     }
+
+    /**
+     * set active tab in title
+     */
+    setTitle = ( (newTitle) =>
+    {
+        this.setState({title: newTitle})
+        return newTitle
+    })
     
     render() {
         return (
         <Router>
             <Switch>
                 <Layout
-                    setTitle = { this.state.setTitle.bind(this) }
+                    setTitle = { this.setTitle }
                     currentTab = { this.state.title }
                 >
                     <Route exact
                         path = "/"
                         render = {
-                            () => <Main setTitle={this.state.setTitle.bind(this)} />
+                            () => <Main setTitle={this.setTitle} />
                         }
                     />
                     <Route
                         path = "/main"
                         render = {
-                            () => <Main setTitle={this.state.setTitle.bind(this)} />
+                            () => <Main setTitle={this.setTitle} />
                         }
                     />
                     <Route
                         path = "/draftsim"
                         render = {
-                            () => <Draftsim setTitle={this.state.setTitle.bind(this)} />
+                            () => <Draftsim setTitle={this.setTitle} />
                         }
                     />
                     <Route
                         path = "/collection"
                         render = {
-                            () => <CardCollection setTitle={this.state.setTitle.bind(this)} />
+                            () => <CardCollection setTitle={this.setTitle} />
                         }
                     />
                 </Layout>
@@ -60,8 +65,7 @@ class CustomRouter extends Component
     )}
 }
 
-ReactDOM.render(
-    (
+ReactDOM.render((
         <div>
             <CssBaseline />
             <CustomRouter />
