@@ -1,14 +1,17 @@
 // import Dashboard from './Dashboard/Dashboard'
 import Main from './Main'
 import Layout from './Layout'
-import DraftsimMain from './Draftsim'
-import { CardCol, CardBox, MtgObject } from './CardComponents'
+import Draftsim from './Draftsim'
+import { CardCollection } from './CardCollection'
+import { CardCol, CardBox, MtgObject, MtgCard } from './CardComponents'
 
 export {
     Main,
     Layout,
-    DraftsimMain,
+    Draftsim,
+    CardCollection,
     CardCol,
     CardBox,
     MtgObject,
+    MtgCard,
 }

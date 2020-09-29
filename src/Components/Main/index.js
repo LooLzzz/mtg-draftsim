@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import clsx from 'clsx';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
-import { Card, CardActionArea, CardContent, CardHeader, CardMedia, Grid, Typography } from '@material-ui/core';
+import { Card, CardActionArea, CardContent, CardMedia, Grid, Typography } from '@material-ui/core';
 import { useHistory } from "react-router-dom";
 import getStyles from './styles'
 
