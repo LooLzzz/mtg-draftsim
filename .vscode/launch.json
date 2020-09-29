@@ -6,8 +6,9 @@
     "configurations": [
         {
             "type": "chrome",
+            // "preLaunchTask": "start react server",
             "request": "launch",
-            "name": "Launch Chrome against localhost",
+            "name": "Run Program",
             "url": "http://localhost:3000",
             "webRoot": "${workspaceFolder}"
         }
