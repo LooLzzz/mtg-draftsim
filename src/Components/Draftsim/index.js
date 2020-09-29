@@ -153,15 +153,14 @@ class Draftsim extends Component
 
     render()
     {  
-        return(
+        return (
             <div
                 className = "container-main"
                 onMouseMove = {e => this.handleMainMouseMove(e)}
             >
                 <span className="container-cards">
                 {
-                    Object.entries(this.state.cols).map( ([key, value]) =>
-                    (
+                    Object.entries(this.state.cols).map( ([key, value]) => (
                         <CardCol
                             key = {key}
                             colId = {key}

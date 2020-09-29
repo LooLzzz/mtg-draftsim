@@ -13,10 +13,10 @@ function MediaCard(props)
     const classes = useStylesHOC();
     let hist = useHistory();
 
-    return(
+    return (
         <Card className = {classes.card}>
             <CardActionArea 
-                onClick={event => hist.push(props.link)}
+                onClick={(event) => (hist.push(props.link))}
             >
                 {/* <CardHeader title = {props.title} /> */}
                 <CardMedia
