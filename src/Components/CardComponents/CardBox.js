@@ -12,7 +12,7 @@ const cardHeight = 370;
 export default function CardBox(props)
 {
     // const classes = useStyles();
-
+    
     const { image_uris, name } = !!props.cardData ? props.cardData : {};
     const [ sizeFactor, setSizeFactor ] = useState(props.fact, fact);
     const { mouseX, mouseY, handleMouseMove } = useMouseMove();

@@ -1,92 +1,115 @@
-import React, { useState } from 'react';
+import React, { Component } from 'react';
 import clsx from 'clsx';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
-import { Drawer, CssBaseline, AppBar, Toolbar, List, Typography, Divider, IconButton, ListItemIcon, ListItemText } from '@material-ui/core';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ListItem from '@material-ui/core/ListItem';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
-import MenuIcon from '@material-ui/icons/Menu';
-
+import { withStyles } from '@material-ui/core/styles';
+import { AppBar, Button, Tab, Tabs, Toolbar, Typography } from '@material-ui/core';
 import getStyles from './styles'
-const useStyles = makeStyles((theme) => getStyles(theme));
+import { withRouter } from 'react-router';
+// import { List, Drawer, Divider, IconButton, ListItemIcon, ListItemText } from '@material-ui/core';
+// import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+// import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+// import ListItem from '@material-ui/core/ListItem';
+// import InboxIcon from '@material-ui/icons/MoveToInbox';
+// import MailIcon from '@material-ui/icons/Mail';
+// import MenuIcon from '@material-ui/icons/Menu';
+// import { Link } from 'react-router-dom';
 
-export default function Layout(props)
+const useStyles = (theme) => getStyles(theme);
+
+function tabNameToIndex(name)
 {
-    const classes = useStyles();
-    const theme = useTheme();
-    const [open, setOpen] = useState(false);
-
-    const handleDrawerToggle = () =>
-    {
-        setOpen(!open);
-    };
-
-    return (
-        <div className={classes.root}>
-            <CssBaseline />
-            <AppBar
-                position="fixed"
-                className={clsx(
-                    {
-                        [classes.appBar]: true, //always
-                        [classes.appBarShift]: open, //only when (open===true)
-                    }
-                )}
-            >
-                <Toolbar>
-                    <IconButton
-                        color="inherit"
-                        aria-label="open drawer"
-                        onClick={handleDrawerToggle}
-                        edge="start"
-                        className={clsx(
-                            {
-                                [classes.menuButton]: true,
-                                [classes.hide]: open
-                            }
-                        )}
-                    >
-                        <MenuIcon />
-                    </IconButton>
-                    <Typography variant="h6" noWrap>
-                        {props.title}
-                    </Typography>
-                </Toolbar>
-            </AppBar>
-            <Drawer
-                className={classes.drawer}
-                variant="persistent"
-                anchor="left"
-                open={open}
-                classes={{ paper: classes.drawerPaper }}
-            >
-                <div className={classes.drawerHeader}>
-                    <IconButton onClick={handleDrawerToggle}>
-                        {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-                    </IconButton>
-                </div>
-                <Divider />
-                <List>
-                    {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-                        <ListItem button key={text}>
-                            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                            <ListItemText primary={text} />
-                        </ListItem>
-                    ))}
-                </List>
-            </Drawer>
-            <main
-                className={clsx(
-                    {
-                        [classes.content]: true,
-                        [classes.contentShift]: open,
-                    })}
-            >
-                <div className={classes.drawerHeader} />
-                {props.children}
-            </main>
-        </div>
-    );
+    switch (name) {
+        default: //defaults to Main
+            return 0;
+        
+        case 'Draftsim':
+            return 1;
+    
+        case 'Collection':
+            return 2;
+    }
 }
+
+class Layout extends Component
+{
+    constructor(props)
+    {
+        super(props);
+        this.state = {...props}
+
+        this.handleClick = (event, url) => {
+            this.setState({
+                currentTab: url,
+            })
+            this.props.history.push('/' + url)
+        }
+    }
+
+    componentDidUpdate(oldProps)
+    {
+        if (oldProps.currentTab !== this.props.currentTab)
+            this.setState({
+                ...this.props
+            })
+    }
+
+    // const theme = useTheme();
+    // const [open, setOpen] = useState(false);
+
+    // const handleDrawerToggle = () =>
+    // {
+    //     setOpen(!open);
+    // };
+
+    render()
+    {
+        const {classes} = this.props;
+        let items = [
+            {
+                label: 'Main',
+                url: '',
+            },
+            {
+                label: 'Draftsim',
+                url: 'draftsim',
+            },
+            {
+                label: 'Collection',
+                url: 'collection',
+            },
+        ]
+
+        return (
+            <div className={classes.root}>
+                <AppBar
+                    position = "absolute"
+                    className = {classes.appBar}
+                >
+                    <Tabs value={tabNameToIndex(this.state.currentTab)}>
+                        {items.map((item, i) => (
+                            <Tab
+                                key = { i }
+                                label = { item.label }
+                                onClick = { (event) => this.handleClick(event, item.url) }
+                            />
+                        ))}
+                    </Tabs>
+                </AppBar>
+                <main className={classes.content} >
+                    <div className={classes.contentSpacer} /> {/*top spacer*/}
+                    { this.props.children }
+                    <div className={classes.contentSpacer} /> {/*bottom spacer*/}
+                </main>
+                <AppBar
+                    position = "fixed"
+                    className = {classes.bottomAppBar}
+                >
+                    <Toolbar variant="dense">
+                        {/* bottom bar */}
+                    </Toolbar>
+                </AppBar>
+            </div>
+        );
+    }
+}
+
+export default withRouter(withStyles(useStyles)(Layout))
