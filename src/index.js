@@ -1,14 +1,11 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { Layout, Main, Draftsim, CardCollection } from './Components'
+import { CssBaseline } from '@material-ui/core';
+import 'fontsource-roboto';
 import './index.css';
 import './App.css'
-import { Layout, Main, DraftsimMain } from './Components'
-import { Button, CssBaseline } from '@material-ui/core';
-import 'fontsource-roboto';
-// import { Dashboard } from './Components/'
-// import * as serviceWorker from './serviceWorker';
-
 
 class CustomRouter extends Component
 {
@@ -48,15 +45,15 @@ class CustomRouter extends Component
                     <Route
                         path = "/draftsim"
                         render = {
-                            () => <DraftsimMain setTitle={this.state.setTitle.bind(this)} />
+                            () => <Draftsim setTitle={this.state.setTitle.bind(this)} />
                         }
                     />
-                    {/* <Route
+                    <Route
                         path = "/collection"
                         render = {
-                            () => <CardCollection setTitle={setTitle} />
+                            () => <CardCollection setTitle={this.state.setTitle.bind(this)} />
                         }
-                    /> */}
+                    />
                 </Layout>
             </Switch>
         </Router>

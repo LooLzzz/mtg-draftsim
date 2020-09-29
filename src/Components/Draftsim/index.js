@@ -10,7 +10,7 @@ const cardHeight = 370;
 /**
  * @param setId
  */
-class DraftsimMain extends Component
+class Draftsim extends Component
 {
     constructor(props)
     {
@@ -227,4 +227,4 @@ class DraftsimMain extends Component
     }
 }
 
-export default DraftsimMain;
+export default Draftsim

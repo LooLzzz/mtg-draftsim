@@ -36,11 +36,11 @@ class Layout extends Component
         super(props);
         this.state = {...props}
 
-        this.handleClick = (event, item) => {
+        this.handleClick = (event, url) => {
             this.setState({
-                currentTab: item,
+                currentTab: url,
             })
-            this.props.history.push('/' + item.toLowerCase())
+            this.props.history.push('/' + url)
         }
     }
 
@@ -63,6 +63,20 @@ class Layout extends Component
     render()
     {
         const {classes} = this.props;
+        let items = [
+            {
+                label: 'Main',
+                url: '',
+            },
+            {
+                label: 'Draftsim',
+                url: 'draftsim',
+            },
+            {
+                label: 'Collection',
+                url: 'collection',
+            },
+        ]
 
         return (
             <div className={classes.root}>
@@ -71,11 +85,11 @@ class Layout extends Component
                     className = {classes.appBar}
                 >
                     <Tabs value={tabNameToIndex(this.state.currentTab)}>
-                        {['Main', 'Draftsim', 'Collection'].map((item, i) => (
+                        {items.map((item, i) => (
                             <Tab
-                                key = {i}
-                                label = {item}
-                                onClick = {(event) => this.handleClick(event, item)}
+                                key = { i }
+                                label = { item.label }
+                                onClick = { (event) => this.handleClick(event, item.url) }
                             />
                         ))}
                     </Tabs>
