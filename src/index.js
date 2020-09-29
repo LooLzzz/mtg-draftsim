@@ -27,8 +27,7 @@ class CustomRouter extends Component
         return newTitle
     })
     
-    render() {
-        return (
+    render() { return (
         <Router>
             <Switch>
                 <Layout
@@ -38,25 +37,25 @@ class CustomRouter extends Component
                     <Route exact
                         path = "/"
                         render = {
-                            () => <Main setTitle={this.setTitle} />
+                            () => (<Main setTitle={this.setTitle} />)
                         }
                     />
                     <Route
                         path = "/main"
                         render = {
-                            () => <Main setTitle={this.setTitle} />
+                            () => (<Main setTitle={this.setTitle} />)
                         }
                     />
                     <Route
                         path = "/draftsim"
                         render = {
-                            () => <Draftsim setTitle={this.setTitle} />
+                            () => (<Draftsim setTitle={this.setTitle} />)
                         }
                     />
                     <Route
                         path = "/collection"
                         render = {
-                            () => <CardCollection setTitle={this.setTitle} />
+                            () => (<CardCollection setTitle={this.setTitle} />)
                         }
                     />
                 </Layout>

@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
-import clsx from 'clsx';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import { Card, CardActionArea, CardContent, CardMedia, Grid, Typography } from '@material-ui/core';
 import { useHistory } from "react-router-dom";
 import getStyles from './styles'
+// import clsx from 'clsx';
 
 const useStylesHOC = makeStyles((theme) => getStyles(theme));
 const useStylesLOC = (theme) => getStyles(theme)
@@ -25,7 +25,7 @@ function MediaCard(props)
                 />
                 <CardContent>
                     <Typography variant='h5' >
-                        {props.title}
+                        { props.title }
                     </Typography>
                 </CardContent>
             </CardActionArea>
@@ -54,7 +54,6 @@ class Main extends Component
     {
         const { classes } = this.props;
         return (
-        // <div style={{height: '80vh', verticalAlign: 'middle'}}>
             <Grid container spacing={2} className={classes.root}>
                 <Grid item xs={12}>
                     <Grid container className={classes.item} justify="space-evenly" spacing={2}>
