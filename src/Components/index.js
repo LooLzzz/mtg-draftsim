@@ -3,7 +3,7 @@ import Main from './Main'
 import Layout from './Layout'
 import Draftsim from './Draftsim'
 import { CardCollection } from './CardCollection'
-import { CardCol, CardBox, MtgObject, MtgCard } from './CardComponents'
+import { CardCol, CardBox, MtgObject } from './CardComponents'
 
 export {
     Main,
@@ -13,5 +13,4 @@ export {
     CardCol,
     CardBox,
     MtgObject,
-    MtgCard,
 }

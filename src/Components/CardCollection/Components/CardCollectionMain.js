@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
-import { MtgCard } from 'Components'
+import { MtgCard } from '../'
 import { withStyles } from '@material-ui/core/styles';
 import getStyles from './styles'
-import '../../Resources/keyrune/css/keyrune.css'
-import '../../Resources/mana/css/mana.css'
+import 'Resources/keyrune/css/keyrune.css'
+import 'Resources/mana/css/mana.css'
 
 const useStylesLOC = (theme) => getStyles(theme)
 
