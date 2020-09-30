@@ -2,6 +2,8 @@ const cardHeight = '75vh'
 
 export default function getStyles(theme)
 {
+    console.log('theme obj:', theme)
+
     return ({
         root: {
             minHeight: '75vh',
@@ -24,3 +26,5 @@ export default function getStyles(theme)
         },
     })
 };
+
+// export default this.getStyles

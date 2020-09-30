@@ -21,7 +21,7 @@ function MediaCard(props)
                 {/* <CardHeader title = {props.title} /> */}
                 <CardMedia
                     className = {classes.media}
-                    image = {require(`../../Resources/images/${props.id}.jpg`)}
+                    image = {require(`Resources/images/${props.id}.jpg`)}
                 />
                 <CardContent>
                     <Typography variant='h5' >
