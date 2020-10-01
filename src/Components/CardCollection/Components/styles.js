@@ -1,8 +1,7 @@
-const cardHeight = '75vh'
-
 export default function getStyles(theme)
 {
-    console.log('theme obj:', theme)
+    const cardHeight = '75vh'
+    const bottomBarHeight = 50
 
     return ({
         root: {
@@ -24,7 +23,18 @@ export default function getStyles(theme)
             backgroundSize: 'cover',
             backgroundPosition: 'center',
         },
+        contentSpacer: {
+            display: 'flex',
+            alignItems: 'center',
+            padding: theme.spacing(0, 1),
+            // necessary for content to be above/below app bar
+            ...theme.mixins.toolbar,
+            justifyContent: 'flex-end',
+        },
+        bottomAppBar: {
+            minHeight: `${bottomBarHeight}px`,
+            top: `calc(100vh - ${bottomBarHeight}px)`,
+            position: "fixed",
+        },
     })
-};
-
-// export default this.getStyles
+}

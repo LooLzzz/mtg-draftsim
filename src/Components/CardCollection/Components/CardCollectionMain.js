@@ -4,6 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import getStyles from './styles'
 import 'Resources/keyrune/css/keyrune.css'
 import 'Resources/mana/css/mana.css'
+import { AppBar, Toolbar } from '@material-ui/core';
 
 const useStylesLOC = (theme) => getStyles(theme)
 
@@ -12,18 +13,28 @@ class CardCollectionMain extends Component
     constructor(props)
     {
         super(props)
-        props.setTitle('Collection')
+        props.setActiveTab('collection')
     }
 
-    render() { return(
-        <span>
-            <i class='ss ss-iko' />
-            <br />
-            <i class='ms ms-cost ms-2 ms-shadow' />
-            <i class='ms ms-cost ms-g ms-shadow' />
-            <i class='ms ms-cost ms-w ms-shadow' />
-        </span>
-    )}
+    render()
+    {
+        const {classes} = this.props;
+
+        return (
+            <span>
+                <main style={{height: '100vh', backgroundColor:'red'}}>
+                    
+                </main>
+
+                <div className={classes.contentSpacer} />
+                <AppBar className = {classes.bottomAppBar} >
+                        <Toolbar variant="dense">
+                            bottom-bar
+                        </Toolbar>
+                    </AppBar>
+            </span>
+        )
+    }
 }
 
 export default withStyles(useStylesLOC)(CardCollectionMain)
