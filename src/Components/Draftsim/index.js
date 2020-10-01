@@ -25,7 +25,7 @@ class Draftsim extends Component
             windowHeight: 0,
         };
 
-        props.setTitle('Draftsim')
+        props.setActiveTab('draftsim')
     }
     
     componentDidMount()

@@ -6,7 +6,8 @@
             "@Components/*": ["Components/*"],
             "@Resources/*": ["Resources/*"],
             "@Hooks/*": ["Hooks/*"],
+            "@Themes/*": ["Themes/*"]
         }
     },
-    "exclude": ["build"],
+    "exclude": ["build"]
 }

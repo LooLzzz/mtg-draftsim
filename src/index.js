@@ -2,66 +2,88 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { Layout, Main, Draftsim, CardCollection } from './Components'
-import { CssBaseline } from '@material-ui/core';
+import { CssBaseline, ThemeProvider } from '@material-ui/core';
+import { darkTheme, lightTheme } from 'Themes'
 import 'fontsource-roboto';
 import './index.css';
 import './App.css'
 
 class CustomRouter extends Component
 {
-    // const [title, setTitle ] = useState('mtg-draftsim')
     constructor(props)
     {
-        super()
+        super(props)
         this.state = {
-            title: 'Main',
+            activeTab: 'Main',
+            activeThemeType: 'dark',
+            theme: darkTheme,
         }
     }
 
     /**
      * set active tab in title
+     * @param tabName ['main' or '', 'draftsim', 'collection']
      */
-    setTitle = ( (newTitle) =>
+    setActiveTab = ( (tabName) => (
+        this.setState({activeTab: tabName})
+    ))
+
+    /**
+     * set new theme for the application.
+     * options are 'light' or 'dark'
+     * @param newTheme ['light', 'dark']
+     */
+    setTheme = ( (themeType) => (
+        this.setState({
+            activeThemeType: themeType,
+            theme: themeType === 'light' ? lightTheme : darkTheme,
+        })
+    ))
+
+    render()
     {
-        this.setState({title: newTitle})
-        return newTitle
-    })
-    
-    render() { return (
-        <Router>
-            <Switch>
-                <Layout
-                    setTitle = { this.setTitle }
-                    currentTab = { this.state.title }
-                >
-                    <Route exact
-                        path = "/"
-                        render = {
-                            () => (<Main setTitle={this.setTitle} />)
-                        }
-                    />
-                    <Route
-                        path = "/main"
-                        render = {
-                            () => (<Main setTitle={this.setTitle} />)
-                        }
-                    />
-                    <Route
-                        path = "/draftsim"
-                        render = {
-                            () => (<Draftsim setTitle={this.setTitle} />)
-                        }
-                    />
-                    <Route
-                        path = "/collection"
-                        render = {
-                            () => (<CardCollection setTitle={this.setTitle} />)
-                        }
-                    />
-                </Layout>
-            </Switch>
-        </Router>
-    )}
+        let passedProps = {
+            activeTab: this.state.activeTab,
+            setActiveTab: this.setActiveTab,
+            activeThemeType: this.state.activeThemeType,
+            setTheme: this.setTheme,
+        }
+
+        return (
+            <ThemeProvider theme={this.state.theme}>
+                <Router>
+                    <Switch>
+                        <Layout { ...passedProps } >
+                            <Route exact
+                                path = "/"
+                                render = {
+                                    () => <Main {...passedProps} />
+                                }
+                            />
+                            <Route
+                                path = "/main"
+                                render = {
+                                    () => <Main {...passedProps} />
+                                }
+                            />
+                            <Route
+                                path = "/draftsim"
+                                render = {
+                                    () => <Draftsim {...passedProps} />
+                                }
+                            />
+                            <Route
+                                path = "/collection"
+                                render = {
+                                    () => <CardCollection {...passedProps} />
+                                }
+                            />
+                        </Layout>
+                    </Switch>
+                </Router>
+            </ThemeProvider>
+        )
+    }
 }
 
 ReactDOM.render((

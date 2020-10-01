@@ -11,12 +11,12 @@ const useStylesLOC = (theme) => getStyles(theme)
 function MediaCard(props)
 {    
     const classes = useStylesHOC();
-    let hist = useHistory();
+    const hist = useHistory();
 
     return (
         <Card className = {classes.card}>
             <CardActionArea 
-                onClick={(event) => (hist.push(props.link))}
+                onClick={ (event) => hist.push('/' + props.url) }
             >
                 {/* <CardHeader title = {props.title} /> */}
                 <CardMedia
@@ -38,15 +38,15 @@ class Main extends Component
     constructor(props)
     {        
         super(props)
-        props.setTitle('Main')
+        props.setActiveTab('main')
         this.items = [
         {
             title: 'to Draftsim',
-            link: '/draftsim',
+            url: 'draftsim',
         },
         {
             title: 'to Collection',
-            link: '/collection',
+            url: 'collection',
         }];
     }
 
@@ -61,6 +61,7 @@ class Main extends Component
                             <Grid item key={i} xs={6}>
                                 <MediaCard
                                     className = { classes.item }
+                                    setActiveTab = { this.props.setActiveTab }
                                     id = { i }
                                     { ...item }
                                 />
