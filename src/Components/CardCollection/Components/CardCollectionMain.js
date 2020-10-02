@@ -14,6 +14,12 @@ class CardCollectionMain extends Component
     {
         super(props)
         props.setActiveTab('collection')
+
+    }
+
+    tmp(name)
+    {
+        return MtgCard.getCardByName(name)
     }
 
     render()

@@ -2,9 +2,8 @@
 
 export default function getStyles(theme)
 {
-    const drawerWidth = 240
     const bottomBarHeight = 50
-    const mainLeftRightPadding = theme.spacing(19)
+    const mainSidesPadding = theme.spacing(15)
 
     // console.log('theme palette:', theme.palette) //DEBUG
 
@@ -18,8 +17,8 @@ export default function getStyles(theme)
             // background: 'linear-gradient(35deg, #D5D5D5 10%, #F0F0F0 50%)',
         },
         appBar: {
-            paddingLeft: mainLeftRightPadding,
-            paddingRight: mainLeftRightPadding,
+            paddingLeft: mainSidesPadding,
+            paddingRight: mainSidesPadding,
             position: "absolute",
             backgroundColor: theme.palette.type === 'dark' ? 'rgba(0,0,0,0.25)' : theme.palette.primary,
             // color: theme.palette.text.primary,
@@ -35,26 +34,11 @@ export default function getStyles(theme)
             minHeight: `${bottomBarHeight}px`,
             top: `calc(100vh - ${bottomBarHeight}px)`,
         },
-        appBarShift: {
-            width: `calc(100% - ${drawerWidth}px)`,
-            marginLeft: drawerWidth,
-            transition: theme.transitions.create(['margin', 'width'], {
-                easing: theme.transitions.easing.easeOut,
-                duration: theme.transitions.duration.enteringScreen,
-            }),
-        },
         menuButton: {
             marginRight: theme.spacing(2),
         },
         hide: {
             display: 'none',
-        },
-        drawer: {
-            width: drawerWidth,
-            flexShrink: 0,
-        },
-        drawerPaper: {
-            width: drawerWidth,
         },
         contentSpacer: {
             display: 'flex',
@@ -68,8 +52,8 @@ export default function getStyles(theme)
             flexGrow: 1,
             // paddingTop: theme.spacing(0.5),
             // paddingBottom: theme.spacing(0.5),
-            paddingLeft: mainLeftRightPadding,
-            paddingRight: mainLeftRightPadding,
+            paddingLeft: mainSidesPadding,
+            paddingRight: mainSidesPadding,
             transition: theme.transitions.create('margin', {
                 easing: theme.transitions.easing.sharp,
                 duration: theme.transitions.duration.leavingScreen,
@@ -83,12 +67,12 @@ export default function getStyles(theme)
             marginLeft: 0,
         },
         listItemText: {
-            marginRight: theme.spacing(2),
+            marginRight: theme.spacing(1),
         },
         ListItemIcon: {
-            marginRight: theme.spacing(1),
+            marginRight: theme.spacing(2.5),
             width: 'auto',
             minWidth: 'auto',
         },
     })
-};
+}

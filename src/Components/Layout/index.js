@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
+import {
+    AppBar, ClickAwayListener, Divider, Grid, Grow, IconButton, List, ListItemText,
+    ListSubheader, MenuItem, Paper, Popper, Tab, Tabs
+} from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { withRouter } from 'react-router';
-import { AppBar, ClickAwayListener, Fade, Grid, Grow, IconButton, List, ListItem, ListItemIcon, ListItemSecondaryAction, ListItemText, ListSubheader, MenuItem, MenuList, Paper, Popper, Switch, Tab, Tabs, Typography } from '@material-ui/core';
 import getStyles from './styles'
-import {
-    Menu as MenuIcon,
-    Brightness3 as DarkmodeIcon,
-    BrightnessHigh as LightmodeIcon,
-} from '@material-ui/icons'
+import { Menu as MenuIcon } from '@material-ui/icons'
+import ListItemDarkmodeToggle from './ListItemDarkmodeToggle';
 
 const useStyles = (theme) => getStyles(theme);
 
@@ -121,47 +121,36 @@ class Layout extends Component
                                             <ClickAwayListener
                                                 onClickAway = { (event) => this.handleMenuToggle(null) }
                                             >
-                                                <List
-                                                    id = 'optionsMenu'
-                                                    subheader = {<ListSubheader>Settings</ListSubheader>}
-                                                >
-                                                    <ListItem>
-                                                        <ListItemIcon
-                                                            className = {classes.ListItemIcon}
-                                                        >
-                                                            <span>
-                                                                <Fade
-                                                                    in = {this.props.activeThemeType === 'light'}
-                                                                    style = {{
-                                                                        display: this.props.activeThemeType !== 'light' ? 'none': '',
-                                                                        height:'100%',
-                                                                    }}
-                                                                >
-                                                                    <LightmodeIcon />
-                                                                </Fade>
-                                                                <Fade
-                                                                    in = {this.props.activeThemeType === 'dark'}
-                                                                    style = {{
-                                                                        display: this.props.activeThemeType !== 'dark' ? 'none': '',
-                                                                        height: '100%',
-                                                                    }}
-                                                                >
-                                                                    <DarkmodeIcon />
-                                                                </Fade>
-                                                            </span>
-                                                        </ListItemIcon>
-                                                        <ListItemText
-                                                            primary = 'Darkmode'
-                                                            className = {classes.listItemText}
-                                                        />
-                                                        <ListItemSecondaryAction>
-                                                            <Switch
-                                                                edge = 'end'
-                                                                checked = {this.props.activeThemeType === 'dark'}
-                                                                onChange = { (event) => this.handleThemeChange(event) }
-                                                            />
-                                                        </ListItemSecondaryAction>
-                                                    </ListItem>
+                                                <List id = 'optionsMenu'>
+                                                    {/* ACCOUNT */}
+                                                    <ListSubheader>Account</ListSubheader>
+                                                    <MenuItem>
+                                                        <ListItemText>
+                                                            Login
+                                                        </ListItemText>
+                                                    </MenuItem>
+                                                    <MenuItem>
+                                                        <ListItemText>
+                                                            Sign up
+                                                        </ListItemText>
+                                                    </MenuItem>
+                                                    {/* ACCOUNT */}
+
+                                                    <Divider />
+
+                                                    {/* SETTINGS */}
+                                                    <ListSubheader>Settings</ListSubheader>
+                                                    <ListItemDarkmodeToggle
+                                                        classes = {classes}
+                                                        handleChange = {this.handleThemeChange.bind(this)}
+                                                        text = {'Darkmode'}
+                                                        trigger = {{
+                                                            value: this.props.activeThemeType,
+                                                            on: 'dark',
+                                                            off: 'light',
+                                                        }}
+                                                    />
+                                                    {/* SETTINGS */}
                                                 </List>
                                             </ClickAwayListener>
                                         </Paper>
