@@ -56,7 +56,7 @@ class Main extends Component
         return (
             <Grid container spacing={2} className={classes.root}>
                 <Grid item xs={12}>
-                    <Grid container className={classes.item} justify="space-evenly" spacing={2}>
+                    <Grid container spacing={2}>
                         {this.items.map((item, i) => (
                             <Grid item key={i} xs={6}>
                                 <MediaCard
