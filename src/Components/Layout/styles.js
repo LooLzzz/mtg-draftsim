@@ -12,21 +12,24 @@ export default function getStyles(theme)
         root: {
             display: 'flex',
             minHeight: '100vh',
-            // background: theme.palette.grey['400'],
-            background: theme.palette.background.default,
-            // background: `linear-gradient(35deg, ${theme.palette.background} 10%, #F0F0F0 50%)`,
+            // background: theme.palette.background.default,
+            background: `linear-gradient(35deg, ${theme.palette.background.default} 10%, ${theme.palette.background.paper} 50%)`,
+            // background: `linear-gradient(35deg, ${theme.palette.background.paper} 10%, ${theme.palette.background.default} 50%)`,
             // background: 'linear-gradient(35deg, #D5D5D5 10%, #F0F0F0 50%)',
         },
         appBar: {
             paddingLeft: mainLeftRightPadding,
             paddingRight: mainLeftRightPadding,
             position: "absolute",
-            backgroundColor: 'rgba(0,0,0,0.25)',
-            // color: 'black',
+            backgroundColor: theme.palette.type === 'dark' ? 'rgba(0,0,0,0.25)' : theme.palette.primary,
+            // color: theme.palette.text.primary,
             transition: theme.transitions.create(['margin', 'width'], {
                 easing: theme.transitions.easing.sharp,
                 duration: theme.transitions.duration.leavingScreen,
             }),
+        },
+        appBarIcon: {
+            color: theme.palette.common.white
         },
         bottomAppBar: {
             minHeight: `${bottomBarHeight}px`,
@@ -71,9 +74,6 @@ export default function getStyles(theme)
                 easing: theme.transitions.easing.sharp,
                 duration: theme.transitions.duration.leavingScreen,
             }),
-            // marginLeft: -drawerWidth,
-            // marginLeft: '1vmin',
-            // marginRight: '1vmin',
         },
         contentShift: {
             transition: theme.transitions.create('margin', {
@@ -81,6 +81,14 @@ export default function getStyles(theme)
                 duration: theme.transitions.duration.enteringScreen,
             }),
             marginLeft: 0,
+        },
+        listItemText: {
+            marginRight: theme.spacing(2),
+        },
+        ListItemIcon: {
+            marginRight: theme.spacing(1),
+            width: 'auto',
+            minWidth: 'auto',
         },
     })
 };
