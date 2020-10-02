@@ -1,7 +1,7 @@
+/*eslint no-unused-vars: "off"*/
 
 import React, { Component } from 'react'
 import { CardCol, MtgObject } from 'Components'
-import View from './view'
 
 const fact = 0.7;
 const cardWidth = 265;
