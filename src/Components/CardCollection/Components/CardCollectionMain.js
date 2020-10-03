@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { MtgCard } from '../'
+import { MtgCard } from 'Models/'
 import { withStyles } from '@material-ui/core/styles';
 import getStyles from './styles'
 import 'Resources/keyrune/css/keyrune.css'
