@@ -3,11 +3,14 @@
     {
         "baseUrl": "src",
         "paths": {
-            "@Components/*": ["Components/*"],
-            "@Resources/*": ["Resources/*"],
-            "@Hooks/*": ["Hooks/*"],
-            "@Themes/*": ["Themes/*"]
+            "@Components/*": ["./Components/*"],
+            "@Resources/*": ["./Resources/*"],
+            "@Hooks/*": ["./Hooks/*"],
+            "@Themes/*": ["./Themes/*"],
+            "@Models/*": ["./Models/*"]
         }
     },
-    "exclude": ["build"]
+    "exclude": [
+        "build"
+    ]
 }

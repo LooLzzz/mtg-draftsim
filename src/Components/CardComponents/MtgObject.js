@@ -17,9 +17,7 @@ async function getAllCardsFromSet(setId)
     }
 
     const fullList = await scryfall.get('cards/search', {
-        q: 
-            'e:' + [setId] +
-            ' is:booster'
+        q: `e: ${setId} is:booster`
     });
     return (collectCards(fullList));
 }
