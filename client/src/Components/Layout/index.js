@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-    AppBar, ClickAwayListener, Divider, Grid, Grow, IconButton, List, ListItemText,
+    AppBar, Box, ClickAwayListener, Divider, Grid, Grow, IconButton, List, ListItemText,
     ListSubheader, MenuItem, Paper, Popper, Tab, Tabs
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';

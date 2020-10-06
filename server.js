@@ -1,18 +1,44 @@
-//server.js
-const express = require('express');
-const favicon = require('express-favicon');
-const path = require('path');
-const port = process.env.PORT || 8080;
-const app = express();
+require('module-alias/register')
 
-app.use(favicon(__dirname + '/build/favicon.ico'));
-// the __dirname is the current directory from where the script is running
-app.use(express.static(__dirname));
-app.use(express.static(path.join(__dirname, 'build')));
-app.get('/ping', function (req, res) {
-    return res.send('pong');
-});
-app.get('/*', function (req, res) {
-    res.sendFile(path.join(__dirname, 'build', 'index.html'));
-});
-app.listen(port);
+const express = require('express')
+const mongoose = require('mongoose')
+const bodyParser = require('body-parser')
+const { Keys } = require('@Config')
+const { userRouter, accessRouter } = require("@Routes");
+// const passport = require("passport");
+// const configPassport = require("@Config/passport");
+
+const app = express()
+const port = process.env.PORT || 5000; // process.env.port is Heroku's port if you choose to deploy the app there
+const db = Keys.mongoURI
+
+// Bodyparser middleware
+app.use(
+    bodyParser.urlencoded({
+        extended: false
+    })
+);
+app.use(bodyParser.json());
+
+// Connect to MongoDB
+mongoose.connect(
+        db,
+        {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        }
+    )
+    .then( () => console.log("MongoDB successfully connected") )
+    .catch( (err) => console.log(err) );
+
+// Passport middleware
+// app.use(passport.initialize());
+// configPassport(passport)
+app.use("/api/users", userRouter);
+app.use("/api/access", accessRouter);
+
+app.listen(port, ( () => console.log(`Server up and running on port ${port} !`) ));
+
+module.exports = {
+    port
+}

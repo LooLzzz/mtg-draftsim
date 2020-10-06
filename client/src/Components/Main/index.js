@@ -70,7 +70,6 @@ class Main extends Component
                     </Grid>
                 </Grid>
             </Grid>
-        // </div>
         )
     }
 }

@@ -2,7 +2,7 @@
 
 export default function getStyles(theme)
 {
-    const bottomBarHeight = 50
+    const bottomBarHeight = '50px'
     const mainSidesPadding = theme.spacing(15)
 
     // console.log('theme palette:', theme.palette) //DEBUG
@@ -11,10 +11,16 @@ export default function getStyles(theme)
         root: {
             display: 'flex',
             minHeight: '100vh',
+            minWidth: '100wh',
             // background: theme.palette.background.default,
             background: `linear-gradient(35deg, ${theme.palette.background.default} 10%, ${theme.palette.background.paper} 50%)`,
             // background: `linear-gradient(35deg, ${theme.palette.background.paper} 10%, ${theme.palette.background.default} 50%)`,
             // background: 'linear-gradient(35deg, #D5D5D5 10%, #F0F0F0 50%)',
+        },
+        'box-shadow': {
+            position: 'absolute',
+            marginLeft: mainSidesPadding,
+            marginRight: mainSidesPadding,
         },
         appBar: {
             paddingLeft: mainSidesPadding,
@@ -31,8 +37,8 @@ export default function getStyles(theme)
             color: theme.palette.common.white
         },
         bottomAppBar: {
-            minHeight: `${bottomBarHeight}px`,
-            top: `calc(100vh - ${bottomBarHeight}px)`,
+            minHeight: bottomBarHeight,
+            top: `calc(100vh - ${bottomBarHeight})`,
         },
         menuButton: {
             marginRight: theme.spacing(2),
@@ -58,6 +64,7 @@ export default function getStyles(theme)
                 easing: theme.transitions.easing.sharp,
                 duration: theme.transitions.duration.leavingScreen,
             }),
+            // boxShadow: theme.shadows[4]
         },
         contentShift: {
             transition: theme.transitions.create('margin', {

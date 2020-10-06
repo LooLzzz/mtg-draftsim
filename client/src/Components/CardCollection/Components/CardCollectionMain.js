@@ -30,7 +30,7 @@ class CardCollectionMain extends Component
             <span>
                 <Grid container spacing={2} className={classes.root}>
                     <Grid item xs={12}>
-                        <main style={{height: '75vh', backgroundColor:'red'}}>
+                        <main style={{height: '75vh', backgroundColor:'orange'}}>
                             
                         </main>
                     </Grid>
