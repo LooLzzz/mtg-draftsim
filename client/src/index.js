@@ -17,12 +17,36 @@ class CustomRouter extends Component
             activeTab: 'Main',
             activeThemeType: 'dark',
             theme: darkTheme,
+            user: null,
         }
     }
 
+    componentDidUpdate(oldProps, oldState)
+    {
+        if (oldProps.routerRef !== this.props.routerRef)
+        {
+            this.setState({
+                routerRef: this.props.routerRef
+            })
+        }
+    }
+
+    getUser = ( () => {
+        return this.state.user
+    })
+
+    /**
+     * set the active user in the application
+     */
+    setUser = ( (user) => (
+        this.setState({
+            activeUser: user
+        })
+    ))
+
     /**
      * set active tab in title
-     * @param tabName ['main' or '', 'draftsim', 'collection']
+     * @param tabName [' ' OR 'main', 'draftsim', 'collection']
      */
     setActiveTab = ( (tabName) => (
         this.setState({activeTab: tabName})
@@ -43,10 +67,13 @@ class CustomRouter extends Component
     render()
     {
         let passedProps = {
+            routerRef: this.state.routerRef,
             activeTab: this.state.activeTab,
             setActiveTab: this.setActiveTab,
             activeThemeType: this.state.activeThemeType,
             setTheme: this.setTheme,
+            setUser: this.setUser,
+            getUser: this.getUser,
         }
 
         return (
@@ -86,14 +113,41 @@ class CustomRouter extends Component
     }
 }
 
-ReactDOM.render((
+class RouterDummy extends Component
+{
+    constructor(props)
+    {
+        super(props)
+        this.state = {
+            routerRef: null,
+        }
+    }
+
+    componentDidMount()
+    {
+        this.setState({
+            routerRef: this.routerRef.current,
+        })
+    }
+
+    routerRef = React.createRef()
+    render()
+    {    
+        return(
+            <CustomRouter forwardRef={true} ref={this.routerRef} routerRef={this.state.routerRef} />
+        )
+    }
+}
+
+ReactDOM.render(
+    (
         <div>
             <CssBaseline />
-            <CustomRouter />
+            <RouterDummy />
         </div>
     )
     ,document.getElementById('root')
-);
+)
 
 /*
  * If you want your app to work offline and load faster, you can change

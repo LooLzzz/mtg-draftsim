@@ -7,7 +7,8 @@
             "@Resources/*": ["./Resources/*"],
             "@Hooks/*": ["./Hooks/*"],
             "@Themes/*": ["./Themes/*"],
-            "@Models/*": ["./Models/*"]
+            "@Models/*": ["./Models/*"],
+            "@Auth/*": ["./Auth/*"]
         }
     },
     "exclude": [

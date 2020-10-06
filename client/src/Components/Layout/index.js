@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 import {
-    AppBar, ClickAwayListener, Divider, Grid, Grow, IconButton, List, ListItemText,
-    ListSubheader, MenuItem, Paper, Popper, Tab, Tabs
+    AppBar, Button, ClickAwayListener, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Grid, Grow, IconButton, List, ListItemText,
+    ListSubheader, MenuItem, Paper, Popper, Tab, Tabs, Typography
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { withRouter } from 'react-router';
 import getStyles from './styles'
 import { Menu as MenuIcon } from '@material-ui/icons'
 import ListItemDarkmodeToggle from './ListItemDarkmodeToggle';
+import { TextValidator, ValidatorForm } from 'react-material-ui-form-validator';
+import { AuthService } from 'Auth/';
 
 const useStyles = (theme) => getStyles(theme);
 
@@ -16,9 +18,72 @@ class Layout extends Component
     constructor(props)
     {
         super(props);
-        this.state = {...props}
+        this.state = {
+            dialogOpen: false,
+            ...props,
+        }
 
         // console.log('props', props) //DEBUG
+    }
+
+    handleLoginFormChange = (e) => {
+        this.setState({
+            [e.currentTarget.name]: e.currentTarget.value
+        })
+    }
+
+    handleLoginSubmit = (e) =>
+    {
+        this.formRef.isFormValid(true).then( (isFormValid) => {
+            if (isFormValid)
+            {
+                this.setState({
+                    loading: true,
+                })
+
+                const {username, password} = this.state
+                AuthService.login(username, password).then( (res) => {
+                    this.setState({
+                        loading: false,
+                    })
+
+                    if (res)
+                        this.props.history.push('/profile')
+                    else
+                        this.setState({
+                            badLogin: true
+                        })
+                })
+            }
+        })
+    }
+
+    handleLoginError = (e) =>
+    {
+        this.setState({
+            badLogin: false,
+        })
+    }
+
+    componentDidUpdate(oldProps, oldState)
+    {
+        if (oldProps.routerRef !== this.props.routerRef)
+            this.setState({
+                routerRef: this.props.routerRef
+            })
+    }
+
+    handleLoginDialogOpen = (e, changeDialogState) => {
+        if (changeDialogState)
+            this.setState({
+                username: '',
+                password: '',
+            })
+        
+        this.handleMenuToggle(null) //close menu popover
+        this.setState({
+            dialogOpen: changeDialogState === 'open',
+        })
     }
 
     tabNameToIndex(name)
@@ -125,12 +190,13 @@ class Layout extends Component
                                                     {/* ACCOUNT */}
                                                     <ListSubheader>Account</ListSubheader>
                                                     <MenuItem>
-                                                        <ListItemText>
+                                                        <ListItemText onClick={(e) => this.handleLoginDialogOpen(e, 'open')}>
                                                             Login
                                                         </ListItemText>
                                                     </MenuItem>
                                                     <MenuItem>
                                                         <ListItemText>
+                                                            {/*//TODO create signup page*/}
                                                             Sign up
                                                         </ListItemText>
                                                     </MenuItem>
@@ -160,6 +226,55 @@ class Layout extends Component
                         </Grid>
                     </Grid>
                 </AppBar>
+                <ValidatorForm
+                    onSubmit = {this.handleLoginSubmit}
+                    onError = {this.handleLoginError}
+                    instantValidate = {false}
+                    ref = { (r) => this.formRef=r }
+                >
+                    <Dialog
+                        open = {this.state.dialogOpen}
+                        onClose = {(e) => this.handleLoginDialogOpen(e, 'close')}
+                    >
+                        <DialogTitle style={{paddingBottom:'0px'}}>
+                            <Typography variant='h5' style={{paddingBottom:'0.4em'}}>
+                                Login
+                            </Typography>
+                            <Typography variant='subtitle2' >
+                                Login to your account
+                            </Typography>
+                        </DialogTitle>
+                        <DialogContent>
+                            <TextValidator
+                                label = 'Username'
+                                name = 'username'
+                                value = {this.state.username}
+                                onChange = { this.handleLoginFormChange }
+                                validators = {['required']}
+                                errorMessages = {['Username is required']}
+                            />
+                        </DialogContent>
+                        <DialogContent>
+                            <TextValidator 
+                                type = 'password'
+                                label = 'Password'
+                                name = 'password'
+                                value = {this.state.password}
+                                onChange = { this.handleLoginFormChange }
+                                validators = {['required', 'minStringLength:5']}
+                                errorMessages = {['Password is required', 'Password is too short']}
+                            />
+                        </DialogContent>
+                        <DialogActions>
+                            <Button variant='contained' type='submit'>
+                                Login
+                            </Button>
+                            <Button onClick={(e) => this.handleLoginDialogOpen(e, 'close')}>
+                                Cancel
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
+                </ValidatorForm>
                 <main className={classes.content} >
                     <div className={classes.contentSpacer} /> {/*top spacer*/}
                     { this.props.children }
