@@ -1,49 +1,40 @@
 {
     "name": "mtg-draftsim",
-    "homepage": ".",
-    "version": "0.1.0",
-    "private": true,
-    "dependencies": {
-        "@material-ui/core": "^4.9.10",
-        "@material-ui/icons": "^4.9.1",
-        "@material-ui/styles": "^4.9.10",
-        "@testing-library/jest-dom": "^4.2.4",
-        "@testing-library/react": "^9.3.2",
-        "@testing-library/user-event": "^7.1.2",
-        "fontsource-roboto": "^3.0.3",
-        "express-favicon": "^2.0.1",
-        "react": "^16.13.1",
-        "react-dom": "^16.13.1",
-        "react-router": "^5.2.0",
-        "react-router-dom": "^5.2.0",
-        "react-scripts": "3.4.1",
-        "recharts": "^1.8.5",
-        "scryfall-client": "^0.13.0"
-    },
+    "version": "1.0.0",
+    "description": "",
+    "main": "server.js",
+    "type": "commonjs",
     "scripts": {
-        "start": "react-scripts start",
-        "build": "react-scripts build",
-        "test": "react-scripts test",
-        "eject": "react-scripts eject"
+        "client": "cd client && npm start",
+        "server": "node server.js",
+        "dev": "concurrently \"npm run server\" \"npm run client\"",
+        "start": "node server.js",
+        "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false && cd client && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
     },
-    "eslintConfig": {
-        "extends": [
-            "react-app"
-        ],
-        "rules": {
-            "no-unused-vars": "off"
-        }
+    "_moduleAliases": {
+        "@root": "/",
+        "@Config": "server/Config",
+        "@Models": "server/Models",
+        "@Routes": "server/Routes",
+        "@Validation": "server/Validation",
+        "@Controllers": "server/Controllers"
     },
-    "browserslist": {
-        "production": [
-            ">0.2%",
-            "not dead",
-            "not op_mini all"
-        ],
-        "development": [
-            "last 1 chrome version",
-            "last 1 firefox version",
-            "last 1 safari version"
-        ]
-    }
+    "author": "LooLzzz",
+    "license": "ISC",
+    "dependencies": {
+        "bcryptjs": "^2.4.3",
+        "body-parser": "^1.19.0",
+        "concurrently": "^5.3.0",
+        "esm": "^3.2.25",
+        "express": "^4.17.1",
+        "is-empty": "^1.2.0",
+        "jsonwebtoken": "^8.5.1",
+        "module-alias": "^2.2.2",
+        "mongoose": "^5.10.7",
+        "nodemon": "^2.0.4",
+        "passport": "^0.4.1",
+        "passport-jwt": "^4.0.0",
+        "validator": "^13.1.17"
+    },
+    "devDependencies": {}
 }

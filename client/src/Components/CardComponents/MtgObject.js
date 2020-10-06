@@ -1,26 +1,19 @@
 import ScryfallClient from 'scryfall-client'
 const scryfall = new ScryfallClient()
 
-async function getAllCardsFromSet(setId)
+function collectCards(list, allCards)
 {
-    function collectCards(list, fullList)
-    {
-        fullList = fullList ? fullList : [];
-        fullList.push.apply(fullList, list);
-
-        if (!list.has_more)
-            return fullList;
-
-        return list.next().then((newList) => (
-            collectCards(newList, fullList)
-        ));
+    allCards = allCards || [];
+    allCards.push.apply(allCards, list);
+   
+    if (!list.has_more) {
+      return allCards;
     }
-
-    const fullList = await scryfall.get('cards/search', {
-        q: `e: ${setId} is:booster`
+   
+    return list.next().then(function (newList) {
+      return collectCards(newList, allCards);
     });
-    return (collectCards(fullList));
-}
+  }
 
 export default class MtgObject
 {
@@ -45,14 +38,18 @@ export default class MtgObject
     generateSet(setId, numOfBoosters, sortBy, component)
     {
         this.setId = setId;
-        getAllCardsFromSet(setId).then(fullList => {
-            this.allCards.bulk = fullList;
-            this.pool = this.generatePool(numOfBoosters);
-            
-            component.setState({
-                cols: MtgObject.sortToColumns(component.state.mtgObj.pool, sortBy),
-            });
-        });
+
+        scryfall.get(`sets/${setId}`)
+            .then(set => set.getCards())
+            .then(list => collectCards(list))
+            .then(setList => {
+                this.allCards.bulk = setList;
+                this.pool = this.generatePool(numOfBoosters);
+                
+                component.setState({
+                    cols: MtgObject.sortToColumns(component.state.mtgObj.pool, sortBy),
+                });
+            })
     }
 
     generateBooster()

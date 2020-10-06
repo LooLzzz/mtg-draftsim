@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import './style.css'
 
-const fact = 0.7;
 const cardWidth = 265;
 const cardHeight = 370;
 
@@ -13,7 +12,7 @@ export default class CardCol extends Component
             <ul
                 className = 'col'
                 style = {{
-                    marginBlockStart: cardHeight * fact * 0.89,
+                    marginBlockStart: cardHeight * this.props.fact * 0.89,
                     display: this.props.cards.length===0 ? 'none' : 'flex',
                 }}
             >
@@ -41,9 +40,9 @@ export default class CardCol extends Component
                                     : //else
                                         `url(${card.image_uris.normal})`
                                 ),
-                                height: cardHeight * fact,
-                                width: cardWidth * fact,
-                                marginTop: -cardHeight * fact * 0.89,
+                                height: cardHeight * this.props.fact,
+                                width: cardWidth * this.props.fact,
+                                marginTop: -cardHeight * this.props.fact * 0.89,
                             }}
                         />)))
                 }

@@ -2,14 +2,15 @@
 
 import React, { Component } from 'react'
 import { CardCol, MtgObject } from 'Components'
+import { withStyles } from '@material-ui/styles';
+import getStyles from './style';
+
+const useStyles = (theme) => getStyles(theme)
 
 const fact = 0.7;
 const cardWidth = 265;
 const cardHeight = 370;
 
-/**
- * @param setId
- */
 class Draftsim extends Component
 {
     constructor(props)
@@ -35,7 +36,7 @@ class Draftsim extends Component
         // console.log(path)
 
         this.setState({
-            setId: params.get('setid') ? params.get('setid') : 'iko',
+            setId: params.get('setid') ? params.get('setid') : 'm19',
             sortBy: params.get('sortby') ? params.get('sortby') : 'color',
         });
 
@@ -152,13 +153,15 @@ class Draftsim extends Component
     }
 
     render()
-    {  
+    {
+        const { classes } = this.props
+
         return (
             <div
-                className = "container-main"
+                className = {classes['container-main']}
                 onMouseMove = {e => this.handleMainMouseMove(e)}
             >
-                <span className="container-cards">
+                <span className={classes['container-cards']}>
                 {
                     Object.entries(this.state.cols).map( ([key, value]) => (
                         <CardCol
@@ -168,8 +171,9 @@ class Draftsim extends Component
                             handleMouseEnter = {this.handleMouseEnter.bind(this)}
                             handleMouseLeave = {this.handleMouseLeave.bind(this)}
                             handleMouseMove = {this.handleCardMouseMove.bind(this)}
-                            className = "cardContainer"
+                            className = "card-container"
                             cards = {value}
+                            fact = {fact}
                             style = {{
                                 flex: 'flex-shrink',
                             }}
@@ -178,7 +182,7 @@ class Draftsim extends Component
                 }
                 </span>
                 <span
-                    className = "container-side"
+                    className = {classes['container-side']}
                     style = {{
                         width: cardWidth * fact * 1.1,
                     }}
@@ -189,15 +193,16 @@ class Draftsim extends Component
                             handleMouseEnter = {this.handleMouseEnter.bind(this)}
                             handleMouseLeave = {this.handleMouseLeave.bind(this)}
                             handleMouseMove = {this.handleCardMouseMove.bind(this)}
-                            className = "cardContainer"
+                            className = "card-container"
                             cards = {this.state.mtgObj.deck}
+                            fact = { fact + 0.05 }
                             style = {{
                                 flex: 'flex-shrink'
                             }}
                         />
                 </span>
                 <span
-                    className = "container-hover"
+                    className = {classes['container-hover']}
                     style = {{
                         display: this.state.hoverCard ? '' : 'none',
                         marginLeft: this.state.hoverCardMarginLeft,
@@ -226,4 +231,4 @@ class Draftsim extends Component
     }
 }
 
-export default Draftsim
+export default withStyles(useStyles)(Draftsim)
