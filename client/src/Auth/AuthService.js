@@ -17,10 +17,14 @@ class AuthService
             .then( (res) => {
                 if (res.data.accessToken)
                     localStorage.setItem('user', JSON.stringify(res.data))
-                return true
+                return res.data
             })
-            .catch ( (res) => {
-                return false
+            .catch( res => {
+                // res = String(res).split(':')
+                // res = res.reduce( (prev, curr, i) => {
+                //     return i!==0 ? prev + curr : ''
+                // })
+                return Object(res)
             })
     }
 

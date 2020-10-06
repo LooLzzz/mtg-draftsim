@@ -17,7 +17,7 @@ class CustomRouter extends Component
             activeTab: 'Main',
             activeThemeType: 'dark',
             theme: darkTheme,
-            user: null,
+            userData: null,
         }
     }
 
@@ -31,16 +31,16 @@ class CustomRouter extends Component
         }
     }
 
-    getUser = ( () => {
-        return this.state.user
+    getUserData = ( () => {
+        return this.state.userData
     })
 
     /**
      * set the active user in the application
      */
-    setUser = ( (user) => (
+    setUserData = ( (user) => (
         this.setState({
-            activeUser: user
+            userData: user
         })
     ))
 
@@ -72,8 +72,8 @@ class CustomRouter extends Component
             setActiveTab: this.setActiveTab,
             activeThemeType: this.state.activeThemeType,
             setTheme: this.setTheme,
-            setUser: this.setUser,
-            getUser: this.getUser,
+            setUserData: this.setUserData,
+            userData: this.state.userData
         }
 
         return (

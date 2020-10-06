@@ -81,5 +81,8 @@ export default function getStyles(theme)
             width: 'auto',
             minWidth: 'auto',
         },
+        circle: {
+            color: 'white',
+        }
     })
 }
