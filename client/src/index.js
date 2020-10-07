@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import { Layout, Main, Draftsim, CardCollection, Lost } from './Components'
+import { BrowserRouter as Router, Redirect, Route, Switch } from "react-router-dom";
+import { Layout, Main, Draftsim, CardCollection, Lost, Signup } from './Components'
 import { CssBaseline, ThemeProvider } from '@material-ui/core';
 import { darkTheme, lightTheme } from 'Themes'
 import 'fontsource-roboto';
-import './index.css';
-import './App.css'
 
 class CustomRouter extends Component
 {
@@ -15,7 +13,8 @@ class CustomRouter extends Component
         super(props)
         this.state = {
             activeTab: 'Main',
-            activeThemeType: 'dark',
+            hideTabIndicator: false,
+            themeType: 'dark',
             theme: darkTheme,
             userData: null,
         }
@@ -43,14 +42,38 @@ class CustomRouter extends Component
             userData: user
         })
     ))
+    
+    setCollectionData = ( (user) => (
+        this.setState({
+            collectionData: user
+        })
+    ))
 
     /**
      * set active tab in title
-     * @param tabName [' ' OR 'main', 'draftsim', 'collection']
+     * @param tabName ['~emptyString~', 'main', 'draftsim', 'collection']
      */
-    setActiveTab = ( (tabName) => (
-        this.setState({activeTab: tabName})
-    ))
+    setActiveTab = ( (tabName) => {
+        const tabs = [
+            '^$', // => empty string
+            'main',
+            'draftsim',
+            'collection',
+        ]
+
+        const regex = '(' + tabs.reduce( (prev, curr) => {
+            return prev + '|' + curr
+        }) + ')'
+
+        this.setState({
+            activeTab: tabName,
+            hideTabIndicator: (
+                String(tabName).match(regex)
+                    ? ''
+                    : 'none'
+            ),
+        })
+    })
 
     /**
      * set new theme for the application.
@@ -59,7 +82,7 @@ class CustomRouter extends Component
      */
     setTheme = ( (themeType) => (
         this.setState({
-            activeThemeType: themeType,
+            themeType: themeType,
             theme: themeType === 'light' ? lightTheme : darkTheme,
         })
     ))
@@ -69,56 +92,60 @@ class CustomRouter extends Component
         let passedProps = {
             routerRef: this.state.routerRef,
             activeTab: this.state.activeTab,
+            hideTabIndicator: this.state.hideTabIndicator,
             setActiveTab: this.setActiveTab,
-            activeThemeType: this.state.activeThemeType,
+            themeType: this.state.themeType,
+            theme: this.state.theme,
             setTheme: this.setTheme,
             setUserData: this.setUserData,
+            setCollectionData: this.setCollectionData,
             userData: this.state.userData
         }
 
         return (
             <ThemeProvider theme={this.state.theme}>
                 <Router>
-                    <Switch>
-                        <Layout { ...passedProps } >
+                    <Layout { ...passedProps } >
+                        <Switch>
                             <Route exact
                                 path = "/"
                                 render = {
                                     () => <Main {...passedProps} />
                                 }
                             />
-                            <Route
-                                path = "/main"
-                                render = {
-                                    () => <Main {...passedProps} />
-                                }
-                            />
-                            <Route
+                            <Route exact
                                 path = "/draftsim"
                                 render = {
                                     () => <Draftsim {...passedProps} />
                                 }
                             />
-                            <Route
+                            <Route exact
                                 path = "/collection"
                                 render = {
                                     () => <CardCollection {...passedProps} />
                                 }
                             />
-                            <Route
+                            <Route exact
                                 path = "/collection"
                                 render = {
                                     () => <CardCollection {...passedProps} />
                                 }
                             />
+                            <Route exact
+                                path = '/signup'
+                                render = {
+                                    () => <Signup {...passedProps} />
+                                }
+                            />
                             <Route
-                                path = "/lost"
+                                path = '/lost'
                                 render = {
                                     () => <Lost {...passedProps} />
                                 }
                             />
-                        </Layout>
-                    </Switch>
+                            <Redirect to='/lost' />
+                        </Switch>
+                    </Layout>
                 </Router>
             </ThemeProvider>
         )

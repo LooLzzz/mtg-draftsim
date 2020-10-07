@@ -8,6 +8,7 @@ export default function getStyles(theme)
             minHeight: '75vh',
             flexDirection: "column",
             justifyContent: "center",
+            alignItems: "center",
             display: 'flex',
             flexGrow: 1,
         },

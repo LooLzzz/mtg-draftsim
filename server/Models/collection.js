@@ -4,7 +4,7 @@ Schema = mongoose.Schema
 // Create Schema
 const CollectionSchema = new Schema({
     userid: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: mongoose.Types.ObjectId,
         required: true
     },
     cards: {
@@ -12,5 +12,5 @@ const CollectionSchema = new Schema({
     }
 });
 
-const Collection = mongoose.model('collection', CollectionSchema)
+const Collection = mongoose.model('collections', CollectionSchema)
 module.exports = Collection

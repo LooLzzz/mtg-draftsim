@@ -5,21 +5,20 @@ export default function getStyles(theme)
     return ({
         root: {
             minHeight: cardHeight,
-            display: 'flex',
-            flexDirection: "column",
+            // width: '30vw',
+            // flexDirection: "column",
             justifyContent: "center",
             alignItems: 'center',
+            display: 'flex',
             flexGrow: 1,
         },
-        card: {
-            minWidth: '35vw',
-            // minHeight: cardHeight,
-        },
         media: {
-            // height: `calc(0.8 * ${cardHeight})`,
-            height: cardHeight,
+            height: `calc(0.8 * ${cardHeight})`,
             backgroundSize: 'contain',
             backgroundPosition: 'center',
+        },
+        card: {
+            minHeight: {cardHeight},
         },
         item: {
             flexDirection: "column",
