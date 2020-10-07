@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import { Layout, Main, Draftsim, CardCollection } from './Components'
+import { Layout, Main, Draftsim, CardCollection, Lost } from './Components'
 import { CssBaseline, ThemeProvider } from '@material-ui/core';
 import { darkTheme, lightTheme } from 'Themes'
 import 'fontsource-roboto';
@@ -103,6 +103,18 @@ class CustomRouter extends Component
                                 path = "/collection"
                                 render = {
                                     () => <CardCollection {...passedProps} />
+                                }
+                            />
+                            <Route
+                                path = "/collection"
+                                render = {
+                                    () => <CardCollection {...passedProps} />
+                                }
+                            />
+                            <Route
+                                path = "/lost"
+                                render = {
+                                    () => <Lost {...passedProps} />
                                 }
                             />
                         </Layout>

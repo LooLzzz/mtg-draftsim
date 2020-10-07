@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import { makeStyles, withStyles } from '@material-ui/core/styles';
-import { Card, CardActionArea, CardContent, CardMedia, Grid, Typography } from '@material-ui/core';
+import { Card, CardActionArea, CardContent, CardMedia, Divider, Grid, Typography } from '@material-ui/core';
 import { useHistory } from "react-router-dom";
+import { Dummy } from 'Components';
 import getStyles from './styles'
 // import clsx from 'clsx';
 
@@ -54,22 +55,35 @@ class Main extends Component
     {
         const { classes } = this.props;
         return (
-            <Grid container spacing={2} className={classes.root}>
-                <Grid item xs={12}>
-                    <Grid container spacing={2}>
-                        {this.items.map((item, i) => (
-                            <Grid item key={i} xs={6}>
-                                <MediaCard
-                                    className = { classes.item }
-                                    setActiveTab = { this.props.setActiveTab }
-                                    id = { i }
-                                    { ...item }
-                                />
-                            </Grid>
-                        ))}
+            <Dummy>
+                <Grid container spacing={2} className={classes.root}>
+                    <Grid item xs={12}>
+                        <Grid container spacing={2}>
+                            {this.items.map((item, i) => (
+                                <Grid item key={i} xs={6}>
+                                    <MediaCard
+                                        className = { classes.item }
+                                        setActiveTab = { this.props.setActiveTab }
+                                        id = { i }
+                                        { ...item }
+                                    />
+                                </Grid>
+                            ))}
+                        </Grid>
                     </Grid>
                 </Grid>
-            </Grid>
+
+                <Divider className={classes.divider} />
+                
+                <div align='center'>
+                    <Typography variant='h4'>
+                        About
+                    </Typography>
+                    <Typography color="textSecondary">
+                        Some text
+                    </Typography>
+                </div>
+            </Dummy>
         )
     }
 }
