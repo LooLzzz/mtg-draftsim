@@ -18,5 +18,8 @@ export default function getStyles(theme)
             backgroundSize: 'cover',
             backgroundPosition: 'center',
         },
+        divider: {
+            marginBottom: theme.spacing(4),
+        },
     })
 };

@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import { MtgCard } from 'Models/'
+import { MtgCard } from 'Models'
+import { Dummy } from 'Components';
 import { withStyles } from '@material-ui/core/styles';
 import getStyles from './styles'
 import 'Resources/keyrune/css/keyrune.css'
@@ -27,7 +28,7 @@ class CardCollectionMain extends Component
         const {classes} = this.props;
 
         return (
-            <span>
+            <Dummy>
                 <Grid container spacing={2} className={classes.root}>
                     <Grid item xs={12}>
                         <main style={{height: '75vh', backgroundColor:'orange'}}>
@@ -42,7 +43,7 @@ class CardCollectionMain extends Component
                         bottom-bar
                     </Toolbar>
                 </AppBar>
-            </span>
+            </Dummy>
         )
     }
 }

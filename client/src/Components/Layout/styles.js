@@ -56,6 +56,7 @@ export default function getStyles(theme)
         },
         content: {
             flexGrow: 1,
+            // display: 'flex',
             // paddingTop: theme.spacing(0.5),
             // paddingBottom: theme.spacing(0.5),
             paddingLeft: mainSidesPadding,

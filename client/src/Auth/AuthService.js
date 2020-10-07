@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const API_URL = '/api/users/'
+const API_URL = '/api/users'
 
 class AuthService
 {
@@ -19,13 +19,7 @@ class AuthService
                     localStorage.setItem('user', JSON.stringify(res.data))
                 return res.data
             })
-            .catch( res => {
-                // res = String(res).split(':')
-                // res = res.reduce( (prev, curr, i) => {
-                //     return i!==0 ? prev + curr : ''
-                // })
-                return Object(res)
-            })
+            .catch( res => res )
     }
 
     register(username, email, password)
