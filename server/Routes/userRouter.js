@@ -115,10 +115,10 @@ router.post("/login", (req, res) =>
                                 id: user.id,
                                 username: user.username,
                                 accessToken: token,
-                            },
-                            collection: {
-                                id: collection.id,
-                                cards: collection.cards ? collection.cards : {},
+                                collection: {
+                                    id: collection.id,
+                                    cards: collection.cards ? collection.cards : {},
+                                }
                             },
                         })
                     })

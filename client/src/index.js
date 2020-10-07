@@ -13,7 +13,6 @@ class CustomRouter extends Component
         super(props)
         this.state = {
             activeTab: 'Main',
-            hideTabIndicator: false,
             themeType: 'dark',
             theme: darkTheme,
             userData: null,
@@ -30,56 +29,19 @@ class CustomRouter extends Component
         }
     }
 
-    getUserData = ( () => {
-        return this.state.userData
+    setUserData = ( (data) => {
+        this.setState({
+            userData: data,
+        })
+        // console.log('set user data:', data) //DEBUG
     })
-
-    /**
-     * set the active user in the application
-     */
-    setUserData = ( (user) => (
-        this.setState({
-            userData: user
-        })
-    ))
     
-    setCollectionData = ( (user) => (
-        this.setState({
-            collectionData: user
-        })
-    ))
-
-    /**
-     * set active tab in title
-     * @param tabName ['~emptyString~', 'main', 'draftsim', 'collection']
-     */
     setActiveTab = ( (tabName) => {
-        const tabs = [
-            '^$', // => empty string
-            'main',
-            'draftsim',
-            'collection',
-        ]
-
-        const regex = '(' + tabs.reduce( (prev, curr) => {
-            return prev + '|' + curr
-        }) + ')'
-
         this.setState({
             activeTab: tabName,
-            hideTabIndicator: (
-                String(tabName).match(regex)
-                    ? ''
-                    : 'none'
-            ),
         })
     })
 
-    /**
-     * set new theme for the application.
-     * options are 'light' or 'dark'
-     * @param newTheme ['light', 'dark']
-     */
     setTheme = ( (themeType) => (
         this.setState({
             themeType: themeType,
@@ -92,13 +54,11 @@ class CustomRouter extends Component
         let passedProps = {
             routerRef: this.state.routerRef,
             activeTab: this.state.activeTab,
-            hideTabIndicator: this.state.hideTabIndicator,
             setActiveTab: this.setActiveTab,
             themeType: this.state.themeType,
             theme: this.state.theme,
             setTheme: this.setTheme,
             setUserData: this.setUserData,
-            setCollectionData: this.setCollectionData,
             userData: this.state.userData
         }
 
