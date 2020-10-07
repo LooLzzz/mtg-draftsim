@@ -4,7 +4,6 @@ const API_URL = '/api/users'
 
 class AuthService
 {
-    logout() { return localStorage.clear() }
     getCurrentUser() { return JSON.parse(localStorage.getItem('user'))}
 
     login(username, password)
@@ -27,6 +26,12 @@ class AuthService
                 console.error(err)
                 return null
             } )
+    }
+
+    logout()
+    {
+        localStorage.removeItem('user')
+        localStorage.removeItem('collection')
     }
 
     signup(username, email, password)

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { withRouter } from 'react-router';
 import { duration, Fade, ListItem, ListItemIcon, ListItemSecondaryAction, ListItemText, Switch } from '@material-ui/core';
-import getStyles from './styles'
+import getStyles from '../styles'
 import {
     Brightness3 as DarkmodeIcon,
     BrightnessHigh as LightmodeIcon,

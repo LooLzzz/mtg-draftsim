@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { AppBar, Grid, Tab, Tabs } from '@material-ui/core';
-import MenuPopper from './MenuPopper'
+import { MenuPopper } from './Components'
 
 import { withStyles } from '@material-ui/core/styles';
 import { withRouter } from 'react-router';
@@ -31,27 +31,12 @@ class Layout extends Component
         }
     }
 
-    updateTabIndicator(e, name)
-    {
-        // console.log('updating tab indicator') //DEBUG
-
-        switch (name) {
-            default:
-                this.setState({hideTabIndicator: true})
-                break
-
-            case 'main':
-            case 'draftsim':
-            case 'collection':
-                this.setState({hideTabIndicator: false})
-                break
-        }
-    }
-
     tabNameToIndex(name)
     {
         switch (name) {
             default:
+                return false
+                
             case 'main':
                 return 0
             
@@ -95,12 +80,7 @@ class Layout extends Component
                         <Grid item xs = {9}>
                             <Tabs
                                 // ref = {(r) => this.tabsRef=r}
-                                value = {this.tabNameToIndex(this.state.activeTab)}
-                                TabIndicatorProps = {{
-                                    style: {
-                                        display: this.state.hideTabIndicator ? 'none': '',
-                                    }
-                                }}
+                                value = { this.tabNameToIndex(this.state.activeTab) }
                             >
                                 {
                                     items.map((item, i) => (
