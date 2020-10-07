@@ -72,13 +72,13 @@ class MenuPopper extends Component
                         loading: false,
                     })
 
-                    if (res.username)
+                    if (res)
                     {
                         this.setState({
                             dialogOpen: false,
-                            // userData: res
                         })
-                        this.props.setUserData(res)
+                        this.props.setUserData(res.user)
+                        this.props.setCollectionData(res.collection)
                         
                         // console.log('got user data', res) //DEBUG
                     }
@@ -87,8 +87,6 @@ class MenuPopper extends Component
                         this.setState({
                             badLogin: true
                         })
-
-                        // console.error(res) //DEBUG
                     }
                 })
             }
@@ -128,7 +126,7 @@ class MenuPopper extends Component
 
     render()
     {
-        const {classes} = this.props
+        const {classes, history} = this.props
 
         return (
             <Dummy>
@@ -165,30 +163,29 @@ class MenuPopper extends Component
                                         <ListSubheader>Account</ListSubheader>
                                         {
                                             this.state.userData
-                                            ? (
+                                            ? ( //if
                                                 <Dummy>
                                                     <ListItem>
                                                         <ListItemText>
                                                             Welcome <b>{this.state.userData.username}</b>
                                                         </ListItemText>
                                                     </ListItem>
-                                                    <MenuItem>
-                                                        <ListItemText onClick={this.handleLogout}>
+                                                    <MenuItem onClick={this.handleLogout}>
+                                                        <ListItemText>
                                                             Logout
                                                         </ListItemText>
                                                     </MenuItem>
                                                 </Dummy>
                                             )
-                                            : (
+                                            : ( //else
                                                 <Dummy>
-                                                    <MenuItem>
-                                                        <ListItemText onClick={(e) => this.handleLoginDialogOpen(e, 'open')}>
+                                                    <MenuItem onClick={(e) => this.handleLoginDialogOpen(e, 'open')}>
+                                                        <ListItemText>
                                                             Login
                                                         </ListItemText>
                                                     </MenuItem>
-                                                    <MenuItem>
+                                                    <MenuItem onClick={(e) => history.push('/signup')}>
                                                         <ListItemText>
-                                                            {/*//TODO create signup page*/}
                                                             Sign up
                                                         </ListItemText>
                                                     </MenuItem>
@@ -206,7 +203,7 @@ class MenuPopper extends Component
                                             handleChange = {this.handleThemeChange.bind(this)}
                                             text = {'Darkmode'}
                                             trigger = {{
-                                                value: this.props.activeThemeType,
+                                                value: this.props.themeType,
                                                 on: 'dark',
                                                 off: 'light',
                                             }}

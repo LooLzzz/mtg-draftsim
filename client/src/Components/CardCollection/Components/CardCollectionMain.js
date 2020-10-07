@@ -5,7 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 import getStyles from './styles'
 import 'Resources/keyrune/css/keyrune.css'
 import 'Resources/mana/css/mana.css'
-import { AppBar, Grid, Toolbar } from '@material-ui/core';
+import { AppBar, Grid, Toolbar, Typography } from '@material-ui/core';
 
 const useStylesLOC = (theme) => getStyles(theme)
 
@@ -15,7 +15,6 @@ class CardCollectionMain extends Component
     {
         super(props)
         props.setActiveTab('collection')
-
     }
 
     tmp(name)
@@ -31,8 +30,10 @@ class CardCollectionMain extends Component
             <Dummy>
                 <Grid container spacing={2} className={classes.root}>
                     <Grid item xs={12}>
-                        <main style={{height: '75vh', backgroundColor:'orange'}}>
-                            
+                        <main /*style={{height: '75vh', backgroundColor:'orange'}}*/>
+                            <Typography>
+                                Collection Component
+                            </Typography>
                         </main>
                     </Grid>
                 </Grid>

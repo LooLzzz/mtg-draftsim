@@ -1,5 +1,13 @@
 import { createMuiTheme as createTheme } from '@material-ui/core/styles';
 
+const sharedOverrides = {
+    MuiTextField: {
+        root: {
+            width: '100%'
+        },
+    },
+}
+
 const lightTheme = createTheme({
     palette: {
         type: 'light',
@@ -9,8 +17,8 @@ const lightTheme = createTheme({
         },
     },
     overrides: {
-
-    }
+        ...sharedOverrides
+    },
 })
 
 const darkTheme = createTheme({
@@ -23,7 +31,13 @@ const darkTheme = createTheme({
                 color: 'white',
             },
         },
-    }
+        MuiCircularProgress: {
+            circle: {
+                color: 'white'
+            },
+        },
+        ...sharedOverrides,
+    },
 })
 
 export {

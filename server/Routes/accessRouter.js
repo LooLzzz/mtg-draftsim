@@ -16,11 +16,11 @@ function verifyToken(req, res, next)
     // console.log('body', req.body)
 
     if (!token)
-        return res.status(401).send({ message: "No token provided!" });
+        return res.status(401).send({ error: "No token provided!" });
 
     jwt.verify(token, Keys.secret, (err, decoded) => {
         if (err)
-            return res.status(401).send({ message: "Unauthorized!" });
+            return res.status(401).send({ error: "Unauthorized!" });
         req.userid = decoded.id
         next()
     })

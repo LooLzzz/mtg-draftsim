@@ -1,7 +1,7 @@
 const isEmpty = require('is-empty')
 const validator = require('validator')
 
-function validateRegisterInput(data)
+function validateSignupInput(data)
 {
     let errors = {};
     
@@ -15,26 +15,30 @@ function validateRegisterInput(data)
     if (validator.isEmpty(data.username))
         errors.username = "Username field is required";
     
-        // Email checks
+    // Email checks
     if (validator.isEmpty(data.email))
         errors.email = "Email field is required";
     else if (!validator.isEmail(data.email))
         errors.email = "Email is invalid";
     
     // Password checks
+    let passErrs = []
     if (validator.isEmpty(data.password))
-        errors.password = "Password field is required";
+        passErrs.push("Password field is required");
     if (validator.isEmpty(data.password2))
-        errors.password2 = "Confirm password field is required";
-    if (!validator.isLength(data.password, { min: 5, max: 30 }))
-        errors.password = "Password must be at least 5 characters long";
+        passErrs.push("Confirm password field is required");
+    if (!validator.isLength(data.password, { min: 5, max: 30 }) || !validator.isLength(data.password2, { min: 5, max: 30 }))
+        passErrs.push("Password must be at least 5 characters long");
     if (!validator.equals(data.password, data.password2))
-        errors.password2 = "Passwords must match";
+        passErrs.push("Passwords must match");
     
+    if (!isEmpty(passErrs))
+        errors.password = passErrs
+
     return {
         errors,
         isValid: isEmpty(errors)
     };
 }
 
-module.exports = validateRegisterInput
+module.exports = validateSignupInput

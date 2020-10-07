@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { makeStyles, withStyles } from '@material-ui/core/styles';
-import { Card, CardActionArea, CardContent, CardMedia, Divider, Grid, Typography } from '@material-ui/core';
-import { useHistory } from "react-router-dom";
+import { Button, Card, CardActionArea, CardContent, CardMedia, Divider, Grid, Typography } from '@material-ui/core';
+import { useHistory, withRouter } from "react-router-dom";
 import { Dummy } from 'Components';
 import getStyles from './styles'
 // import clsx from 'clsx';
@@ -12,12 +12,12 @@ const useStylesLOC = (theme) => getStyles(theme)
 function MediaCard(props)
 {    
     const classes = useStylesHOC();
-    const hist = useHistory();
+    const history = useHistory();
 
     return (
         <Card className = {classes.card}>
             <CardActionArea 
-                onClick={ (event) => hist.push('/' + props.url) }
+                onClick={ (event) => history.push('/' + props.url) }
             >
                 {/* <CardHeader title = {props.title} /> */}
                 <CardMedia
@@ -53,7 +53,7 @@ class Main extends Component
 
     render()
     {
-        const { classes } = this.props;
+        const { classes, history } = this.props;
         return (
             <Dummy>
                 <Grid container spacing={2} className={classes.root}>
@@ -79,13 +79,15 @@ class Main extends Component
                     <Typography variant='h4'>
                         About
                     </Typography>
-                    <Typography color="textSecondary">
-                        Some text
-                    </Typography>
+                    <Button variant="outlined" onClick={(e) => history.push('/lost')}>
+                        <Typography color="textSecondary">
+                            Get lost
+                        </Typography>
+                    </Button>
                 </div>
             </Dummy>
         )
     }
 }
 
-export default withStyles(useStylesLOC)(Main)
+export default withRouter(withStyles(useStylesLOC)(Main))

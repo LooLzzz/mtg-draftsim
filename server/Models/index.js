@@ -1,5 +1,5 @@
-const User = require("./user.js");
-const Collection = require("./collection.js");
+const User = require("./User.js");
+const Collection = require("./Collection.js");
 
 module.exports = {
     User,

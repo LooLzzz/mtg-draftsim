@@ -13,7 +13,9 @@ class Layout extends Component
     constructor(props)
     {
         super(props);
-        this.state = {...props}
+        this.state = {
+            ...props,
+        }
 
         // console.log('props', props) //DEBUG
     }
@@ -21,48 +23,61 @@ class Layout extends Component
     componentDidUpdate(oldProps, oldState)
     {
         if (oldProps !== this.props)
+        {
             this.setState({
                 ...this.props
             })
+            // console.log('updating layout') //DEBUG
+        }
+    }
+
+    updateTabIndicator(e, name)
+    {
+        // console.log('updating tab indicator') //DEBUG
+
+        switch (name) {
+            default:
+                this.setState({hideTabIndicator: true})
+                break
+
+            case 'main':
+            case 'draftsim':
+            case 'collection':
+                this.setState({hideTabIndicator: false})
+                break
+        }
     }
 
     tabNameToIndex(name)
     {
         switch (name) {
-            default: //defaults to Main
-                return 0;
+            default:
+            case 'main':
+                return 0
             
             case 'draftsim':
-                return 1;
+                return 1
         
             case 'collection':
-                return 2;
+                return 2
         }
     }
 
-    handleTabClick(url)
-    {
-        this.props.setActiveTab(url)
-        this.props.history.push('/'+url)
-    }
-
-    usernameFieldRef = React.createRef()
-
     render()
     {
-        const {classes} = this.props;
+        const {classes, history} = this.props;
         const items = [
             {
                 label: 'Main',
-                url: '',
+                url: '/',
             },
             {
                 label: 'Draftsim',
-                url: 'draftsim',
+                url: '/draftsim',
             },
             {
                 label: 'Collection',
-                url: 'collection',
+                url: '/collection',
             },
         ]
         const menuProps = {
@@ -78,13 +93,21 @@ class Layout extends Component
                         }}
                     >
                         <Grid item xs = {9}>
-                            <Tabs value={this.tabNameToIndex(this.props.activeTab)} >
+                            <Tabs
+                                // ref = {(r) => this.tabsRef=r}
+                                value = {this.tabNameToIndex(this.state.activeTab)}
+                                TabIndicatorProps = {{
+                                    style: {
+                                        display: this.state.hideTabIndicator ? 'none': '',
+                                    }
+                                }}
+                            >
                                 {
                                     items.map((item, i) => (
                                         <Tab
                                             key = { i }
                                             label = { item.label }
-                                            onClick = { () => this.handleTabClick(item.url) }
+                                            onClick = { () => history.push(item.url) }
                                         />
                                     ))
                                 }
