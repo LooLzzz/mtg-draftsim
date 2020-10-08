@@ -1,10 +1,8 @@
 export default function getStyles(theme)
 {
-    const cardHeight = '75vh'
-
     return ({
         root: {
-            minHeight: cardHeight,
+            minHeight: '80vh',
             // width: '30vw',
             // flexDirection: "column",
             justifyContent: "center",
@@ -12,19 +10,13 @@ export default function getStyles(theme)
             display: 'flex',
             flexGrow: 1,
         },
-        media: {
-            height: `calc(0.8 * ${cardHeight})`,
-            backgroundSize: 'contain',
-            backgroundPosition: 'center',
-        },
-        card: {
-            minHeight: {cardHeight},
-        },
-        item: {
-            flexDirection: "column",
-            justifyContent: "center",
+        paper: {
+            padding: theme.spacing(3),
             display: 'flex',
-            flexGrow: 1,
-        }
+            justifyContent: "center",
+            alignItems: 'center',
+            // flexDirection: "column",
+            // flexGrow: 0.1,
+        },
     })
 }

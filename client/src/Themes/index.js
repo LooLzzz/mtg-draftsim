@@ -1,9 +1,17 @@
+import { colors } from '@material-ui/core';
 import { createMuiTheme as createTheme } from '@material-ui/core/styles';
+// import { deepOrange } from '@material-ui/core/colors';
 
 const sharedOverrides = {
     MuiTextField: {
         root: {
-            width: '100%'
+            width: '100%',
+            margin: '0.4em',
+        },
+    },
+    MuiPaper: {
+        rounded: {
+            borderRadius: '12.5px',
         },
     },
 }
@@ -24,6 +32,7 @@ const lightTheme = createTheme({
 const darkTheme = createTheme({
     palette: {
         type: 'dark',
+        // secondary: deepOrange,
     },
     overrides: {
         MuiTypography: {
@@ -31,6 +40,13 @@ const darkTheme = createTheme({
                 color: 'white',
             },
         },
+        // MuiFormLabel: {
+        //     root: {
+        //         '&$focused': {
+        //             color: colors.red['A400'],
+        //         },
+        //     }
+        // },
         MuiCircularProgress: {
             circle: {
                 color: 'white'

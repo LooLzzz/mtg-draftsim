@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Redirect, Route, Switch } from "react-router-dom";
+import { AuthService } from 'Auth';
 import { Layout, Main, Draftsim, CardCollection, Lost, Signup } from './Components'
-import { CssBaseline, ThemeProvider } from '@material-ui/core';
 import { darkTheme, lightTheme } from 'Themes'
+import { CssBaseline, ThemeProvider } from '@material-ui/core';
 import 'fontsource-roboto';
 
 class CustomRouter extends Component
@@ -19,6 +20,11 @@ class CustomRouter extends Component
         }
     }
 
+    componentDidMount()
+    {
+        this.isLoggedIn()
+    }
+
     componentDidUpdate(oldProps, oldState)
     {
         if (oldProps.routerRef !== this.props.routerRef)
@@ -27,6 +33,14 @@ class CustomRouter extends Component
                 routerRef: this.props.routerRef
             })
         }
+    }
+
+    isLoggedIn = (e) => {
+        const userData = AuthService.getCurrentUserData()
+        if (userData)
+            this.setUserData(userData)
+        
+        return userData
     }
 
     setUserData = ( (data) => {
@@ -51,7 +65,7 @@ class CustomRouter extends Component
 
     render()
     {
-        let passedProps = {
+        const passedProps = {
             routerRef: this.state.routerRef,
             activeTab: this.state.activeTab,
             setActiveTab: this.setActiveTab,
@@ -59,51 +73,41 @@ class CustomRouter extends Component
             theme: this.state.theme,
             setTheme: this.setTheme,
             setUserData: this.setUserData,
-            userData: this.state.userData
+            userData: this.state.userData,
+            isLoggedIn: this.isLoggedIn,
         }
+
+        const routes = [
+            { path: '/',
+              Component: Main },
+            { path: '/main',
+              to: '/',
+              Component: Redirect },
+            { path: '/draftsim',
+              Component: Draftsim },
+            { path: '/collection',
+              Component: CardCollection },
+            { path: '/signup',
+              Component: Signup },
+            { path: '/lost',
+              Component: Lost },
+        ]
 
         return (
             <ThemeProvider theme={this.state.theme}>
                 <Router>
                     <Layout { ...passedProps } >
                         <Switch>
-                            <Route exact
-                                path = "/"
-                                render = {
-                                    () => <Main {...passedProps} />
-                                }
-                            />
-                            <Route exact
-                                path = "/draftsim"
-                                render = {
-                                    () => <Draftsim {...passedProps} />
-                                }
-                            />
-                            <Route exact
-                                path = "/collection"
-                                render = {
-                                    () => <CardCollection {...passedProps} />
-                                }
-                            />
-                            <Route exact
-                                path = "/collection"
-                                render = {
-                                    () => <CardCollection {...passedProps} />
-                                }
-                            />
-                            <Route exact
-                                path = '/signup'
-                                render = {
-                                    () => <Signup {...passedProps} />
-                                }
-                            />
-                            <Route
-                                path = '/lost'
-                                render = {
-                                    () => <Lost {...passedProps} />
-                                }
-                            />
-                            <Redirect to='/lost' />
+                            { routes.map((item, i) => (
+                                <Route exact
+                                    key = {i}
+                                    path = {item.path}
+                                    render = {
+                                        () => <item.Component {...item.to} {...passedProps} />
+                                    }
+                                />
+                            )) }
+                            <Redirect to='/lost' /> {/* all else will be sent to '/lost' */}
                         </Switch>
                     </Layout>
                 </Router>
