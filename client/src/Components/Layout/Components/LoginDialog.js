@@ -17,6 +17,7 @@ class LoginDialog extends Component
         super(props)
         this.state = {
             loading: false,
+            submitErrors: {},
             ...props, //props = {dialogOpen}
         }
     }
@@ -40,14 +41,14 @@ class LoginDialog extends Component
     handleFormError = (e) =>
     {
         this.setState({
-            badSubmit: false,
+            submitErrors: {},
         })
     }
 
     handleFormSubmit = (e) =>
     {
         this.setState({
-            badSubmit: false
+            submitErrors: {},
         })
 
         const dryRun = true
@@ -67,15 +68,16 @@ class LoginDialog extends Component
 
                     if (res.accessToken) //success
                     {
-                        this.props.setUserData(res.user)
+                        this.props.setUserData(res)
                         this.props.handleLoginDialogOpen(e, 'close')
                         this.props.history.push('/') //go back to main page
                         // console.log('got user data', res.user) //DEBUG
                     }
                     else
                     {
+                        // console.error('login error:', res)
                         this.setState({
-                            badSubmit: true
+                            submitErrors: res.data,
                         })
                     }
                 })
@@ -85,7 +87,7 @@ class LoginDialog extends Component
 
     render()
     {
-        const {classes} = this.props
+        // const {classes} = this.props
 
         return (
             <Dummy>
@@ -145,12 +147,9 @@ class LoginDialog extends Component
                                 errorMessages = {['Password is required', 'Password is too short']}
                             />
                         </DialogContent>
-                        <DialogContent style={{display: this.state.badSubmit ? '': 'none'}}>
-                            <Typography
-                                variant = 'subtitle2'
-                                color = 'error'
-                            >
-                                Bad login info
+                        <DialogContent>
+                            <Typography variant='subtitle2' color='error'>
+                                { Object.values(this.state.submitErrors).map(value => value) }
                             </Typography>
                         </DialogContent>
                         <DialogActions style={{

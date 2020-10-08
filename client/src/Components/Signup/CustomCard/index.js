@@ -46,7 +46,7 @@ class CustomCard extends Component
         // console.log(this.state.children)
 
         return (
-            <Paper className={classes.root} elevation={8} >
+            <Paper className={classes.root} elevation={8} style={{...this.props.style}} >
                 <div className={classes.header} >
                     {this.state?.children.header}
                 </div>

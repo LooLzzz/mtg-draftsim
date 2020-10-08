@@ -44,7 +44,7 @@ class MenuPopper extends Component
             dialogOpen: open === 'open', //open => ['open' || 'close']
             username: '',
             password: '',
-            badLogin: false,
+            submitErrors: {},
         })
 
         // console.log(this.usernameFieldRef)
@@ -70,7 +70,7 @@ class MenuPopper extends Component
 
     render()
     {
-        const {classes, history} = this.props
+        const {classes} = this.props
 
         return (
             <Dummy>

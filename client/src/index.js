@@ -35,8 +35,8 @@ class CustomRouter extends Component
         }
     }
 
-    isLoggedIn = (e) => {
-        const userData = AuthService.getCurrentUserData()
+    isLoggedIn = async (e) => {
+        const userData = await AuthService.getCurrentUserData()
         if (userData)
             this.setUserData(userData)
         
