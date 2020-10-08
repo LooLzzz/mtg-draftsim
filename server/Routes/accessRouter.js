@@ -3,6 +3,7 @@ require('module-alias/register')
 const mongoose = require('mongoose');
 const express = require("express");
 const jwt = require("jsonwebtoken");
+const { Keys } = require("@Config")
 const { allAccess, userAccess } = require('@Controllers')
 
 const router = express.Router()
@@ -16,11 +17,11 @@ function verifyToken(req, res, next)
     // console.log('body', req.body)
 
     if (!token)
-        return res.status(401).send({ error: "No token provided!" });
+        return res.status(401).json({ error: "Token not provided!" });
 
     jwt.verify(token, Keys.secret, (err, decoded) => {
         if (err)
-            return res.status(401).send({ error: "Unauthorized!" });
+            return res.status(401).json({ error: "Unauthorized!" });
         req.userid = decoded.id
         next()
     })

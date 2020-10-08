@@ -6,7 +6,8 @@ import { TextValidator, ValidatorForm } from 'react-material-ui-form-validator';
 import { Dummy } from 'Components';
 import CustomCard from "./CustomCard";
 
-import { withStyles } from '@material-ui/core/styles';
+import { withRouter } from 'react-router';
+import { withStyles, withTheme } from '@material-ui/styles';
 import getStyles from './styles'
 const useStyles = (theme) => getStyles(theme)
 
@@ -20,7 +21,7 @@ class Signup extends Component
             password: '',
             password2: '',
             loading: false,
-            badSubmit: false,
+            errorMessages: {},
             success: false,
             ...props,
         }
@@ -34,20 +35,10 @@ class Signup extends Component
     
     componentDidMount()
     {
-        if (this.props.userData || this.props.isLoggedIn()) //already signed in
-            this.props.history.push('/lost') //get lost chump :3
-            // this.props.history.push('/')
-    }
-
-    handleFormClear = (e) => {
-        this.setState({
-            username: '',
-            password: '',
-            password2: '',
-            badSubmit: false,
-            success: false,
+        this.props.isLoggedIn().then(flag => {
+            if (flag)
+                this.props.history.push('/lost')
         })
-        this.formRef.resetValidations()
     }
 
     handleFormChange = (e) => {
@@ -55,57 +46,76 @@ class Signup extends Component
             [e.currentTarget.name]: e.currentTarget.value
         })
     }
+
+    handleFormClear = () => {
+        this.setState({
+            username: '',
+            password: '',
+            password2: '',
+            errorMessages: {},
+            success: false,
+        })
+        this.formRef.resetValidations()
+
+        this.props.isLoggedIn().then(flag => {
+            if (flag)
+                this.props.history.push('/')
+        })
+    }
     
-    handleFormError = (e) =>
+    handleFormError = () =>
     {
         this.setState({
-            badSubmit: false,
+            errorMessages: {},
         })
     }
 
-    handleFormSubmit = (e) =>
+    handleFormSubmit = async () =>
     {
+        if (await this.props.isLoggedIn()) //already signed in
+        {    
+            this.props.history.push('/')
+            return null
+        }
+
         this.setState({
-            badSubmit: false
+            errorMessages: {},
         })
-        
+
         const dryRun = true
-        this.formRef.isFormValid(dryRun).then( (isFormValid) =>
+        const isFormValid = await this.formRef.isFormValid(dryRun)
+            
+        if (isFormValid)
         {
-            if (isFormValid)
+            this.setState({loading: true})
+
+            const {username, password, password2} = this.state
+            const res = await AuthService.signup(username, password, password2)
+            
+            this.setState({loading: false})
+
+            if (res.accessToken) //success
             {
+                this.handleFormClear()
+                this.setState({success: true})
+                this.props.setUserData(res)
+                // this.props.handleLoginDialogOpen(e, 'close')
+                // this.props.history.push('/') //go back to main page
+                // console.log('got user data', res.user) //DEBUG
+            }
+            else
+            {
+                // console.error('signup error:', res)
                 this.setState({
-                    loading: true,
-                })
-
-                const {username, password, password2} = this.state
-                AuthService.signup(username, password, password2).then( (res) => {
-                    this.setState({
-                        loading: false,
-                    })
-
-                    if (res.accessToken) //success
-                    {
-                        this.setState({success: true})
-                        this.props.setUserData(res.user)
-                        // this.props.handleLoginDialogOpen(e, 'close')
-                        // this.props.history.push('/') //go back to main page
-                        // console.log('got user data', res.user) //DEBUG
-                    }
-                    else
-                    {
-                        this.setState({
-                            badSubmit: true
-                        })
-                    }
+                    errorMessages: res.data,
                 })
             }
-        })
+        }
     }
 
     render()
     {
-        const {classes} = this.props
+        const {classes, theme} = this.props
         
         return (
             <Dummy>
@@ -119,16 +129,15 @@ class Signup extends Component
                         <CustomCard>
                             <header>
                                 <Typography variant="h4">
-                                    Signup
+                                    <b>SIGNUP</b>
                                 </Typography>
                             </header>
                             <icon>
                                 <AccountCircleIcon
                                     fontSize = 'inherit'
-                                    // color = 'primary'
                                     color = 'inherit'
                                     style = {{
-                                        color: '#26c6da'
+                                        color: theme.palette.type==='dark' ? theme.palette.info.light : theme.palette.primary.main,
                                     }}
                                 />
                             </icon>
@@ -172,19 +181,16 @@ class Signup extends Component
                                     validators = {['required', 'minStringLength:5', 'isPasswordMatch']}
                                     errorMessages = {['Password is required', 'Password is too short', 'Passwords does not match']}
                                 />
-                                <Typography
-                                    variant = 'subtitle2'
-                                    color = 'error'
-                                    style = {{display: this.state.badSubmit ? '' : 'none'}}
-                                >
-                                    Some error info...
-                                </Typography>
-                                <Typography
-                                    variant = 'subtitle2'
-                                    color = 'green'
-                                    style = {{display: this.state.success ? '' : 'none'}}
-                                >
-                                    Success!
+                                {
+                                    Object.values(this.state.errorMessages).map( (value, i) => (
+                                        <Typography key={i} variant='subtitle2' color='error' >
+                                            {value}
+                                        </Typography>
+                                    ))
+                                }
+                                <Typography variant='subtitle2' style={{color: theme.palette.success.main}} >
+                                    { this.state.success ? 'Success!' : '' }
+                                    {/* Success! */}
                                 </Typography>
                             </content>
                             <action>
@@ -216,4 +222,4 @@ class Signup extends Component
     }
 }
 
-export default withStyles(useStyles)(Signup)
+export default withRouter(withTheme(withStyles(useStyles)(Signup)))

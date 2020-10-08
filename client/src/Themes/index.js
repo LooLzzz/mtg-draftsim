@@ -1,6 +1,5 @@
-import { colors } from '@material-ui/core';
+// import { colors } from '@material-ui/core';
 import { createMuiTheme as createTheme } from '@material-ui/core/styles';
-// import { deepOrange } from '@material-ui/core/colors';
 
 const sharedOverrides = {
     MuiTextField: {

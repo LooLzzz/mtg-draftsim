@@ -12,19 +12,19 @@ class AuthService
                 username,
                 password
             })
-            .then( (res) => {
-                if (res.data.user.accessToken)
+            .then( res => {
+                if (res.data && res.data.accessToken)
                 {
-                    localStorage.setItem('user', JSON.stringify(res.data.user))
-                    // localStorage.setItem('collection', JSON.stringify(res.data.collection))
+                    localStorage.setItem('user', JSON.stringify(res.data))
                     return res.data
                 }
-                return null
+                //else
+                return res
             })
             .catch( err => {
-                console.error('login error:', err.response.data)
-                return err.response.data
-            } )
+                console.error('login error:', err.response)
+                return err.response
+            })
     }
 
     signup(username, password, password2)
@@ -35,12 +35,14 @@ class AuthService
                 password,
                 password2
             })
-            .then( (res) => {
+            .then( res => {
+                if (res.data && res.data.accessToken)
+                    return res.data
                 return res
             })
-            .catch( (err) => {
-                console.error('signup error:', err.response.data)
-                return err.response.data
+            .catch( err => {
+                console.error('signup error:', err.response)
+                return err.response
             })
     }
 
@@ -50,10 +52,14 @@ class AuthService
         // localStorage.removeItem('collection')
     }
 
-    getCurrentUserData()
+    async getCurrentUserData()
     {
-        if (AccessService.isValidUserToken)
-            return JSON.parse(localStorage.getItem('user'))
+        let isValid = await AccessService.isValidUserToken()
+        if (isValid)
+        {
+            const userData = JSON.parse(localStorage.getItem('user'))
+            return userData
+        }
         //else
         localStorage.removeItem('user')
         return null
