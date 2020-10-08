@@ -65,7 +65,7 @@ class LoginDialog extends Component
                         loading: false,
                     })
 
-                    if (res) //success
+                    if (res.accessToken) //success
                     {
                         this.props.setUserData(res.user)
                         this.props.handleLoginDialogOpen(e, 'close')
