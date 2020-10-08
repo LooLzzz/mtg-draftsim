@@ -25,15 +25,14 @@ router.post("/signup", (req, res) =>
     if (!isValid)
         return res
             .status(400)
-            .json({errors: errors});
+            .json(...errors);
 
-    errors = {}
     User.findOne({username: req.body.username})
         .then(user => {
             if (user)
                 return res
                     .status(400)
-                    .json({errors: {username: "Username already exists"}})
+                    .json({username: "Username already exists"})
             //else
             const newUser = new User({
                 username: req.body.username,
@@ -80,7 +79,7 @@ router.post("/login", (req, res) =>
 
     // Check validation
     if (!isValid)
-        return res.status(400).json(errors);
+        return res.status(400).json(...errors);
     const username = req.body.username;
     const password = req.body.password;
 
