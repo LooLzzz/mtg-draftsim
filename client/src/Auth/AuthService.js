@@ -39,7 +39,7 @@ class AuthService
                 return res
             })
             .catch( (err) => {
-                console.error('signup error:', err)
+                console.error('signup error:', err.response.data)
                 return null
             })
     }
