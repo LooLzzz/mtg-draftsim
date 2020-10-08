@@ -22,8 +22,8 @@ class AuthService
                 return null
             })
             .catch( err => {
-                console.error(err)
-                return null
+                console.error('login error:', err.response.data)
+                return err.response.data
             } )
     }
 
@@ -40,7 +40,7 @@ class AuthService
             })
             .catch( (err) => {
                 console.error('signup error:', err.response.data)
-                return null
+                return err.response.data
             })
     }
 

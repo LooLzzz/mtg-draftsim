@@ -84,7 +84,7 @@ class Signup extends Component
                         loading: false,
                     })
 
-                    if (res) //success
+                    if (res.accessToken) //success
                     {
                         this.setState({success: true})
                         this.props.setUserData(res.user)
