@@ -63,6 +63,11 @@ class MenuPopper extends Component
         })
     }
 
+    handleSignupClick = (e) => {
+        this.handleMenuToggle(null)
+        this.props.history.push('/signup')
+    }
+
     render()
     {
         const {classes, history} = this.props
@@ -123,7 +128,7 @@ class MenuPopper extends Component
                                                             Login
                                                         </ListItemText>
                                                     </MenuItem>
-                                                    <MenuItem onClick={(e) => history.push('/signup')}>
+                                                    <MenuItem onClick={this.handleSignupClick}>
                                                         <ListItemText>
                                                             Sign up
                                                         </ListItemText>

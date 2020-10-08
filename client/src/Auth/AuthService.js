@@ -1,11 +1,10 @@
 import axios from "axios"
+import AccessService from './AccessService'
 
 const API_URL = '/api/users'
 
 class AuthService
 {
-    getCurrentUser() { return JSON.parse(localStorage.getItem('user'))}
-
     login(username, password)
     {
         return axios
@@ -17,7 +16,7 @@ class AuthService
                 if (res.data.user.accessToken)
                 {
                     localStorage.setItem('user', JSON.stringify(res.data.user))
-                    localStorage.setItem('collection', JSON.stringify(res.data.collection))
+                    // localStorage.setItem('collection', JSON.stringify(res.data.collection))
                     return res.data
                 }
                 return null
@@ -28,23 +27,36 @@ class AuthService
             } )
     }
 
-    logout()
-    {
-        localStorage.removeItem('user')
-        localStorage.removeItem('collection')
-    }
-
-    signup(username, email, password)
+    signup(username, password, password2)
     {
         return axios
             .post(`${API_URL}/signup`, {
                 username,
-                email,
-                password
+                password,
+                password2
             })
             .then( (res) => {
                 return res
             })
+            .catch( (err) => {
+                console.error('signup error:', err)
+                return null
+            })
+    }
+
+    logout()
+    {
+        localStorage.removeItem('user')
+        // localStorage.removeItem('collection')
+    }
+
+    getCurrentUserData()
+    {
+        if (AccessService.isValidUserToken)
+            return JSON.parse(localStorage.getItem('user'))
+        //else
+        localStorage.removeItem('user')
+        return null
     }
 }
 
