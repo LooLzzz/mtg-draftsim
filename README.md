@@ -18,6 +18,12 @@ Run both commands concurrently
 
 ---
 
+Deployed at heroku:
+
+[https://mtg-draftsim.herokuapp.com/](https://mtg-draftsim.herokuapp.com/)
+
+---
+
 Made with <3 by [LooLzzz](http://github.com/LooLzzz) using `create-react-app`
 <br/>
 [![LooLzzz](https://avatars0.githubusercontent.com/u/8081213?s=460&u=f00fbdf1d592adfd5995d471a2121a920a0f33bd&v=4)](http://github.com/LooLzzz)
