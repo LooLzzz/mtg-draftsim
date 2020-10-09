@@ -3,8 +3,8 @@
  * @type {{mongoURI: String}}
  */
 const Keys = {
-    mongoURI: "mongodb+srv://LooLzzz:tWDRoGvJcPNRWkM2@cluster0.f6kn1.gcp.mongodb.net/mtg-draftsim",
-    secret: "6YbSFfpB9Z"
+    mongoURI: process.env.MONGO_URI,
+    secret: process.env.SECRET_KEY
 }
 
 module.exports = Keys
