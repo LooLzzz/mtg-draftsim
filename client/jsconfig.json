@@ -1,0 +1,17 @@
+{
+    "compilerOptions":
+    {
+        "baseUrl": "src",
+        "paths": {
+            "@Components/*": ["./Components/*"],
+            "@Resources/*": ["./Resources/*"],
+            "@Hooks/*": ["./Hooks/*"],
+            "@Themes/*": ["./Themes/*"],
+            "@Models/*": ["./Models/*"],
+            "@Auth/*": ["./Auth/*"]
+        }
+    },
+    "exclude": [
+        "build"
+    ]
+}
