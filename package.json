@@ -1,45 +1,41 @@
 {
-  "name": "mtg-draftsim",
-  "homepage": ".",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "@material-ui/core": "^4.9.10",
-    "@material-ui/icons": "^4.9.1",
-    "@material-ui/styles": "^4.9.10",
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.3.2",
-    "@testing-library/user-event": "^7.1.2",
-    "express-favicon": "^2.0.1",
-    "fontsource-roboto": "^3.0.3",
-    "react": "^16.13.1",
-    "react-beautiful-dnd": "^13.0.0",
-    "react-dom": "^16.13.1",
-    "react-router": "^5.2.0",
-    "react-router-dom": "^5.2.0",
-    "react-scripts": "3.4.1",
-    "recharts": "^1.8.5",
-    "scryfall-client": "^0.13.0"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  }
+    "name": "mtg-draftsim",
+    "version": "1.0.0",
+    "description": "",
+    "main": "server.js",
+    "type": "commonjs",
+    "scripts": {
+        "client": "cd client && npm start",
+        "start": "node server.js",
+        "server": "nodemon server.js",
+        "dev": "concurrently \"npm run server\" \"npm run client\"",
+        "heroku-postbuild": "NODE_MODULES_CACHE=false && NPM_CONFIG_PRODUCTION=false && cd client && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
+    },
+    "_moduleAliases": {
+        "@root": "/",
+        "@Config": "server/Config",
+        "@Models": "server/Models",
+        "@Routes": "server/Routes",
+        "@Validation": "server/Validation",
+        "@Controllers": "server/Controllers"
+    },
+    "author": "LooLzzz",
+    "license": "ISC",
+    "dependencies": {
+        "bcryptjs": "^2.4.3",
+        "body-parser": "^1.19.0",
+        "concurrently": "^5.3.0",
+        "dotenv": "^8.2.0",
+        "esm": "^3.2.25",
+        "express": "^4.17.1",
+        "is-empty": "^1.2.0",
+        "jsonwebtoken": "^8.5.1",
+        "module-alias": "^2.2.2",
+        "mongoose": "^5.10.8",
+        "nodemon": "^2.0.4",
+        "passport": "^0.4.1",
+        "passport-jwt": "^4.0.0",
+        "validator": "^13.1.17"
+    },
+    "devDependencies": {}
 }
