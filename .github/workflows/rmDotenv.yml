@@ -1,0 +1,14 @@
+name: Remove Dotenv File
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  clear-dotenv:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Remove File
+        uses: JesseTG/rm@v1.0.2
+        with:
+          path: .env

@@ -6,6 +6,8 @@
 *.vscode
 .vscode
 
+*bfg*
+
 # dependencies
 *node_modules
 # .env
@@ -20,10 +22,7 @@
 
 # misc
 .DS_Store
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+.env*
 
 *yarn.lock
 *npm-debug.log*
