@@ -4,16 +4,17 @@ name: Handle-Secrets
 on: push
 
 jobs:
-    # Set the job key. The key is displayed as the job name
-    # when a job name is not provided
-    handle-secrets:
-        # Name the Job
-        name: Handle secrets from github secrets api
-        # Set the type of machine to run on
-        runs-on: ubuntu-latest
+  # Set the job key. The key is displayed as the job name
+  # when a job name is not provided
+  handle-secrets:
+    # Name the Job
+    name: Handle secrets from github secrets api
+    # Set the type of machine to run on
+    runs-on: ubuntu-latest
 
-        steps:
-            - name: get-secrets
-              env:
-                  MONGO_URI: ${{ secrets.MONGO_URI }}
-                  SECRET_KEY: ${{ secrets.SECRET_KEY }}
+    steps:
+      - name: get-secrets
+        env:
+          MONGO_URI: ${{ secrets.MONGO_URI }}
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+        run: echo "passed secrets to appliaction as envs"
