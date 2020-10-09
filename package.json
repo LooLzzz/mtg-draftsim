@@ -9,7 +9,7 @@
         "start": "node server.js",
         "server": "nodemon server.js",
         "dev": "concurrently \"npm run server\" \"npm run client\"",
-        "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false && cd client && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
+        "heroku-postbuild": "NODE_MODULES_CACHE=false && NPM_CONFIG_PRODUCTION=false && cd client && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
     },
     "_moduleAliases": {
         "@root": "/",
