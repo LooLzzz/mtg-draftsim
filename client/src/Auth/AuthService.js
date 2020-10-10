@@ -1,4 +1,5 @@
 import axios from "axios"
+import isEmpty from 'is-empty'
 import AccessService from './AccessService'
 
 const API_URL = '/api/users'
@@ -54,14 +55,16 @@ class AuthService
 
     async getCurrentUserData()
     {
-        let isValid = await AccessService.isValidUserToken()
+        const userData = JSON.parse(localStorage.getItem('user'))
+        if (isEmpty(userData))
+            return false
+
+        const {isValid, error} = await AccessService.isValidUserToken()
         if (isValid)
-        {
-            const userData = JSON.parse(localStorage.getItem('user'))
             return userData
-        }
         //else
         localStorage.removeItem('user')
+        console.error('error while fetching user data:', error)
         return null
     }
 }

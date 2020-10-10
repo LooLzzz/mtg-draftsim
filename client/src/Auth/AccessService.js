@@ -11,27 +11,45 @@ class UserService
         let res = {}
         if (user && user.accessToken)
             res = {
-                'x-access-token': user.accessToken
+                'accessToken': user.accessToken
             };
         
         return res;
     }
 
-    getPublicContent()
+    isPublicAccess()
     {
-        return axios.get(API_URL + 'all');
+        // '/api/access/all'
+        return axios.get(API_URL + 'all')
     }
 
-    getUserContent()
+    isUserAccess()
     {
-        return axios.get(API_URL + 'user', { headers: this.getAuthHeader() });
+        // '/api/access/user'
+        return axios.get(API_URL + 'user', { headers: this.getAuthHeader() })
     }
 
-    isValidUserToken()
+    /**
+     * returns an object following: {isValid:bool, error:str}
+     */
+    async isValidUserToken()
     {
-        return this.getUserContent()
-            .then(res => true)
-            .catch(res => false)
+        const userData = JSON.parse(localStorage.getItem('user'))
+        if (!userData)
+            return false
+
+        const {data} = await this.isUserAccess()
+        return {
+            isValid: !!(data && data.user),
+            error: data.error ? data.error : '',
+        }
+
+        // if (data && data.user)
+        //     return true
+        //else
+        // if (data && data.error)
+        //     console.log('error:', data.error)
+        // return false
     }
 }
 

@@ -17,8 +17,7 @@
         "@Config": "server/Config",
         "@Models": "server/Models",
         "@Routes": "server/Routes",
-        "@Validation": "server/Validation",
-        "@Controllers": "server/Controllers"
+        "@Validation": "server/Validation"
     },
     "author": "LooLzzz",
     "license": "ISC",

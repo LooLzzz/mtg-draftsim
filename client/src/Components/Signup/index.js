@@ -33,12 +33,12 @@ class Signup extends Component
         )
     }
     
-    componentDidMount()
+    async componentDidMount()
     {
-        this.props.isLoggedIn().then(flag => {
-            if (flag)
-                this.props.history.push('/lost')
-        })
+        let flag = await this.props.isLoggedIn()
+        
+        if (flag)
+            this.props.history.push('/lost')
     }
 
     handleFormChange = (e) => {
@@ -47,20 +47,18 @@ class Signup extends Component
         })
     }
 
-    handleFormClear = () => {
+    handleFormClear = async () => {
+        const flag = await this.props.isLoggedIn()
+        if (flag)
+            this.props.history.push('/')
+
         this.setState({
             username: '',
             password: '',
             password2: '',
             errorMessages: {},
-            success: false,
         })
         this.formRef.resetValidations()
-
-        this.props.isLoggedIn().then(flag => {
-            if (flag)
-                this.props.history.push('/')
-        })
     }
     
     handleFormError = () =>
@@ -96,7 +94,8 @@ class Signup extends Component
 
             if (res.accessToken) //success
             {
-                this.handleFormClear()
+                // this.handleFormClear()
+                // this.formRef.resetValidations()
                 this.setState({success: true})
                 this.props.enqueueSnackbar(`Successfully registered ${res.username}`, {variant: 'success'})
                 this.props.setUserData(res)
@@ -138,9 +137,6 @@ class Signup extends Component
                                 <AccountCircleIcon
                                     fontSize = 'inherit'
                                     color = 'inherit'
-                                    // style = {{
-                                    //     color: theme.palette.type==='dark' ? theme.palette.info.light : theme.palette.primary.main,
-                                    // }}
                                 />
                             </icon>
                             <content>
@@ -153,9 +149,9 @@ class Signup extends Component
                                     size = 'small'
                                     value = {this.state.username}
                                     onChange = { this.handleFormChange }
-                                    validators = {['required']}
-                                    errorMessages = {['Username is required']}
-                                    // errorMessages = {['']}
+                                    validators = {['required', `matchRegexp:^([A-Za-z0-9]|[-_.'])*$`]}
+                                    errorMessages = {['Username is required', `Username can only be alphanumerica and any of - _ . ' `]}
+                                    disabled = {this.state.success}
                                 />
                                 <TextValidator
                                     variant = 'outlined'
@@ -169,6 +165,7 @@ class Signup extends Component
                                     onChange = { this.handleFormChange }
                                     validators = {['required', 'minStringLength:5']}
                                     errorMessages = {['Password is required', 'Password is too short']}
+                                    disabled = {this.state.success}
                                 />
                                 <TextValidator
                                     variant = 'outlined'
@@ -182,6 +179,7 @@ class Signup extends Component
                                     onChange = { this.handleFormChange }
                                     validators = {['required', 'minStringLength:5', 'isPasswordMatch']}
                                     errorMessages = {['Password is required', 'Password is too short', 'Passwords does not match']}
+                                    disabled = {this.state.success}
                                 />
                                 {
                                     Object.values(this.state.errorMessages).map( (value, i) => (
@@ -190,22 +188,30 @@ class Signup extends Component
                                         </Typography>
                                     ))
                                 }
-                                <Typography variant='subtitle2' style={{color: theme.palette.success.main}} >
+                                {/* <Typography variant='subtitle2' style={{color: theme.palette.success.main}} >
                                     { this.state.success ? 'Success!' : '' }
-                                    {/* Success! */}
-                                </Typography>
+                                </Typography> */}
                             </content>
                             <action>
                                 <Grid container spacing={1}>
                                     <Grid item>
-                                        <Button size="medium" variant="outlined"
+                                        <Button
+                                            size = "medium"
+                                            variant = "outlined"
                                             onClick = {this.handleFormClear}
+                                            // disabled = {this.state.success}
                                         >
                                             Clear
                                         </Button>
                                     </Grid>
                                     <Grid item>
-                                        <Button type='submit' size="medium" variant="contained" color="primary">
+                                        <Button
+                                            type = "submit"
+                                            size = "medium"
+                                            variant = "contained"
+                                            color = "primary"
+                                            disabled = {this.state.success}
+                                        >
                                             Submit
                                         </Button>
                                     </Grid>
