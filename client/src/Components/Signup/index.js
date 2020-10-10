@@ -3,9 +3,9 @@ import { AuthService } from 'Auth';
 import { Button, CircularProgress, Dialog, DialogContent, Grid, Typography } from '@material-ui/core';
 import { AccountCircle as AccountCircleIcon } from '@material-ui/icons';
 import { TextValidator, ValidatorForm } from 'react-material-ui-form-validator';
-import { Dummy } from 'Components';
 import CustomCard from "./CustomCard";
 
+import { withSnackbar } from 'notistack';
 import { withRouter } from 'react-router';
 import { withStyles, withTheme } from '@material-ui/styles';
 import getStyles from './styles'
@@ -98,6 +98,7 @@ class Signup extends Component
             {
                 this.handleFormClear()
                 this.setState({success: true})
+                this.props.enqueueSnackbar(`Successfully registered ${res.username}`, {variant: 'success'})
                 this.props.setUserData(res)
                 // this.props.handleLoginDialogOpen(e, 'close')
                 // this.props.history.push('/') //go back to main page
@@ -106,6 +107,7 @@ class Signup extends Component
             else
             {
                 // console.error('signup error:', res)
+                this.props.enqueueSnackbar("Something's went wrong!", {variant: 'error'})
                 this.setState({
                     errorMessages: res.data,
                 })
@@ -118,7 +120,7 @@ class Signup extends Component
         const {classes, theme} = this.props
         
         return (
-            <Dummy>
+            <>
                 <div className={classes.root}>
                     <ValidatorForm
                         onSubmit = {this.handleFormSubmit}
@@ -136,13 +138,13 @@ class Signup extends Component
                                 <AccountCircleIcon
                                     fontSize = 'inherit'
                                     color = 'inherit'
-                                    style = {{
-                                        color: theme.palette.type==='dark' ? theme.palette.info.light : theme.palette.primary.main,
-                                    }}
+                                    // style = {{
+                                    //     color: theme.palette.type==='dark' ? theme.palette.info.light : theme.palette.primary.main,
+                                    // }}
                                 />
                             </icon>
                             <content>
-                                <TextValidator
+                                <TextValidator /*autoFocus*/
                                     variant = 'outlined'
                                     label = 'Username'
                                     name = 'username'
@@ -217,9 +219,9 @@ class Signup extends Component
                         <CircularProgress />
                     </DialogContent>
                 </Dialog>
-            </Dummy>
+            </>
         )
     }
 }
 
-export default withRouter(withTheme(withStyles(useStyles)(Signup)))
+export default withSnackbar(withRouter(withTheme(withStyles(useStyles)(Signup))))

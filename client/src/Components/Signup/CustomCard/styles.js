@@ -18,12 +18,15 @@ export default function getStyles(theme)
             fontSize: iconSize,
             alignSelf: 'flex-start',
             position: 'relative',
+            // color: theme.palette.primary.light,
+            zIndex: 1,
         },
         divider: {
             bottom: `calc(${iconSize} - 0.55em)`,
             marginBottom: theme.spacing(3),
             width: `calc(100% + 2*${theme.spacing(3)}px)`,
             position: 'relative',
+            zIndex: 0,
         },
         bot: {
             position: 'relative',

@@ -8,6 +8,7 @@
             "@Hooks/*": ["./Hooks/*"],
             "@Themes/*": ["./Themes/*"],
             "@Models/*": ["./Models/*"],
+            "@Objects/*": ["./Objects/*"],
             "@Auth/*": ["./Auth/*"]
         }
     },

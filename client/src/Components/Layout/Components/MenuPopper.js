@@ -5,8 +5,8 @@ import {
 } from '@material-ui/core'
 import { Menu as MenuIcon } from '@material-ui/icons'
 import { ListItemDarkmodeToggle, LoginDialog } from './'
-import { Dummy } from 'Components'
 import { AuthService } from 'Auth/'
+import { withSnackbar } from 'notistack'
 
 import { withStyles } from '@material-ui/core/styles';
 import getStyles from '../styles'
@@ -55,6 +55,8 @@ class MenuPopper extends Component
         this.handleMenuToggle(null) //close menu popover
         this.props.setUserData(null)
         AuthService.logout()
+        
+        this.props.enqueueSnackbar(`Logged out`, {variant: 'info'})
     }
 
     handleMenuToggle = (target) => {
@@ -73,7 +75,7 @@ class MenuPopper extends Component
         const {classes} = this.props
 
         return (
-            <Dummy>
+            <>
                 <IconButton
                     aria-controls = {'optionsMenu'}
                     aria-haspopup = {'true'}
@@ -82,18 +84,19 @@ class MenuPopper extends Component
                     <MenuIcon className={classes.appBarIcon} />
                 </IconButton>
                 <Popper
+                    transition
+                    disablePortal
+                    placement = 'bottom-end'
                     open = {!!this.state.menuAnchor}
                     anchorEl = {this.state.menuAnchor}
                     onClose = {(e) => this.handleMenuToggle(null)}
-                    transition
-                    disablePortal
                 >
                     { ({TransitionProps, placement}) => (                                  
                         <Grow
                             {...TransitionProps}
                             style = {{
                                 transformOrigin:
-                                    placement === "bottom"
+                                    placement.match("bottom")
                                         ? "center top"
                                         : "center bottom",
                             }}
@@ -108,7 +111,7 @@ class MenuPopper extends Component
                                         {
                                             this.state.userData
                                             ? ( //if
-                                                <Dummy>
+                                                <>
                                                     <ListItem>
                                                         <ListItemText>
                                                             Welcome <b>{this.state.userData.username}</b>
@@ -119,10 +122,10 @@ class MenuPopper extends Component
                                                             Logout
                                                         </ListItemText>
                                                     </MenuItem>
-                                                </Dummy>
+                                                </>
                                             )
                                             : ( //else
-                                                <Dummy>
+                                                <>
                                                     <MenuItem onClick={(e) => this.handleLoginDialogOpen(e, 'open')}>
                                                         <ListItemText>
                                                             Login
@@ -133,7 +136,7 @@ class MenuPopper extends Component
                                                             Sign up
                                                         </ListItemText>
                                                     </MenuItem>
-                                                </Dummy>
+                                                </>
                                             )
                                         }
                                         {/* ACCOUNT */}
@@ -167,9 +170,9 @@ class MenuPopper extends Component
                     setUserData = {this.props.setUserData}
                     {...this.state}
                 />
-            </Dummy>
+            </>
         )
     }
 }
 
-export default withStyles(useStyles)(MenuPopper)
+export default withSnackbar(withStyles(useStyles)(MenuPopper))

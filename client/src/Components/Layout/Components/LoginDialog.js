@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
-import { Dummy } from 'Components/'
 import { AuthService } from 'Auth/'
 import { Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Divider, InputAdornment, Typography } from '@material-ui/core'
 import { AccountCircle as AccountCircleIcon } from '@material-ui/icons'
 import { TextValidator, ValidatorForm } from 'react-material-ui-form-validator'
 import { withRouter } from 'react-router'
+import { withSnackbar } from 'notistack'
 
 import { withStyles } from '@material-ui/core/styles';
 import getStyles from '../styles'
@@ -20,6 +20,11 @@ class LoginDialog extends Component
             submitErrors: {},
             ...props, //props = {dialogOpen}
         }
+
+        // this.snackbar = {
+        //     enqueue: this.props.enqueueSnackbar,
+        //     close: this.props.closeSnackbar
+        // }
     }
 
     componentDidUpdate(oldProps, oldState)
@@ -70,12 +75,14 @@ class LoginDialog extends Component
                     {
                         this.props.setUserData(res)
                         this.props.handleLoginDialogOpen(e, 'close')
+                        this.props.enqueueSnackbar(`Logged in as ${res.username}`, {variant: 'success'})
                         this.props.history.push('/') //go back to main page
                         // console.log('got user data', res.user) //DEBUG
                     }
                     else
                     {
                         // console.error('login error:', res)
+                        this.props.enqueueSnackbar("Something's went wrong!", {variant: 'error'})
                         this.setState({
                             submitErrors: res.data,
                         })
@@ -90,7 +97,7 @@ class LoginDialog extends Component
         // const {classes} = this.props
 
         return (
-            <Dummy>
+            <>
                 <Dialog
                     open = {this.state.dialogOpen}
                     onClose = {(e) => this.props.handleLoginDialogOpen(e, 'close')}
@@ -119,6 +126,9 @@ class LoginDialog extends Component
                                 id = 'username'
                                 color = 'secondary'
                                 // size = 'small'
+                                style = {{
+                                    margin: '0px',
+                                }}
                                 InputProps = {{
                                     startAdornment: (
                                       <InputAdornment position="start">
@@ -141,6 +151,9 @@ class LoginDialog extends Component
                                 id = 'password'
                                 color = 'secondary'
                                 // size = 'small'
+                                style = {{
+                                    margin: '0px',
+                                }}
                                 value = {this.state.password}
                                 onChange = { this.handleFormChange }
                                 validators = {['required', 'minStringLength:5']}
@@ -176,9 +189,9 @@ class LoginDialog extends Component
                         <CircularProgress /*className={classes.circle}*/ />
                     </DialogContent>
                 </Dialog>
-            </Dummy>
+            </>
         )
     }
 }
 
-export default withRouter(withStyles(useStyles)(LoginDialog))
+export default withSnackbar(withRouter(withStyles(useStyles)(LoginDialog)))

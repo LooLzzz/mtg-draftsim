@@ -1,57 +1,69 @@
-// import { colors } from '@material-ui/core';
+import { colors } from '@material-ui/core';
 import { createMuiTheme as createTheme } from '@material-ui/core/styles';
 
-const sharedOverrides = {
-    MuiTextField: {
-        root: {
-            width: '100%',
-            margin: '0.4em',
-        },
+const shared = {
+    palette:
+    {
+        colors,
     },
-    MuiPaper: {
-        rounded: {
-            borderRadius: '12.5px',
+
+    overrides:
+    {
+        MuiTextField: {
+            root: {
+                width: '100%',
+                margin: '0.4em',
+            },
+        },
+        MuiPaper: {
+            rounded: {
+                borderRadius: '12.5px',
+            },
         },
     },
 }
 
 const lightTheme = createTheme({
-    palette: {
+    palette:
+    {
+        ...shared.palette,
         type: 'light',
         background: {
             default: '#D5D5D5',
             paper: '#F0F0F0',
         },
     },
-    overrides: {
-        ...sharedOverrides
-    },
+
+    overrides:
+    {
+        ...shared.overrides,
+    }
 })
 
 const darkTheme = createTheme({
-    palette: {
+    palette:
+    {
+        ...shared.palette,
         type: 'dark',
+        secondary: {
+            main: colors.orange['900'],
+        },
         // secondary: deepOrange,
     },
-    overrides: {
+
+    overrides:
+    {
+        ...shared.overrides,
         MuiTypography: {
             root: {
                 color: 'white',
             },
         },
-        // MuiFormLabel: {
-        //     root: {
-        //         '&$focused': {
-        //             color: colors.red['A400'],
-        //         },
-        //     }
-        // },
         MuiCircularProgress: {
             circle: {
                 color: 'white'
             },
         },
-        ...sharedOverrides,
     },
 })
 

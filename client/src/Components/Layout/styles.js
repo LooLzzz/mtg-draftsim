@@ -5,7 +5,7 @@ export default function getStyles(theme)
     const bottomBarHeight = '50px'
     const mainSidesPadding = theme.spacing(15)
 
-    // console.log('theme palette:', theme.palette) //DEBUG
+    // console.log('theme palette: (from \'layout/styles\')', theme.palette) //DEBUG
 
     return ({
         root: {
@@ -26,7 +26,8 @@ export default function getStyles(theme)
             paddingLeft: mainSidesPadding,
             paddingRight: mainSidesPadding,
             position: "absolute",
-            backgroundColor: theme.palette.type === 'dark' ? 'rgba(0,0,0,0.25)' : theme.palette.primary,
+            // backgroundColor: theme.palette.type === 'dark' ? 'rgba(0,0,0,0.25)' : theme.palette.primary,
+            // backgroundColor: theme.palette.type === 'dark' ? theme.palette.primary : theme.palette.primary,
             // color: theme.palette.text.primary,
             transition: theme.transitions.create(['margin', 'width'], {
                 easing: theme.transitions.easing.sharp,
@@ -49,10 +50,10 @@ export default function getStyles(theme)
         contentSpacer: {
             display: 'flex',
             alignItems: 'center',
-            padding: theme.spacing(0, 1),
-            // necessary for content to be below app bar
-            ...theme.mixins.toolbar,
+            // padding: theme.spacing(0, 1),
+            minHeight: theme.spacing(8),
             justifyContent: 'flex-end',
+            // ...theme.mixins.toolbar,
         },
         content: {
             flexGrow: 1,

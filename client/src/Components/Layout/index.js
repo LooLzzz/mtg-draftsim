@@ -16,7 +16,7 @@ class Layout extends Component
         this.state = {
             ...props,
         }
-
+        
         // console.log('props', props) //DEBUG
     }
     
@@ -65,9 +65,6 @@ class Layout extends Component
                 url: '/collection',
             },
         ]
-        const menuProps = {
-            ...this.props,
-        }
 
         return (
             <div className={classes.root}>
@@ -95,7 +92,7 @@ class Layout extends Component
                         </Grid>
                         <Grid item>
                             <MenuPopper
-                                {...menuProps}
+                                {...this.props}
                             />
                         </Grid>
                     </Grid>

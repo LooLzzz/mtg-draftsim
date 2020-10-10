@@ -113,7 +113,11 @@ router.post("/login", (req, res) =>
 
 function sendUserDataAsJson(res, user, collection)
 {
-    let accessToken = jwt.sign({ id: user.id, username: user.username }, Keys.secret, { expiresIn: 31556926 /*1 year*/ })
+    let accessToken = jwt.sign(
+        { id: user.id, username: user.username },
+        Keys.secret,
+        { expiresIn: 31556926 /*1 year*/ }
+    )
     
     res.status(200)
         .json({

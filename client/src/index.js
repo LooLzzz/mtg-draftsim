@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import { Button, CssBaseline, ThemeProvider } from '@material-ui/core';
+import { Close as CloseIcon } from '@material-ui/icons';
 import { BrowserRouter as Router, Redirect, Route, Switch } from "react-router-dom";
-import { AuthService } from 'Auth';
+import { SnackbarProvider } from 'notistack';
 import { Layout, Main, Draftsim, CardCollection, Lost, Signup } from './Components'
+import { AuthService } from 'Auth';
 import { darkTheme, lightTheme } from 'Themes'
-import { CssBaseline, ThemeProvider } from '@material-ui/core';
+
 import 'fontsource-roboto';
 
 class CustomRouter extends Component
@@ -12,6 +15,8 @@ class CustomRouter extends Component
     constructor(props)
     {
         super(props)
+        
+        this.notistackRef = React.createRef()
         this.state = {
             activeTab: 'Main',
             themeType: 'dark',
@@ -63,10 +68,15 @@ class CustomRouter extends Component
         })
     ))
 
+    notistackDismissButton = (key) => (
+        <Button onClick={ e => this.notistackRef.current.closeSnackbar(key)} endIcon={<CloseIcon />}>
+            Dismiss
+        </Button>
+    )
+
     render()
     {
         const passedProps = {
-            routerRef: this.state.routerRef,
             activeTab: this.state.activeTab,
             setActiveTab: this.setActiveTab,
             themeType: this.state.themeType,
@@ -95,49 +105,31 @@ class CustomRouter extends Component
 
         return (
             <ThemeProvider theme={this.state.theme}>
-                <Router>
-                    <Layout { ...passedProps } >
-                        <Switch>
-                            { routes.map((item, i) => (
-                                <Route exact
-                                    key = {i}
-                                    path = {item.path}
-                                    render = {
-                                        () => <item.Component {...item.to} {...passedProps} />
-                                    }
-                                />
-                            )) }
-                            <Redirect to='/lost' /> {/* all else will be sent to '/lost' */}
-                        </Switch>
-                    </Layout>
-                </Router>
+                <SnackbarProvider
+                    ref = {this.notistackRef}
+                    // onContextMenu = {this.handleSnackbarContextMenu.bind(this)}
+                    autoHideDuration = {3250}
+                    maxSnack = {3}
+                    action = { key => this.notistackDismissButton(key) }
+                >
+                    <Router>
+                        <Layout { ...passedProps } >
+                            <Switch>
+                                { routes.map((item, i) => (
+                                    <Route exact
+                                        key = {i}
+                                        path = {item.path}
+                                        render = {
+                                            () => <item.Component {...item.to} {...passedProps} />
+                                        }
+                                    />
+                                )) }
+                                <Redirect to='/lost' /> {/* all else will be sent to '/lost' */}
+                            </Switch>
+                        </Layout>
+                    </Router>
+                </SnackbarProvider>
             </ThemeProvider>
-        )
-    }
-}
-
-class RouterDummy extends Component
-{
-    constructor(props)
-    {
-        super(props)
-        this.state = {
-            routerRef: null,
-        }
-    }
-
-    componentDidMount()
-    {
-        this.setState({
-            routerRef: this.routerRef.current,
-        })
-    }
-
-    routerRef = React.createRef()
-    render()
-    {    
-        return(
-            <CustomRouter forwardRef={true} ref={this.routerRef} routerRef={this.state.routerRef} />
         )
     }
 }
@@ -146,7 +138,7 @@ ReactDOM.render(
     (
         <div>
             <CssBaseline />
-            <RouterDummy />
+            <CustomRouter />
         </div>
     )
     ,document.getElementById('root')

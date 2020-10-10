@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import { Button, Card, CardActionArea, CardContent, CardMedia, Divider, Grid, Typography } from '@material-ui/core';
 import { useHistory, withRouter } from "react-router-dom";
-import { Dummy } from 'Components';
 import getStyles from './styles'
 // import clsx from 'clsx';
 
@@ -55,7 +54,7 @@ class Main extends Component
     {
         const { classes, history } = this.props;
         return (
-            <Dummy>
+            <>
                 <Grid container spacing={2} className={classes.root}>
                     <Grid item xs={12}>
                         <Grid container spacing={2}>
@@ -80,12 +79,12 @@ class Main extends Component
                         About
                     </Typography>
                     <Button variant="outlined" onClick={(e) => history.push('/lost')}>
-                        <Typography color="textSecondary">
+                        <Typography color='textSecondary'>
                             Get lost
                         </Typography>
                     </Button>
                 </div>
-            </Dummy>
+            </>
         )
     }
 }
