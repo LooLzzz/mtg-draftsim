@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import { Helmet } from 'react-helmet';
 import { Button, CssBaseline, ThemeProvider } from '@material-ui/core';
 import { Close as CloseIcon } from '@material-ui/icons';
 import { BrowserRouter as Router, Redirect, Route, Switch } from "react-router-dom";
@@ -136,10 +137,13 @@ class CustomRouter extends Component
 
 ReactDOM.render(
     (
-        <div>
+        <>
+            <Helmet>
+                <title>Draftsim</title>
+            </Helmet>
             <CssBaseline />
             <CustomRouter />
-        </div>
+        </>
     )
     ,document.getElementById('root')
 )
