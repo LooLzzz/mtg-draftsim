@@ -10,7 +10,8 @@
             "@Models/*": ["./Models/*"],
             "@Objects/*": ["./Objects/*"],
             "@Auth/*": ["./Auth/*"]
-        }
+        },
+        "experimentalDecorators": true
     },
     "exclude": [
         "build"

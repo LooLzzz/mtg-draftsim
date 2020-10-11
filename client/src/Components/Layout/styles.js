@@ -12,6 +12,7 @@ export default function getStyles(theme)
             display: 'flex',
             minHeight: '100vh',
             minWidth: '100wh',
+            maxWidth: '100wh',
             // background: theme.palette.background.default,
             background: `linear-gradient(35deg, ${theme.palette.background.default} 10%, ${theme.palette.background.paper} 50%)`,
             // background: `linear-gradient(35deg, ${theme.palette.background.paper} 10%, ${theme.palette.background.default} 50%)`,

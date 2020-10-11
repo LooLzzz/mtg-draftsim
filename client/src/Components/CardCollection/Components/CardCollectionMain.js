@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { AppBar, Grid, Toolbar, Typography } from '@material-ui/core';
-import CardlistTable from './CardlistTable';
+import Cardlist from './Cardlist';
 
 import { withRouter } from 'react-router';
 import { withStyles } from '@material-ui/core/styles';
@@ -34,15 +34,17 @@ class CardCollectionMain extends Component
                         <div className={classes.cardPreviewContainer}>
                             <img className={classes.cardPreview}
                                 //TODO get card image from onMouseHover
+                                alt="preview"
                                 src="https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=141818&type=card"
                             />
                         </div>
                     </div>
 
                     <div className={classes.rightPanelContainer}>
-                        {/* <div className={classes.cardlistContainer}> */}
-                            <CardlistTable />
-                        {/* </div> */}
+                        <div className={classes.cardlistContainer}>
+                             {/* //TODO add a map function for splitting the overall cardlist to different, smaller cardlists */}
+                            <Cardlist />
+                        </div>
                     </div>
                 </div>
 

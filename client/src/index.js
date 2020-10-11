@@ -16,8 +16,12 @@ class CustomRouter extends Component
     constructor(props)
     {
         super(props)
-        
+    
+        // CONSTS
+        // this.routerRef = React.createRef()
         this.notistackRef = React.createRef()
+        // CONSTS
+
         this.state = {
             activeTab: 'Main',
             themeType: 'dark',
@@ -31,17 +35,8 @@ class CustomRouter extends Component
         this.isLoggedIn()
     }
 
-    componentDidUpdate(oldProps, oldState)
+    isLoggedIn = async (e) =>
     {
-        if (oldProps.routerRef !== this.props.routerRef)
-        {
-            this.setState({
-                routerRef: this.props.routerRef
-            })
-        }
-    }
-
-    isLoggedIn = async (e) => {
         const userData = await AuthService.getCurrentUserData()
         if (userData)
             this.setUserData(userData)
@@ -49,27 +44,31 @@ class CustomRouter extends Component
         return userData
     }
 
-    setUserData = ( (data) => {
+    setUserData = ( (data) =>
+    {
         this.setState({
             userData: data,
         })
         // console.log('set user data:', data) //DEBUG
     })
     
-    setActiveTab = ( (tabName) => {
+    setActiveTab = ( (tabName) =>
+    {
         this.setState({
             activeTab: tabName,
         })
     })
 
-    setTheme = ( (themeType) => (
+    setTheme = ( (themeType) => 
+    {
         this.setState({
             themeType: themeType,
             theme: themeType === 'light' ? lightTheme : darkTheme,
         })
-    ))
+    })
 
-    notistackDismissButton = (key) => (
+    notistackDismissButton = (key) =>
+    (
         <Button onClick={ e => this.notistackRef.current.closeSnackbar(key)} endIcon={<CloseIcon />}>
             Dismiss
         </Button>
@@ -105,45 +104,46 @@ class CustomRouter extends Component
         ]
 
         return (
-            <ThemeProvider theme={this.state.theme}>
-                <SnackbarProvider
-                    ref = {this.notistackRef}
-                    // onContextMenu = {this.handleSnackbarContextMenu.bind(this)}
-                    autoHideDuration = {3250}
-                    maxSnack = {3}
-                    action = { key => this.notistackDismissButton(key) }
-                >
-                    <Router>
-                        <Layout { ...passedProps } >
-                            <Switch>
-                                { routes.map((item, i) => (
-                                    <Route exact
-                                        key = {i}
-                                        path = {item.path}
-                                        render = {
-                                            () => <item.Component {...item.to} {...passedProps} />
-                                        }
-                                    />
-                                )) }
-                                <Redirect to='/lost' /> {/* all else will be sent to '/lost' */}
-                            </Switch>
-                        </Layout>
-                    </Router>
-                </SnackbarProvider>
-            </ThemeProvider>
+            <>
+                <Helmet>
+                    <title>Draftsim</title>
+                </Helmet>
+                
+                <ThemeProvider theme={this.state.theme}>
+                    <CssBaseline />
+                    <SnackbarProvider
+                        ref = {this.notistackRef}
+                        // onContextMenu = {this.handleSnackbarContextMenu.bind(this)}
+                        autoHideDuration = {3250}
+                        maxSnack = {3}
+                        action = { key => this.notistackDismissButton(key) }
+                    >
+                        <Router /*ref={this.routerRef}*/ >
+                            <Layout { ...passedProps } >
+                                <Switch>
+                                    { routes.map((item, i) => (
+                                        <Route exact
+                                            key = {i}
+                                            path = {item.path}
+                                            render = {
+                                                () => <item.Component {...item.to} {...passedProps} />
+                                            }
+                                        />
+                                    )) }
+                                    <Redirect to='/lost' /> {/* anything else will be sent to '/lost' */}
+                                </Switch>
+                            </Layout>
+                        </Router>
+                    </SnackbarProvider>
+                </ThemeProvider>
+            </>
         )
     }
 }
 
 ReactDOM.render(
     (
-        <>
-            <Helmet>
-                <title>Draftsim</title>
-            </Helmet>
-            <CssBaseline />
-            <CustomRouter />
-        </>
+        <CustomRouter />
     )
     ,document.getElementById('root')
 )

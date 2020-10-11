@@ -8,6 +8,34 @@ export default function getStyles(theme)
     }
 
     return ({
+        '@global': {
+            table: {
+                borderCollapse: '',
+                borderSpacing: '2px',
+                flexGrow: 1,
+                textAlign: 'center',
+                
+                // border: '1px orange solid', //DEBUG
+            },
+            thead: {
+                '& tr': {
+                    textAlign: 'left',
+                    // borderBottom: `solid #333 2px`
+                    borderBottom: `solid ${theme.palette.divider} 2px`
+                },
+            },
+            tbody: {
+                // color: theme.palette.text.secondary,
+                '& tr': {
+                    // borderTop:'solid #333 1px'
+                    borderTop: `solid ${theme.palette.divider} 1px`
+                },
+                '& .MuiTypography-root': {
+                    ...theme.typography.body2,
+                    color: theme.palette.text.secondary,
+                },
+            },
+        },
         root: {
             display: 'flex',
             minHeight: `calc(100vh - ${topSpacerHeight} - ${bottomBarHeight})`,
@@ -54,9 +82,15 @@ export default function getStyles(theme)
             alignItems: 'start',
             flexGrow: 1,
         },
-        item: {
-            margin: theme.spacing(0.5),
+        cardRow: {
+            display: 'flex',
             flexGrow: 1,
+            justifyContent: 'space-between',
+            textAlign: 'center',
+            // alignItems: 'center',
+            // color: theme.palette.text.primary,
+          
+            border: 'solid orange 1px', //DEBUG
         },
         contentSpacer: {
             display: 'block',

@@ -7,7 +7,7 @@ import CustomCard from "./CustomCard";
 
 import { withSnackbar } from 'notistack';
 import { withRouter } from 'react-router';
-import { withStyles, withTheme } from '@material-ui/styles';
+import { withStyles } from '@material-ui/styles';
 import getStyles from './styles'
 const useStyles = (theme) => getStyles(theme)
 
@@ -116,7 +116,7 @@ class Signup extends Component
 
     render()
     {
-        const {classes, theme} = this.props
+        const {classes} = this.props
         
         return (
             <>
@@ -230,4 +230,4 @@ class Signup extends Component
     }
 }
 
-export default withSnackbar(withRouter(withTheme(withStyles(useStyles)(Signup))))
+export default withSnackbar(withRouter(withStyles(useStyles)(Signup)))

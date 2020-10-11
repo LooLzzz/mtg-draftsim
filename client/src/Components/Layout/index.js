@@ -16,8 +16,6 @@ class Layout extends Component
         this.state = {
             ...props,
         }
-        
-        // console.log('props', props) //DEBUG
     }
     
     componentDidUpdate(oldProps, oldState)
