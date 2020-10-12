@@ -38,6 +38,9 @@ const lightTheme = createTheme({
     {
         ...shared.palette,
         type: 'light',
+        table: {
+            divider: 'rgba(150, 150, 150, 0.75)',
+        },
         background: {
             default: '#D5D5D5',
             paper: '#F0F0F0',
@@ -55,6 +58,9 @@ const darkTheme = createTheme({
     {
         ...shared.palette,
         type: 'dark',
+        table: {
+            divider: '#424242',
+        },
         primary: {
             // main: '#2D4583',
             main: '#2D5295',

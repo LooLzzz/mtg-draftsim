@@ -8,64 +8,88 @@ export default function getStyles(theme)
     }
 
     return ({
-        '@global': {
-            table: {
-                borderCollapse: 'collapse',
-                borderSpacing: '2px',
-                flexGrow: 1,
-                textAlign: 'center',
-                maxWidth: '22%',
-                minWidth: '22%',
-                width: '2%',
-                marginRight: '1%',
-                marginLeft: '1%',
 
-                // border: '1px orange solid', //DEBUG
-            },
-            thead: {
-                '& tr': {
-                    textAlign: 'left',
-                    // borderBottom: `solid #525252 2px`
-                    borderBottom: `solid ${theme.palette.background.paper} 2px`
+        masonryGrid: {
+            display: 'flex',
+            // marginLeft: '-30px', /* gutter size offset */
+            flexGrow: 1,
+        },
+        masonryGridColumn: {
+            '@global': {
+                table: {
+                    width: '100%',
+                    borderCollapse: 'collapse',
+                    borderSpacing: '2px',
+                    textAlign: 'center',
+                    // marginBottom: '30px',
                 },
-            },
-            tbody: {
-                // color: theme.palette.text.secondary,
-                '& tr': {
-                    // borderTop:'solid #525252 1px'
-                    borderTop: `solid ${theme.palette.background.paper} 1px`
+                thead: {
+                    '& tr': {
+                        textAlign: 'left',
+                        // borderBottom: `solid #525252 2px`,
+                        // borderBottom: `solid ${theme.palette.background.paper} 2px`,
+                        borderBottom: `solid ${theme.palette.table.divider} 2px`,
+                    },
                 },
-                '& .MuiTypography-root': {
-                    ...theme.typography.body2,
+                tbody: {
                     color: theme.palette.text.secondary,
+                    '& tr': {
+                        // borderTop:'solid #525252 1px'
+                        // borderTop: `solid ${theme.palette.background.paper} 1px`,
+                        borderTop: `solid ${theme.palette.table.divider} 1px`,
+                        display: 'flex',
+                        alignItems: 'baseline',
+                    },
+                    '& .MuiTypography-root': {
+                        ...theme.typography.body2,
+                        // color: theme.palette.text.secondary,
+                    },
+                    '& .MuiIconButton-colorSecondary': {
+                        color: theme.palette.table.divider,
+                        // color: theme.palette.background.paper,
+                        // color: theme.palette.text.secondary,
+                    },
+                    '& .MuiSvgIcon-root': {
+                        fontSize: '1.15rem',
+                    },
+                    '& .MuiInputBase-root': {
+                        fontSize: "0.875rem",
+                        height: '1rem',
+                        color: theme.palette.text.secondary,
+                        width: '1.6rem',
+                    },
+                    '& input': {
+                        cursor: 'pointer',
+                        textAlign: 'center',
+                    },
                 },
             },
+            paddingLeft: '30px', /* gutter size */
+            backgroundClip: 'padding-box',
+        },
+        foil: {
+            minWidth: '0.5rem',
+        },
+        cardName: {
+            flexGrow: 6,
+            color: theme.palette.text.primary,
+        },
+        cmc: {
+            paddingRight: '0.3em',
         },
         root: {
             display: 'flex',
             minHeight: `calc(100vh - ${topSpacerHeight} - ${bottomBarHeight})`,
-            // flexDirection: 'row',
-            // justifyContent: "space-evenly",
-            // alignItems: "flex-start",
-            // flexGrow: 1,
-
-            // border: 'solid orange 1px', //DEBUG
         },
         leftPanelContainer: {
-            // flexGrow: 1,
-            // paddingLeft: theme.spacing(5),
             paddingTop: theme.spacing(2),
             paddingRight: theme.spacing(1),
-
-            // border: 'solid blue 1px', //DEBUG
         },
         cardPreviewContainer: {
             position: 'sticky',
             top: theme.spacing(2),
         },
         cardPreview: {
-            // position: 'sticky',
-            // top: theme.spacing(2),
             objectFit: 'scale-down',
             objectPosition: 'top',
             borderRadius: '4.75% / 3.5%',
@@ -73,31 +97,9 @@ export default function getStyles(theme)
         },
         rightPanelContainer: {
             display: 'flex',
-            // alignSelf: 'flex-start',
             flexGrow: 1,
-            gap: '10px',
-            paddingLeft: theme.spacing(1),
             
             // border: 'solid red 1px', //DEBUG
-        },
-        cardlistContainer: {
-            display: 'flex',
-            flexWrap: 'wrap',
-            // flexDirection: 'column',
-            justifyContent: 'left',
-            alignContent: 'space-around',
-            alignItems: 'start',
-            flexGrow: 1,
-        },
-        cardRow: {
-            display: 'flex',
-            flexGrow: 1,
-            justifyContent: 'space-between',
-            textAlign: 'center',
-            // alignItems: 'center',
-            // color: theme.palette.text.primary,
-          
-            border: 'solid orange 1px', //DEBUG
         },
         contentSpacer: {
             display: 'block',

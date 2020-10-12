@@ -1,16 +1,26 @@
 import React, { Component } from 'react'
-import { Typography } from '@material-ui/core'
+import { IconButton, InputBase, Typography } from '@material-ui/core'
+import { ArrowDropDownCircleOutlined as ArrowDropDownCircleOutlinedIcon } from '@material-ui/icons'
 import clsx from 'clsx'
-// import { DataGrid } from '@material-ui/data-grid'
-// import { Dummy } from 'Components'
 
 import { withStyles } from '@material-ui/core/styles'
 import getStyles from './styles'
 const useStyles = (theme) => getStyles(theme)
 
+//TODO remove this
 function randInt(min, max)
 {
     return Math.round(min + Math.random() * (max - min))
+}
+
+function stripStr(str, chars)
+{
+    if (chars === "]") chars = "\\]";
+    if (chars === "\\") chars = "\\\\";
+    
+    return String(str).replace(new RegExp(
+      "^[" + chars + "]+|[" + chars + "]+$", "g"
+    ), "");
 }
 
 class Cardlist extends Component
@@ -20,37 +30,9 @@ class Cardlist extends Component
         super(props)
         this.state = {
             ...props,
-            cols: [],
-            rows: [],
-            cardlist: [...Array(randInt(10,50)).keys()], //imitates card list for now
+            mouseOn: null,
+            cardlist: [...Array(randInt(10,50)).keys()], //TODO get cardlist from localstorage
         }
-    }
-
-    componentDidMount()
-    {
-        this.createCols()
-        this.createRows()
-    }
-
-    createCols = () =>
-    {
-        let cols = [
-            {field:'name', headerName:'Name'},
-            {field:'cmc', headerName:'CMC'},
-            {field:'price', headerName:'Price'},
-        ]
-
-        this.setState({cols:cols})
-    }
-
-    createRows = () =>
-    {
-        let rows = this.state.cardlist.map((item, i) => ({
-            id: i,
-            name: item
-        }))
-
-        this.setState({rows:rows})
     }
 
     render()
@@ -58,52 +40,66 @@ class Cardlist extends Component
         const {classes} = this.props
 
         return (
-            <>
-                {/* <DataGrid
-                    hideFooter
-                    // disableSelectionOnClick
-
-                    rowHeight = '35'
-                    rows = {this.state.rows}
-                    columns = {this.state.cols}
-                /> */}
-                {/* <CardRow /> */}
-                <table>
-                    <thead>
-                        <tr>
-                            <Typography component='td' colSpan='6' variant='h6'>
-                                section header
+            <table>
+                <thead>
+                    <tr>
+                        <Typography component='td' colSpan='6' variant='h6' >
+                            Header
+                        </Typography>
+                    </tr>
+                </thead>
+                <tbody onMouseLeave={e => this.setState({mouseOn: null})}>
+                {
+                    this.state.cardlist.map( (item, key) => (
+                        <tr key={key} id={key} onMouseEnter={e => this.setState({mouseOn: key})} >
+                            <Typography component='td' color='textSecondary' className={classes.foil} >
+                                
+                            </Typography>
+                            <Typography component='td' color='textSecondary' className={classes.count} >
+                                <InputBase
+                                    defaultValue = {randInt(0,4)+'x'}
+                                    onClick = { e => {
+                                        e.currentTarget.children[0].value = stripStr(e.currentTarget.children[0].value, 'x')
+                                    }}
+                                    onBlur = { e => {
+                                        let val = e.currentTarget.value
+                                        if (Number(val))
+                                            e.currentTarget.value += 'x'
+                                        else
+                                        {
+                                            val = String(val).toLowerCase()
+                                            if (val.match('^[0-9]+x+$'))
+                                                e.currentTarget.value = val.substring(0, val.indexOf('x')) + 'x'
+                                            else
+                                                e.currentTarget.value = '1x'
+                                        }
+                                    }}
+                                    onKeyDown = { e => {
+                                        if (e.key === 'Enter')
+                                            e.target.blur()
+                                    }}
+                                />
+                            </Typography>
+                            <Typography color='textPrimary' component='td' className={clsx('alignLeft', classes.cardName)} >
+                                {key}
+                            </Typography>
+                            <Typography component='td' color='textSecondary' className={clsx('alignRight', classes.cmc)} >
+                                cmc
+                            </Typography>
+                            <Typography component='td' color='textSecondary' className={clsx('alignRight', classes.price)} >
+                                {/* {randInt(0,9)}$ */}
+                                9$
+                            </Typography>
+                            <Typography component='td' color='textSecondary'>
+                                <IconButton size='small' color={this.state.mouseOn === key ? '' : 'secondary'} >
+                                    <ArrowDropDownCircleOutlinedIcon />
+                                </IconButton>
                             </Typography>
                         </tr>
-                    </thead>
-                    <tbody>
-                    {
-                        this.state.cardlist.map( (item, i) => (
-                            <tr key={i}>
-                                <Typography component='td'>
-                                    F
-                                </Typography>
-                                <Typography component='td'> {/* <td style={{width:'2%'}}> */}
-                                    {randInt(1,4)}x
-                                </Typography>
-                                <Typography component='td' className={clsx('alignLeft')} >
-                                    card name
-                                </Typography>
-                                <Typography component='td' className={clsx('alignRight')} >
-                                    cmc
-                                </Typography>
-                                <Typography component='td'className={clsx('alignRight')} >
-                                    {randInt(0,9)}$
-                                </Typography>
-                                <Typography component='td'>
-                                    **
-                                </Typography>
-                            </tr>
-                        ))
-                    }
-                    </tbody>
-                </table>
-            </>
+                    ))
+                }
+                </tbody>
+            </table>
         )
     }
 }
