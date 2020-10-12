@@ -91,7 +91,7 @@ class Cardlist extends Component
                                 9$
                             </Typography>
                             <Typography component='td' color='textSecondary'>
-                                <IconButton size='small' color={this.state.mouseOn === key ? '' : 'secondary'} >
+                                <IconButton size='small' color={this.state.mouseOn === key ? 'default' : 'secondary'} >
                                     <ArrowDropDownCircleOutlinedIcon />
                                 </IconButton>
                             </Typography>

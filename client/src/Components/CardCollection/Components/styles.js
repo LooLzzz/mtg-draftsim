@@ -67,6 +67,11 @@ export default function getStyles(theme)
             paddingLeft: '30px', /* gutter size */
             backgroundClip: 'padding-box',
         },
+        root: {
+            display: 'flex',
+            // flexDirection: 'column',
+            minHeight: `calc(100vh - ${topSpacerHeight} - ${bottomBarHeight})`,
+        },
         foil: {
             minWidth: '0.5rem',
         },
@@ -77,9 +82,10 @@ export default function getStyles(theme)
         cmc: {
             paddingRight: '0.3em',
         },
-        root: {
+        topPanelContainer: {
             display: 'flex',
-            minHeight: `calc(100vh - ${topSpacerHeight} - ${bottomBarHeight})`,
+            justifyContent: 'flex-end',
+            minWidth: '100%',
         },
         leftPanelContainer: {
             paddingTop: theme.spacing(2),

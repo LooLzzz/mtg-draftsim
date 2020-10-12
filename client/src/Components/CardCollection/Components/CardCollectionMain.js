@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { AppBar, Grid, Toolbar, Typography } from '@material-ui/core';
+import { AppBar, TextField, Toolbar } from '@material-ui/core';
 import Cardlist from './Cardlist';
 import Masonry from 'react-masonry-css'
 
@@ -10,6 +10,7 @@ import getStyles from './styles'
 import { MtgCard } from 'Objects'
 import 'Resources/keyrune/css/keyrune.css'
 import 'Resources/mana/css/mana.css'
+import CardSearchBox from './CardSearchBox';
 
 const useStylesLOC = (theme) => getStyles(theme)
 
@@ -24,13 +25,24 @@ class CardCollectionMain extends Component
         props.setActiveTab('collection')
     }
 
+    handleSearchResult = res =>
+    {
+        //do something
+    }
+
     render()
     {
         const {classes} = this.props;
 
         return (
             <>
-                <div className={classes.root} /* flex container */ >
+                <div className={classes.topPanelContainer}>
+                    <CardSearchBox
+                        onResult = {this.handleSearchResult}
+                    />
+                </div>
+
+                <div className={classes.root}>
                     <div className={classes.leftPanelContainer}>
                         <div className={classes.cardPreviewContainer}>
                             <img className={classes.cardPreview}
@@ -54,12 +66,13 @@ class CardCollectionMain extends Component
                                 900: 1,
                             }}
                         >
-                        {[ //TODO some array view logic
-                            <Cardlist />,
-                            <Cardlist />,
-                            <Cardlist />,
-                            <Cardlist />,
-                            <Cardlist />
+                        {[ //TODO add some array view logic
+                            <Cardlist key='1' />,
+                            <Cardlist key='2' />,
+                            // <Cardlist key='3' />,
+                            // <Cardlist key='4' />,
+                            // <Cardlist key='5' />,
+                            // <Cardlist key='6' />
                         ]}
                         </Masonry>
                     </div>
