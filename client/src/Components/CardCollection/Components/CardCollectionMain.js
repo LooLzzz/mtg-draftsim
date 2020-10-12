@@ -44,6 +44,11 @@ class CardCollectionMain extends Component
                         <div className={classes.cardlistContainer}>
                              {/* //TODO add a map function for splitting the overall cardlist to different, smaller cardlists */}
                             <Cardlist />
+                            <Cardlist />
+                            <Cardlist />
+                            <Cardlist />
+                            <Cardlist />
+                            <Cardlist />
                         </div>
                     </div>
                 </div>

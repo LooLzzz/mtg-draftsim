@@ -9,13 +9,16 @@ const shared = {
 
     overrides:
     {
-        // MuiCssBaseline: {
-        //     '@global': {
-        //         '.cardlistTable': {
-        //             backgroundColor: 'red',
-        //         }
-        //     },
-        // },
+        MuiCssBaseline: {
+            '@global': {
+                '.alignLeft': {
+                    textAlign: 'left',
+                },
+                '.alignRight': {
+                    textAlign: 'right',
+                }
+            },
+        },
         MuiTextField: {
             root: {
                 width: '100%',
@@ -52,8 +55,17 @@ const darkTheme = createTheme({
     {
         ...shared.palette,
         type: 'dark',
+        primary: {
+            // main: '#2D4583',
+            main: '#2D5295',
+            // main: '#404664',
+        },
         secondary: {
-            main: colors.orange['900'],
+            main: '#DA7B08',
+            // main: '#F3533B',
+            // main: '#FA9F42',
+            // main: '#F56C40',
+            // main: colors.orange['900'],
         },
         // secondary: deepOrange,
     },

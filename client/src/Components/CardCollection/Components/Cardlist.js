@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Typography } from '@material-ui/core'
+import clsx from 'clsx'
 // import { DataGrid } from '@material-ui/data-grid'
 // import { Dummy } from 'Components'
 
@@ -7,37 +8,10 @@ import { withStyles } from '@material-ui/core/styles'
 import getStyles from './styles'
 const useStyles = (theme) => getStyles(theme)
 
-// @withStyles(useStyles)
-// class CardRow extends Component
-// {
-//     render()
-//     {
-//         const {classes} = this.props
-        
-//         return (
-//             <div className={classes.cardRow}>
-//                 <Typography variant="body2" style={{}}>
-//                     1
-//                 </Typography>
-//                 <Typography variant="body2" style={{flexGrow:0.5}}>
-//                     2
-//                 </Typography>
-//                 <Typography variant="body2" style={{flexGrow:6, textAlign:'left'}}>
-//                     3
-//                 </Typography>
-//                 <Typography variant="body2" style={{flexGrow:3, textAlign:'right'}}>
-//                     4
-//                 </Typography>
-//                 <Typography variant="body2" style={{flexGrow:3, textAlign:'right'}}>
-//                     5
-//                 </Typography>
-//                 <Typography variant="body2" style={{flexGrow:0.5}}>
-//                     6
-//                 </Typography>
-//             </div>
-//         )
-//     }
-// }
+function randInt(min, max)
+{
+    return Math.round(min + Math.random() * (max - min))
+}
 
 class Cardlist extends Component
 {
@@ -48,7 +22,7 @@ class Cardlist extends Component
             ...props,
             cols: [],
             rows: [],
-            cardlist: [...Array(100).keys()], //imitates card list for now
+            cardlist: [...Array(randInt(10,50)).keys()], //imitates card list for now
         }
     }
 
@@ -107,22 +81,22 @@ class Cardlist extends Component
                         this.state.cardlist.map( (item, i) => (
                             <tr key={i}>
                                 <Typography component='td'>
-                                    isFoil
+                                    F
                                 </Typography>
                                 <Typography component='td'> {/* <td style={{width:'2%'}}> */}
-                                    count
+                                    {randInt(1,4)}x
                                 </Typography>
-                                <Typography component='td'> {/* <td style={{textAlign:'left'}}> */}
+                                <Typography component='td' className={clsx('alignLeft')} >
                                     card name
                                 </Typography>
-                                <Typography component='td'> {/* <td style={{textAlign:'right'}}> */}
+                                <Typography component='td' className={clsx('alignRight')} >
                                     cmc
                                 </Typography>
-                                <Typography component='td'> {/* <td style={{textAlign:'right'}}> */}
-                                    price
+                                <Typography component='td'className={clsx('alignRight')} >
+                                    {randInt(0,9)}$
                                 </Typography>
                                 <Typography component='td'>
-                                    options
+                                    **
                                 </Typography>
                             </tr>
                         ))
