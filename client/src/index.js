@@ -88,19 +88,27 @@ class CustomRouter extends Component
         }
 
         const routes = [
-            { path: '/',
-              Component: Main },
             { path: '/main',
-              to: '/',
-              Component: Redirect },
+              exact: true,
+              Component: Main },
+            { path: '/',
+              to: '/main',
+              exact: true},
             { path: '/draftsim',
+              exact: true,
               Component: Draftsim },
             { path: '/collection',
+              exact: false,
               Component: CardCollection },
             { path: '/signup',
+              exact: true,
               Component: Signup },
             { path: '/lost',
+              exact: true,
               Component: Lost },
+            { path: '*',
+              to: '/lost',
+              exact: false},
         ]
 
         return (
@@ -121,16 +129,34 @@ class CustomRouter extends Component
                         <Router /*ref={this.routerRef}*/ >
                             <Layout { ...passedProps } >
                                 <Switch>
-                                    { routes.map((item, i) => (
-                                        <Route exact
+                                {
+                                    routes.map((item, i) => (
+                                        item.to
+                                        ? <Redirect
                                             key = {i}
+                                            exact = {item.exact}
                                             path = {item.path}
-                                            render = {
-                                                () => <item.Component {...item.to} {...passedProps} />
+                                            to = {item.to}
+                                        />
+                                        : <Route
+                                            key = {i}
+                                            exact = {item.exact}
+                                            path = {item.path}
+                                            render = { () => 
+                                                <item.Component {...passedProps} />
                                             }
                                         />
-                                    )) }
-                                    <Redirect to='/lost' /> {/* anything else will be sent to '/lost' */}
+                                    ))
+                                }
+
+                                {/* <Redirect exact
+                                    path = '/'
+                                    to = '/main'
+                                />
+                                <Redirect
+                                    path = '*'
+                                    to = '/lost'
+                                /> */}
                                 </Switch>
                             </Layout>
                         </Router>

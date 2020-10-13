@@ -7,9 +7,9 @@ import { withStyles } from '@material-ui/core/styles'
 import getStyles from './styles'
 const useStyles = (theme) => getStyles(theme)
 
-//TODO remove this
 function randInt(min, max)
 {
+    //TODO remove this
     return Math.round(min + Math.random() * (max - min))
 }
 
@@ -31,7 +31,7 @@ class Cardlist extends Component
         this.state = {
             ...props,
             mouseOn: null,
-            cardlist: [...Array(randInt(10,50)).keys()], //TODO get cardlist from localstorage
+            // cardlist: props.cardlist, //TODO get cardlist from localstorage
         }
     }
 
@@ -44,7 +44,7 @@ class Cardlist extends Component
                 <thead>
                     <tr>
                         <Typography component='td' colSpan='6' variant='h6' >
-                            Header
+                            {this.props.header}
                         </Typography>
                     </tr>
                 </thead>

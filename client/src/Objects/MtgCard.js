@@ -1,4 +1,8 @@
 import ScryfallClient from 'scryfall-client'
+import axios from 'axios'
+import Promise from 'bluebird'
+
+Promise.config({cancellation: true})
 const scryfall = new ScryfallClient()
 
 /**
@@ -12,14 +16,29 @@ class MtgCard
         this.data = {...data}
     }
 
-    static getCardByName(name)
+    static autocomplete(query)
     {
-        scryfall.getCard(name, 'exactName').then(
-            (cardData) => ( new MtgCard(cardData) )
-        ).catch( (e) => {
-            console.log('error in \'MtgCard.getCardByName()\':', e)
+        return Promise.resolve(
+            axios.get('https://api.scryfall.com/cards/autocomplete?q=' + query)
+                .then( res => res.data.data )
+                .catch( err => {
+                    console.error("error in 'MtgCard.autocomplete()':", err)
+                    return []
+                })
+        )
+    }
+
+    static async getCardByName(name)
+    {
+        try
+        {
+            let cardData = await scryfall.getCard(name, 'exactName')
+            return new MtgCard(cardData)
+        } catch (err)
+        {
+            console.error("error in 'MtgCard.getCardByName()':", err)
             return null
-        })
+        }
     }
 }
 

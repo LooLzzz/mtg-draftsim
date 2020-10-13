@@ -8,9 +8,9 @@ export default function getStyles(theme)
     }
 
     return ({
-
         masonryGrid: {
             display: 'flex',
+            justifyContent: 'flex-end',
             // marginLeft: '-30px', /* gutter size offset */
             flexGrow: 1,
         },
@@ -53,9 +53,9 @@ export default function getStyles(theme)
                         fontSize: '1.15rem',
                     },
                     '& .MuiInputBase-root': {
+                        color: theme.palette.text.secondary,
                         fontSize: "0.875rem",
                         height: '1rem',
-                        color: theme.palette.text.secondary,
                         width: '1.6rem',
                     },
                     '& input': {
@@ -72,6 +72,13 @@ export default function getStyles(theme)
             // flexDirection: 'column',
             minHeight: `calc(100vh - ${topSpacerHeight} - ${bottomBarHeight})`,
         },
+        searchBoxLabel: {
+            fontSize: '1em',
+        },
+        searchBoxInput: {
+            fontSize: '1em',
+            backgroundColor: theme.palette.type === 'dark' ? '#212121' : '#EEF0F2',
+        },
         foil: {
             minWidth: '0.5rem',
         },
@@ -84,7 +91,7 @@ export default function getStyles(theme)
         },
         topPanelContainer: {
             display: 'flex',
-            justifyContent: 'flex-end',
+            justifyContent: 'space-between',
             minWidth: '100%',
         },
         leftPanelContainer: {

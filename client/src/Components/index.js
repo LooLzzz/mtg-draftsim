@@ -5,8 +5,8 @@ import Lost from './Lost'
 import Layout from './Layout'
 import Signup from './Signup'
 import Draftsim from './Draftsim'
-import { CardCollection } from './CardCollection'
-import { CardCol, CardBox, MtgObject } from './CardComponents'
+import CardCollection from './CardCollection'
+import { CardCol, CardBox, MtgObject } from './Draftsim/Components'
 
 export {
     Dummy,
