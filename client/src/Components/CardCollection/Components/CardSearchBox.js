@@ -23,21 +23,39 @@ class CardSearchbox extends Component
             // ...props,
             options: [],
             loading: false,
+            val: '',
         }
         // this.inputRef = React.createRef()
         this.handleResult = props.onResult
         this.searchPromise = Promise.resolve() // Dummy promise to avoid null checks
+        // this.val = ''
     }
     
-    // handleKeyDown = (e) =>
-    // {
-    //     if (e.key === 'Escape')
-    //     {
-    //         if (this.inputRef.current)
-    //             this.inputRef.current.children[0].value = ''
-    //         e.target.blur()
-    //     }
-    // }
+    handleChange = (e, v) => 
+    {
+        if (!this.state.loading)
+            this.handleResult(v)
+    }
+
+    handleKeyPress = async (e) =>
+    {
+        // console.log('val:', this.state.val)
+        if (e.key === 'Enter')// && !this.state.val)
+        {
+            if (this.state.loading)
+            {
+                e.persist()
+                await this.searchPromise
+            }
+            let val = isEmpty(this.state.options) ? null : this.state.options[0]
+            this.handleResult(val)
+            this.setState({val})
+            // console.log(e.target)
+            // e.target.blur()
+        }
+        // else if (e.key === 'Escape')
+        //     this.setState({options: []})
+    }
 
     // handleBlur = (e) =>
     // {
@@ -45,22 +63,27 @@ class CardSearchbox extends Component
     //         this.setState({loading: false})
     // }
 
-    handleInputChange = (e, value) =>
+    handleInputChange = (e, v) =>
     {
         this.searchPromise.cancel()
 
-        if (isEmpty(value))
-            this.setState({loading:false})
+        if (isEmpty(v))
+        {
+            this.setState({
+                loading: false,
+                options: [],
+            })
+        }
         else
         {
             this.setState({loading:true})
 
             this.searchPromise = (
-                MtgCard.autocomplete(value)
+                MtgCard.autocomplete(v)
                     .then( (res) => {
                         // console.log('this should happen only once')
                         this.setState({options: res})
-                        this.setState({loading:false})
+                        this.setState({loading: false})
                     })
                     // .finally( () => {
                     //     if (!this.searchPromise.isCancelled()) //.isCancelled() doesnt work for some reason #shrug
@@ -80,8 +103,10 @@ class CardSearchbox extends Component
                 clearOnEscape
                 id = 'card-searchbox'
                 options = {this.state.options}
-                onChange = {(e,v) => this.handleResult(v)}
-                onInputChange = {(e,v) => this.handleInputChange(e,v)}
+                value = {this.state.val}
+                onKeyPress = {this.handleKeyPress}
+                onChange = {this.handleChange}
+                onInputChange = {this.handleInputChange}
                 // onKeyDown = {this.handleKeyDown}
                 // onBlur = {this.handleBlur}
                 loading = {this.state.loading}

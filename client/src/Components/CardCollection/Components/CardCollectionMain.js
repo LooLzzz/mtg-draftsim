@@ -61,7 +61,7 @@ class CardCollectionMain extends Component
             curr = order[curr]
         }
 
-        console.log(newlist)
+        // console.log(newlist)
         return newlist
     }
 
