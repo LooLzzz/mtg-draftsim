@@ -2,16 +2,11 @@ import React, { Component } from 'react'
 import { IconButton, InputBase, Typography } from '@material-ui/core'
 import { ArrowDropDownCircleOutlined as ArrowDropDownCircleOutlinedIcon } from '@material-ui/icons'
 import clsx from 'clsx'
+import { MtgCard } from 'Objects'
 
 import { withStyles } from '@material-ui/core/styles'
 import getStyles from './styles'
 const useStyles = (theme) => getStyles(theme)
-
-// function randInt(min, max)
-// {
-//     //TODO remove this
-//     return Math.round(min + Math.random() * (max - min))
-// }
 
 function stripStr(str, chars)
 {
@@ -23,6 +18,20 @@ function stripStr(str, chars)
     ), "");
 }
 
+async function scryfallPopulate(card)
+{
+    if (card.image_uris)
+        return card
+    
+    let res = await MtgCard.getCard(card.name, card.set)
+    
+    // console.log(res)
+    return {
+        ...res.data,
+        ...card,
+    }
+}
+
 /**
  * expects cols props.
  * cols is an array that can contain each one of:
@@ -30,7 +39,7 @@ function stripStr(str, chars)
  *   'foil',
  *   'count',
  *   'cardName',
- *   'cmc',
+ *   'mana_cost',
  *   'price',
  *   'options'
  * ]
@@ -42,21 +51,117 @@ class Cardlist extends Component
         super(props)
         this.state = {
             ...props,
+            cardlist: [],
             mouseOn: null,
-            // cardlist: props.cardlist, //TODO get cardlist from localstorage
         }
+        
+        props.listenAddCard(this.addCard)
+        props.listenSetCardlist(this.setCardlist)
+    }
+
+    addCard = async (newCard) =>
+    {
+        // console.log('got card from sub:', card) //DEBUG
+        let {cardlist} = this.state
+        let flag = false
+        for (let i = 0; i < cardlist.length; i++)
+        {
+            const card = cardlist[i]
+            if (card.name === newCard.name)
+                if (card.set === newCard.set)
+                    if (card.foil === newCard.foil)
+                        {
+                            // console.log(this.countRefs[i])
+                            // console.log(this.countRefs[i].current)
+                            // this.countRefs[i].current.value++
+                            cardlist[i].count++
+                            flag = true
+                            break
+                        }
+        }
+
+        if (!flag)
+        {
+            newCard = await scryfallPopulate(newCard)
+            cardlist.push(newCard)
+        }
+        // console.log(cardlist)
+        this.setState({cardlist})
+    }
+
+    setCardlist = async (cardlist) =>
+    {
+        let populatedList = []
+        for (const card of cardlist)
+            populatedList.push(await scryfallPopulate(card))
+        this.setState({cardlist: populatedList})
+    }
+
+    // async componentDidUpdate(oldProps, oldState)
+    // {
+    //     console.log('oldProps', oldProps.cardlist)
+    //     console.log('props', this.props.cardlist)
+
+    //     if (this.props.cardlist !== oldState.cardlist)
+    //     {
+    //         this.setState({cardlist: this.props.cardlist})
+
+    //         let populatedList = []
+    //         for (const card of this.props.cardlist)
+    //             populatedList.push(await scryfallPopulate(card))
+                
+    //         // console.log('populated list:', populatedList) //DEBUG
+    //         this.setState({cardlist: populatedList})
+    //     }
+    // }
+
+    manaCostToSpan = (manaCost) =>
+    {
+        // ms ms-shadow ms-cost
+        if (!manaCost)
+            return null
+        
+        let costs = manaCost.match(/[a-zA-z0-9]+/g)
+
+        return costs.map((cost, i) => (
+            <span
+                key = {i}
+                className = {'ms ms-shadow ms-cost ms-' + cost.toLowerCase()}
+            />
+        ))
+    }
+
+    handleCountChange = (e, i) =>
+    {
+        let {cardlist} = this.state
+        cardlist[i].count = e.currentTarget.value
+        this.setState({cardlist})
+
+        // let val = e.currentTarget.value
+        // if (Number(val))
+        //     e.currentTarget.value += 'x'
+        // else
+        // {
+        //     val = String(val).toLowerCase()
+         
+        //     e.currentTarget.value = (
+        //         val.match(/^[0-9]+x+$/g)
+        //             ? val.substring(0, val.indexOf('x')) + 'x'
+        //             : '1x'
+        //     )
+        // }
     }
 
     handleOnMouseLeave = (e) =>
     {
         this.setState({mouseOn: null})
-        this.props.setCardImageUrl(null)
+        // this.props.setCardImage(null)
     }
 
     handleOnMouseEnter = (e, i) =>
     {
         this.setState({mouseOn: i})
-        this.props.setCardImageUrl(this.state.cardlist[i].imageUrl)
+        this.props.setCardImage(this.state.cardlist[i]?.image_uris?.normal, this.state.cardlist[i].foil)
     }
 
     render()
@@ -88,27 +193,26 @@ class Cardlist extends Component
                             />
                             <Typography component='td' color='textSecondary' className={classes.count} hidden={!this.state.cols.includes('count')} >
                                 <InputBase
-                                    value = {item.count}
-                                    // defaultValue = {item.count}
-                                    // defaultValue = {randInt(0,4)+'x'}
+                                    value = {this.state.cardlist[i].count}
+                                    onChange = {e => this.handleCountChange(e, i)}
                                     onClick = { e => {
                                         e.currentTarget.children[0].value = stripStr(e.currentTarget.children[0].value, 'x')
                                     }}
-                                    onBlur = { e => {
-                                        let val = e.currentTarget.value
-                                        if (Number(val))
-                                            e.currentTarget.value += 'x'
-                                        else
-                                        {
-                                            val = String(val).toLowerCase()
+                                    // onBlur = { e => {
+                                    //     let val = e.currentTarget.value
+                                    //     if (Number(val))
+                                    //         e.currentTarget.value += 'x'
+                                    //     else
+                                    //     {
+                                    //         val = String(val).toLowerCase()
                                             
-                                            e.currentTarget.value = (
-                                                val.match('^[0-9]+x+$')
-                                                    ? val.substring(0, val.indexOf('x')) + 'x'
-                                                    : '1x'
-                                            )
-                                        }
-                                    }}
+                                    //         e.currentTarget.value = (
+                                    //             val.match(/^[0-9]+x+$/g)
+                                    //                 ? val.substring(0, val.indexOf('x')) + 'x'
+                                    //                 : '1x'
+                                    //         )
+                                    //     }
+                                    // }}
                                     onKeyDown = { e => {
                                         if (e.key === 'Enter')
                                             e.target.blur()
@@ -118,13 +222,17 @@ class Cardlist extends Component
                             <Typography color='textPrimary' component='td' className={clsx('alignLeft', classes.cardName)} hidden={!this.state.cols.includes('cardName')} >
                                 {item.name}
                             </Typography>
-                            <Typography component='td' color='textSecondary' className={clsx('alignRight', classes.cmc)} hidden={!this.state.cols.includes('cmc')} >
-                                {item.cmc}
+                            <Typography component='td' color='textSecondary' className={clsx('alignRight', classes.mana_cost)} hidden={!this.state.cols.includes('mana_cost')} >
+                            {
+                                this.manaCostToSpan(item.mana_cost)
+                            }
                             </Typography>
                             <Typography component='td' color='textSecondary' className={clsx('alignRight', classes.price)} hidden={!this.state.cols.includes('price')} >
                             {
-                                item.price
-                                    ? item.price
+                                item.prices && item.prices.usd
+                                    ? item.foil
+                                        ? item.prices.usd_foil + '$'
+                                        : item.prices.usd + '$'
                                     : '-'
                             }
                             </Typography>

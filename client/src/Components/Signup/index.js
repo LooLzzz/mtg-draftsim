@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { AuthService } from 'Auth';
+import { UserService } from 'Auth';
 import { Button, CircularProgress, Dialog, DialogContent, Grid, Typography } from '@material-ui/core';
 import { AccountCircle as AccountCircleIcon } from '@material-ui/icons';
 import { TextValidator, ValidatorForm } from 'react-material-ui-form-validator';
@@ -35,10 +35,10 @@ class Signup extends Component
     
     async componentDidMount()
     {
-        let flag = await this.props.isLoggedIn()
+        let isLoggedIn = await this.props.isLoggedIn()
         
-        if (flag)
-            this.props.history.push('/lost')
+        if (isLoggedIn)
+            this.props.history.push('/')
     }
 
     handleFormChange = (e) => {
@@ -88,7 +88,7 @@ class Signup extends Component
             this.setState({loading: true})
 
             const {username, password, password2} = this.state
-            const res = await AuthService.signup(username, password, password2)
+            const res = await UserService.signup(username, password, password2)
             
             this.setState({loading: false})
 

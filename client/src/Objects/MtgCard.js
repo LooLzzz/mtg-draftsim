@@ -1,9 +1,9 @@
-import ScryfallClient from 'scryfall-client'
+// import ScryfallClient from 'scryfall-client'
 import axios from 'axios'
 import Promise from 'bluebird'
 
 Promise.config({cancellation: true})
-const scryfall = new ScryfallClient()
+// const scryfall = new ScryfallClient()
 
 /**
  * An object to represent a single mtg card.
@@ -28,11 +28,20 @@ class MtgCard
         )
     }
 
-    static async getCardByName(name)
+    static async getCard(name, set)
     {
         try
         {
-            let cardData = await scryfall.getCard(name, 'exactName')
+            name = name.replace(' ', '+')
+            set = set ? `;set=${set}` : ''
+            let cardData = await Promise.resolve(
+                axios.get('https://api.scryfall.com/cards/named?exact=' + name + set)
+                    .then( res => res.data )
+                    .catch( err => {
+                        console.error("error in 'MtgCard.getCardByName()':", err)
+                        return []
+                    })
+            )
             return new MtgCard(cardData)
         } catch (err)
         {

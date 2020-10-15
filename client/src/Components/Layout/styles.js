@@ -58,6 +58,7 @@ export default function getStyles(theme)
         },
         content: {
             flexGrow: 1,
+            textAlign: '-webkit-center',
             // display: 'flex',
             // paddingTop: theme.spacing(0.5),
             // paddingBottom: theme.spacing(0.5),

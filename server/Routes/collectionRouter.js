@@ -2,20 +2,45 @@ require('module-alias/register')
 
 const mongoose = require('mongoose');
 const express = require("express");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const { Keys } = require("@Config");
-const { validateSignupInput, validateLoginInput } = require("@Validation");
-const { User, Collection } = require("@Models");
+const { Collection } = require("@Models");
+const { validateToken } = require("@Validation");
 
 const router = express.Router()
 
 /**
  * @route POST api/collection/get
- * @desc Signup user
+ * @desc Get user's collection
  * @access Public
  */
-router.post("/get", (req, res) =>
-{
-    //TODO all this
-})
+router.post(
+    "/get",
+    [validateToken],
+    (req, res) => {
+        const { userid } = req
+
+        Collection.findOne({ userid })
+            .then(collection => {
+                const data = {id: collection.id, cards: collection.cards} //dont send back userid
+                // console.log(data) //DEBUG
+                res.json(data)
+            })
+            .catch(err => console.error(err));
+    }
+)
+
+/**
+ * @route POST api/collection/commit
+ * @desc Get user's collection
+ * @access Public
+ */
+router.post(
+    "/commit",
+    [validateToken],
+    (req, res) => {
+        const { userid } = req
+
+        //TODO this
+    }
+)
+
+module.exports = router

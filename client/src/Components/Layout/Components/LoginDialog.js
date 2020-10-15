@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { AuthService } from 'Auth/'
+import { UserService } from 'Auth/'
 import { Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Divider, InputAdornment, Typography } from '@material-ui/core'
 import { AccountCircle as AccountCircleIcon } from '@material-ui/icons'
 import { TextValidator, ValidatorForm } from 'react-material-ui-form-validator'
@@ -66,7 +66,7 @@ class LoginDialog extends Component
                 })
 
                 const {username, password} = this.state
-                AuthService.login(username, password).then( (res) => {
+                UserService.login(username, password).then( (res) => {
                     this.setState({
                         loading: false,
                     })

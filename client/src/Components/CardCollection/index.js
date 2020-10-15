@@ -18,6 +18,17 @@ class CardCollection extends Component
         props.setActiveTab('collection')
     }
     
+    async componentDidUpdate(oldProps, oldState)
+    {
+        if (this.state !== oldState)
+        {
+            let isLoggedIn = await this.props.isLoggedIn()
+            
+            if (!isLoggedIn)
+                this.props.history.push('/')
+        }
+    }
+
     render()
     {
         // const { match, location, history } = this.props;

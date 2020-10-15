@@ -1,7 +1,9 @@
 import AccessService from './AccessService'
-import AuthService from './AuthService'
+import UserService from './UserService'
+import CollectionService from './CollectionService'
 
 export {
     AccessService,
-    AuthService
+    UserService,
+    CollectionService,
 }

@@ -83,11 +83,14 @@ export default function getStyles(theme)
             minHeight: '0.5rem',
             minWidth: '0.5rem',
         },
+        price: {
+            minWidth: '3.5rem',
+        },
         cardName: {
             flexGrow: 6,
             color: theme.palette.text.primary,
         },
-        cmc: {
+        mana_cost: {
             paddingRight: '0.3em',
         },
         topPanelContainer: {

@@ -2,6 +2,9 @@ import React, { Component } from 'react'
 import { AppBar, Breadcrumbs, Toolbar } from '@material-ui/core';
 import { Cardlist, CardSearchbox } from '.'
 import { Link } from 'react-router-dom';
+import { CollectionService } from 'Auth';
+import { MtgCard } from 'Objects/';
+import cardBackImage from 'Resources/images/cardback.jpg'
 
 import { withRouter } from 'react-router';
 import { withStyles } from '@material-ui/core/styles';
@@ -9,52 +12,87 @@ import getStyles from './styles'
 
 const useStylesLOC = (theme) => getStyles(theme)
 
+const foilBackgroundCSS = `
+    linear-gradient(
+        -45deg,
+        rgba(255,0,0,0.15) 0%,
+        rgba(255,0,178,0.15) 16%,
+        rgba(9,0,255,0.15) 32%,
+        rgba(3,255,250,0.15) 50%,
+        rgba(3,255,68,0.15) 66%,
+        rgba(179,255,3,0.15) 82%,
+        rgba(255,3,3,0.15) 100%
+    )`
+
 class CollectionMain extends Component
 {
     constructor(props)
     {
         super(props)
         this.state = {
-            // cardlist: [
-            //     {
-            //         name: 'test1',
-            //         foil: true,
-            //         count: 1,
-            //         cmc: '3U',
-            //         imageUrl: "https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=141853&type=card",
-            //     },
-            //     {
-            //         name: 'test2',
-            //         foil: false,
-            //         count: 1,
-            //         cmc: '3U',
-            //         price: '22$',
-            //         imageUrl: "https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=141822&type=card",
-            //     },
-            // ],
-            // cardlist: props.userData.collection,
-            cardlist: [],
             cols: [
                 'foil',
                 'count',
                 'cardName',
-                'cmc',
+                'mana_cost',
                 'price',
                 'options'
             ],
         }
 
-        console.log(props)
+        CollectionService.getCollectionData()
+            .then(collection => {
+                this.setState({
+                    collectionId: collection.id,
+                    cardlist: collection.cards,
+                })
+
+                this.listenersSetCardlist.forEach((listener) => listener(collection.cards)) //notify all listeners
+            })
+
+        this.listenersAddCard = []
+        this.listenersSetCardlist = []
+
+        // console.log(props) //DEBUG
     }
 
-    handleSearchResult = (res) =>
+    handleSearchResult = async (res) =>
     {
-        console.log('got result from searchbox:', res)
+        // console.log('got result from searchbox:', res) //DEBUG
+        
+        let {cardlist} = this.state
+        let {data} = await MtgCard.getCard(res)
+        
+        let card = {
+            ...data,
+            foil: false,
+            count: 1,
+        }
+
+        cardlist.push(card)
+        
+        // console.log('from scryfall:', card) //DEBUG
+
+        // this.setState({cardlist})
+        this.listenersAddCard.forEach((listener) => listener(card)) //notify all listeners
     }
 
-    setCardImageUrl = (newVal) =>
+    listenAddCard = (listener) =>
     {
-        this.setState({cardImageUrl: newVal})
+        this.listenersAddCard.push(listener)
+    }
+
+    listenSetCardlist = (listener) =>
+    {
+        this.listenersSetCardlist.push(listener)
+    }
+
+    setCardImage = (url, foil) =>
+    {
+        if (url)
+            this.setState({cardImage: {url, foil}})
+        else
+            this.setState({cardImage: {url:cardBackImage, foil:false}})
     }
 
     render()
@@ -63,7 +101,7 @@ class CollectionMain extends Component
 
         return (
             <>
-                <div className={classes.topPanelContainer}>
+                <div className={classes.topPanelContainer} style={{minWidth:'800px', width: '50vw'}}>
                     <div>
                         <Breadcrumbs style={{fontSize:'0.9rem'}}>
                             <Link to='/collection'>
@@ -81,27 +119,40 @@ class CollectionMain extends Component
                     </div>
                 </div>
 
-                <div className={classes.root}>
+                <div className={classes.root} style={{minWidth:'800px', width: '50vw'}}>
                     <div className={classes.leftPanelContainer}>
                         <div className={classes.cardPreviewContainer}>
-                            <img className={classes.cardPreview}
-                                //TODO get card image from onMouseHover
-                                alt = 'preview'
-                                src = {
-                                    this.state.cardImageUrl
-                                        ? this.state.cardImageUrl
-                                        : 'https://www.slightlymagic.net/forum/download/file.php?id=11045&sid=aabe7772e0c31bd3202bbc27ad7925cb&mode=view'
-                                }
-                            />
+                            <div
+                                className = {classes.cardPreview}
+                                style = {{
+                                    backgroundSize: 'cover',
+                                    backgroundImage: (
+                                        this.state.cardImage?.foil
+                                            ? `${foilBackgroundCSS}, url(${this.state.cardImage?.url})`
+                                            : `url(${this.state.cardImage?.url})`
+                                    )
+                                }}
+                            >
+                                <img
+                                    className = {classes.cardPreview}
+                                    alt = 'preview'
+                                    src = {cardBackImage}
+                                    style = {{
+                                        opacity: this.state.cardImage ? 0 : 1
+                                    }}
+                                />
+                            </div>
                         </div>
                     </div>
 
                     <div className={classes.rightPanelContainer}>
                         <Cardlist 
                             cols = {this.state.cols} 
-                            cardlist = {this.state.cardlist} 
+                            // cardlist = {this.state.cardlist}
                             header = 'Collection' 
-                            setCardImageUrl = {this.setCardImageUrl}
+                            setCardImage = {this.setCardImage}
+                            listenAddCard = {this.listenAddCard}
+                            listenSetCardlist = {this.listenSetCardlist}
                         />
                     </div>
                 </div>

@@ -6,7 +6,7 @@ import { Close as CloseIcon } from '@material-ui/icons';
 import { BrowserRouter as Router, Redirect, Route, Switch } from "react-router-dom";
 import { SnackbarProvider } from 'notistack';
 import { Layout, Main, Draftsim, CardCollection, Lost, Signup } from './Components'
-import { AuthService } from 'Auth';
+import { UserService } from 'Auth';
 import { darkTheme, lightTheme } from 'Themes'
 
 import 'fontsource-roboto';
@@ -37,11 +37,11 @@ class CustomRouter extends Component
 
     isLoggedIn = async (e) =>
     {
-        const userData = await AuthService.getCurrentUserData()
+        const userData = await UserService.getCurrentUserData()
         if (userData)
             this.setUserData(userData)
         
-        return userData
+        return !!userData
     }
 
     setUserData = ( (data) =>

@@ -7,7 +7,7 @@ const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const path = require('path');
 const { Keys } = require('@Config')
-const { userRouter, accessRouter } = require("@Routes");
+const { userRouter, accessRouter, collectionRouter } = require("@Routes");
 // const passport = require("passport");
 // const configPassport = require("@Config/passport");
 
@@ -44,6 +44,7 @@ mongoose.connect(
 // configPassport(passport)
 app.use("/api/users", userRouter);
 app.use("/api/access", accessRouter);
+app.use("/api/collection", collectionRouter);
 
 if (process.env.NODE_ENV === 'production')
 {

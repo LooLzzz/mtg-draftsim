@@ -31,7 +31,7 @@ class DeckView extends Component
                 'foil',
                 'count',
                 'cardName',
-                'cmc',
+                'mana_cost',
                 'price',
                 'options',
             ],

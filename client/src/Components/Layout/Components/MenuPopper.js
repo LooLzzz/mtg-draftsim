@@ -5,7 +5,7 @@ import {
 } from '@material-ui/core'
 import { Menu as MenuIcon } from '@material-ui/icons'
 import { ListItemDarkmodeToggle, LoginDialog } from './'
-import { AuthService } from 'Auth/'
+import { UserService } from 'Auth/'
 import { withSnackbar } from 'notistack'
 
 import { withStyles } from '@material-ui/core/styles';
@@ -54,7 +54,8 @@ class MenuPopper extends Component
     handleLogout = (e) => {
         this.handleMenuToggle(null) //close menu popover
         this.props.setUserData(null)
-        AuthService.logout()
+        this.props.history.push('/')
+        UserService.logout()
         
         this.props.enqueueSnackbar(`Logged out`, {variant: 'info'})
     }

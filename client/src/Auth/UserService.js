@@ -4,7 +4,7 @@ import AccessService from './AccessService'
 
 const API_URL = '/api/users'
 
-class AuthService
+class UserService
 {
     login(username, password)
     {
@@ -69,4 +69,4 @@ class AuthService
     }
 }
 
-export default new AuthService()
+export default new UserService()

@@ -2,35 +2,37 @@ import axios from 'axios';
 
 const API_URL = '/api/access/';
 
-class UserService
+class AccessService
 {
-    getAuthHeader()
+    getAuthHeaders()
     {
         const user = JSON.parse(localStorage.getItem('user'));
     
-        let res = {}
+        let headers = {}
         if (user && user.accessToken)
-            res = {
-                'accessToken': user.accessToken
-            };
+            headers.accessToken = user.accessToken
         
-        return res;
-    }
-
-    isPublicAccess()
-    {
-        // '/api/access/all'
-        return axios.get(API_URL + 'all')
-    }
-
-    isUserAccess()
-    {
-        // '/api/access/user'
-        return axios.get(API_URL + 'user', { headers: this.getAuthHeader() })
+        return headers;
     }
 
     /**
-     * returns an object following: {isValid:bool, error:str}
+     * @ROUTE /api/access/all
+     */
+    isPublicAccess()
+    {
+        return axios.get(API_URL + 'all')
+    }
+
+    /**
+     * @ROUTE /api/access/user
+     */
+    isUserAccess()
+    {
+        return axios.get(API_URL + 'user', { headers: this.getAuthHeaders() })
+    }
+
+    /**
+     * returns an object with: {isValid:bool, error:str}
      */
     async isValidUserToken()
     {
@@ -53,4 +55,4 @@ class UserService
     }
 }
 
-export default new UserService();
+export default new AccessService();
