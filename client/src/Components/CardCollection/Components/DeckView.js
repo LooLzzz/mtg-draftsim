@@ -2,16 +2,15 @@ import React, { Component } from 'react'
 import { AppBar, Breadcrumbs, Toolbar } from '@material-ui/core';
 import Cardlist from './Cardlist';
 import Masonry from 'react-masonry-css'
+import { Link } from 'react-router-dom';
 
 import { withRouter } from 'react-router';
 import { withStyles } from '@material-ui/core/styles';
 import getStyles from './styles'
 
-import { MtgCard } from 'Objects'
 import 'Resources/keyrune/css/keyrune.css'
 import 'Resources/mana/css/mana.css'
 import CardSearchbox from './CardSearchbox';
-import { Link } from 'react-router-dom';
 
 const useStylesLOC = (theme) => getStyles(theme)
 
@@ -21,18 +20,25 @@ function randInt(min, max)
     return Math.round(min + Math.random() * (max - min))
 }
 
-class CardCollectionMain extends Component
+class DeckView extends Component
 {
     constructor(props)
     {
         super(props)
         this.state = {
             ...props,
+            cols: [
+                'foil',
+                'count',
+                'cardName',
+                'cmc',
+                'price',
+                'options',
+            ],
         }
-        props.setActiveTab('collection')
     }
 
-    sortListForMason = (cardlist, numOfCols) =>
+    sortListForMason = (cardlist) =>
     {
         let newlist = []
         cardlist = cardlist.sort( (a,b) => (b.length-a.length) ) //sorted high to low
@@ -78,17 +84,14 @@ class CardCollectionMain extends Component
             <>
                 <div className={classes.topPanelContainer}>
                     <div>
-                        {/* <Breadcrumbs style={{fontSize:'0.9rem'}}>
-                            <Link>
-                                link_home
+                        <Breadcrumbs style={{fontSize:'0.9rem'}}>
+                            <Link to='/collection'>
+                                Collection
                             </Link>
-                            <Link>
-                                link2
-                            </Link>
-                            <Link>
-                                <b>link_current</b>
-                            </Link>
-                        </Breadcrumbs> */}
+                            <a style={{cursor:'pointer'}}>
+                                <b>Deck View</b>
+                            </a>
+                        </Breadcrumbs>
                     </div>
                     <div>
                         <CardSearchbox
@@ -125,16 +128,16 @@ class CardCollectionMain extends Component
                         {
                             this.sortListForMason(
                                 [
-                                    [...Array(randInt(5,30)).keys()],
-                                    [...Array(randInt(5,30)).keys()],
-                                    [...Array(randInt(5,30)).keys()],
-                                    [...Array(randInt(5,30)).keys()],
-                                    [...Array(randInt(5,30)).keys()],
-                                    [...Array(randInt(5,30)).keys()],
+                                    // [...Array(randInt(5,30)).keys()],
+                                    // [...Array(randInt(5,30)).keys()],
+                                    // [...Array(randInt(5,30)).keys()],
+                                    // [...Array(randInt(5,30)).keys()],
+                                    // [...Array(randInt(5,30)).keys()],
+                                    // [...Array(randInt(5,30)).keys()],
                                 ]
                             ,2)
                                 .map( (list, i) =>
-                                    <Cardlist key={i} cardlist={list} header={'List '+i} />
+                                    <Cardlist key={i} cols={this.state.cols} cardlist={list} header={'List '+i} />
                                 )
 
 
@@ -160,4 +163,4 @@ class CardCollectionMain extends Component
     }
 }
 
-export default withRouter(withStyles(useStylesLOC)(CardCollectionMain))
+export default withRouter(withStyles(useStylesLOC)(DeckView))

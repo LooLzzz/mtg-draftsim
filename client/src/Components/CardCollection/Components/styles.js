@@ -10,11 +10,11 @@ export default function getStyles(theme)
     return ({
         masonryGrid: {
             display: 'flex',
-            justifyContent: 'flex-end',
+            justifyContent: 'center',
             // marginLeft: '-30px', /* gutter size offset */
             flexGrow: 1,
         },
-        masonryGridColumn: {
+        // masonryGridColumn: {
             '@global': {
                 table: {
                     width: '100%',
@@ -63,7 +63,7 @@ export default function getStyles(theme)
                         textAlign: 'center',
                     },
                 },
-            },
+            // },
             paddingLeft: '30px', /* gutter size */
             backgroundClip: 'padding-box',
         },
@@ -80,6 +80,7 @@ export default function getStyles(theme)
             backgroundColor: theme.palette.type === 'dark' ? '#212121' : '#EEF0F2',
         },
         foil: {
+            minHeight: '0.5rem',
             minWidth: '0.5rem',
         },
         cardName: {
@@ -95,6 +96,7 @@ export default function getStyles(theme)
             minWidth: '100%',
         },
         leftPanelContainer: {
+            // flexGrow: 1,
             paddingTop: theme.spacing(2),
             paddingRight: theme.spacing(1),
         },

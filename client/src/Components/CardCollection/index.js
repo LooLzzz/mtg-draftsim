@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { CardCollectionMain } from './Components'
+import { DeckView, CollectionMain } from './Components'
 import { Link, Route, Switch, withRouter } from 'react-router-dom';
 
 import { withStyles } from '@material-ui/core/styles';
@@ -30,12 +30,19 @@ class CardCollection extends Component
 
             <Switch>
                 <Route exact path='/collection'>
-                    <Link to={'/collection/list'}>
-                        to list
+                    <Link to={'/collection/main'}>
+                        to collection
+                    </Link>
+                    <br />
+                    <Link to={'/collection/deck'}>
+                        to deck view
                     </Link>
                 </Route>
-                <Route exact path = {'/collection/list'}>
-                    <CardCollectionMain {...this.props} />
+                <Route exact path='/collection/main'>
+                    <CollectionMain {...this.props} />
+                </Route>
+                <Route path = {'/collection/deck'}>
+                    <DeckView {...this.props} />
                 </Route>
             </Switch>
             </>

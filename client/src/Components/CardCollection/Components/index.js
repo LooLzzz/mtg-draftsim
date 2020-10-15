@@ -1,9 +1,11 @@
-import CardCollectionMain from './CardCollectionMain'
+import CollectionMain from './CollectionMain'
+import DeckView from './DeckView'
 import Cardlist from './Cardlist'
 import CardSearchbox from './CardSearchbox'
 
 export {
-    CardCollectionMain,
+    CollectionMain,
+    DeckView,
     Cardlist,
     CardSearchbox,
 }

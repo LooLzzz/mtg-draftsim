@@ -7,11 +7,11 @@ import { withStyles } from '@material-ui/core/styles'
 import getStyles from './styles'
 const useStyles = (theme) => getStyles(theme)
 
-function randInt(min, max)
-{
-    //TODO remove this
-    return Math.round(min + Math.random() * (max - min))
-}
+// function randInt(min, max)
+// {
+//     //TODO remove this
+//     return Math.round(min + Math.random() * (max - min))
+// }
 
 function stripStr(str, chars)
 {
@@ -23,6 +23,18 @@ function stripStr(str, chars)
     ), "");
 }
 
+/**
+ * expects cols props.
+ * cols is an array that can contain each one of:
+ * [
+ *   'foil',
+ *   'count',
+ *   'cardName',
+ *   'cmc',
+ *   'price',
+ *   'options'
+ * ]
+ */
 class Cardlist extends Component
 {
     constructor(props)
@@ -33,6 +45,18 @@ class Cardlist extends Component
             mouseOn: null,
             // cardlist: props.cardlist, //TODO get cardlist from localstorage
         }
+    }
+
+    handleOnMouseLeave = (e) =>
+    {
+        this.setState({mouseOn: null})
+        this.props.setCardImageUrl(null)
+    }
+
+    handleOnMouseEnter = (e, i) =>
+    {
+        this.setState({mouseOn: i})
+        this.props.setCardImageUrl(this.state.cardlist[i].imageUrl)
     }
 
     render()
@@ -48,16 +72,25 @@ class Cardlist extends Component
                         </Typography>
                     </tr>
                 </thead>
-                <tbody onMouseLeave={e => this.setState({mouseOn: null})}>
+                <tbody onMouseLeave={this.handleOnMouseLeave}>
                 {
-                    this.state.cardlist.map( (item, key) => (
-                        <tr key={key} id={key} onMouseEnter={e => this.setState({mouseOn: key})} >
-                            <Typography component='td' color='textSecondary' className={classes.foil} >
-                                
-                            </Typography>
-                            <Typography component='td' color='textSecondary' className={classes.count} >
+                    this.state.cardlist.map( (item, i) => (
+                        <tr key={i} onMouseEnter={e => this.handleOnMouseEnter(e, i)} >
+                            <Typography component='td' color='textSecondary' className={classes.foil} hidden={!this.state.cols.includes('foil')}
+                                style = {
+                                    item.foil
+                                        ? {
+                                            backgroundImage: 'linear-gradient(45deg, #FA8BFF 20%, #2BD2FF 52%, #2BFF88 80%)',
+                                            borderRadius: '100% 100%'
+                                        }
+                                        : {}
+                                }
+                            />
+                            <Typography component='td' color='textSecondary' className={classes.count} hidden={!this.state.cols.includes('count')} >
                                 <InputBase
-                                    defaultValue = {randInt(0,4)+'x'}
+                                    value = {item.count}
+                                    // defaultValue = {item.count}
+                                    // defaultValue = {randInt(0,4)+'x'}
                                     onClick = { e => {
                                         e.currentTarget.children[0].value = stripStr(e.currentTarget.children[0].value, 'x')
                                     }}
@@ -68,10 +101,12 @@ class Cardlist extends Component
                                         else
                                         {
                                             val = String(val).toLowerCase()
-                                            if (val.match('^[0-9]+x+$'))
-                                                e.currentTarget.value = val.substring(0, val.indexOf('x')) + 'x'
-                                            else
-                                                e.currentTarget.value = '1x'
+                                            
+                                            e.currentTarget.value = (
+                                                val.match('^[0-9]+x+$')
+                                                    ? val.substring(0, val.indexOf('x')) + 'x'
+                                                    : '1x'
+                                            )
                                         }
                                     }}
                                     onKeyDown = { e => {
@@ -80,19 +115,22 @@ class Cardlist extends Component
                                     }}
                                 />
                             </Typography>
-                            <Typography color='textPrimary' component='td' className={clsx('alignLeft', classes.cardName)} >
-                                {key}
+                            <Typography color='textPrimary' component='td' className={clsx('alignLeft', classes.cardName)} hidden={!this.state.cols.includes('cardName')} >
+                                {item.name}
                             </Typography>
-                            <Typography component='td' color='textSecondary' className={clsx('alignRight', classes.cmc)} >
-                                cmc
+                            <Typography component='td' color='textSecondary' className={clsx('alignRight', classes.cmc)} hidden={!this.state.cols.includes('cmc')} >
+                                {item.cmc}
                             </Typography>
-                            <Typography component='td' color='textSecondary' className={clsx('alignRight', classes.price)} >
-                                {/* {randInt(0,9)}$ */}
-                                9$
+                            <Typography component='td' color='textSecondary' className={clsx('alignRight', classes.price)} hidden={!this.state.cols.includes('price')} >
+                            {
+                                item.price
+                                    ? item.price
+                                    : '-'
+                            }
                             </Typography>
-                            <Typography component='td' color='textSecondary'>
-                                <IconButton size='small' color={this.state.mouseOn === key ? 'default' : 'secondary'} >
-                                    <ArrowDropDownCircleOutlinedIcon />
+                            <Typography component='td' color='textSecondary' hidden={!this.state.cols.includes('options')} >
+                                <IconButton size='small' color={this.state.mouseOn === i ? 'default' : 'secondary'} >
+                                    <ArrowDropDownCircleOutlinedIcon /> {/* //TODO add dropdown list with options */}
                                 </IconButton>
                             </Typography>
                         </tr>
