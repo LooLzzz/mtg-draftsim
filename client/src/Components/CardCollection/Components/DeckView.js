@@ -3,14 +3,14 @@ import { AppBar, Breadcrumbs, Toolbar } from '@material-ui/core';
 import Cardlist from './Cardlist';
 import Masonry from 'react-masonry-css'
 import { Link } from 'react-router-dom';
+import CardSearchbox from './CardSearchbox';
 
 import { withRouter } from 'react-router';
 import { withStyles } from '@material-ui/core/styles';
 import getStyles from './styles'
 
-import 'Resources/keyrune/css/keyrune.css'
-import 'Resources/mana/css/mana.css'
-import CardSearchbox from './CardSearchbox';
+// import 'Resources/keyrune/css/keyrune.css'
+// import 'Resources/mana/css/mana.css'
 
 const useStylesLOC = (theme) => getStyles(theme)
 

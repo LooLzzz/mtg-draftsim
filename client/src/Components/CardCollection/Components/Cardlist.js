@@ -115,11 +115,33 @@ class Cardlist extends Component
     //     }
     // }
 
+    setToSpan = (set, rarity) =>
+    {
+        set = 'ss-' + set.toLowerCase()
+        rarity = rarity ? 'ss-' + rarity.toLowerCase() : ''
+
+        return (
+            <span
+                className = {`ss ${set} ${rarity}`}
+                style = {{
+                    fontSize: '0.9rem',
+                    backgroundColor: 'rgba(255,255,255,0.1)',
+                    // backgroundBlendMode: 'color',
+                    borderRadius: '100%',
+                    padding: '0.1rem',
+                    // border: 'solid white 1px',
+                }}
+            />
+        )
+    }
+
     manaCostToSpan = (manaCost) =>
     {
         // ms ms-shadow ms-cost
         if (!manaCost)
-            return null
+            return '-'
+            //return <span>-</span>
+            //return null
         
         let costs = manaCost.match(/[a-zA-z0-9]+/g)
 
@@ -127,6 +149,9 @@ class Cardlist extends Component
             <span
                 key = {i}
                 className = {'ms ms-shadow ms-cost ms-' + cost.toLowerCase()}
+                style = {{
+                    marginLeft: '0.2rem'
+                }}
             />
         ))
     }
@@ -181,6 +206,7 @@ class Cardlist extends Component
                 {
                     this.state.cardlist.map( (item, i) => (
                         <tr key={i} onMouseEnter={e => this.handleOnMouseEnter(e, i)} >
+                            {/* FOIL */}
                             <Typography component='td' color='textSecondary' className={classes.foil} hidden={!this.state.cols.includes('foil')}
                                 style = {
                                     item.foil
@@ -191,6 +217,11 @@ class Cardlist extends Component
                                         : {}
                                 }
                             />
+                            {/* SET */}
+                            <Typography component='td' color='textSecondary' className={classes.set} hidden={!this.state.cols.includes('set')} >
+                                {this.setToSpan(item.set, item.rarity)}
+                            </Typography>
+                            {/* COUNT */}
                             <Typography component='td' color='textSecondary' className={classes.count} hidden={!this.state.cols.includes('count')} >
                                 <InputBase
                                     value = {this.state.cardlist[i].count}
@@ -219,14 +250,15 @@ class Cardlist extends Component
                                     }}
                                 />
                             </Typography>
+                            {/* CARD NAME */}
                             <Typography color='textPrimary' component='td' className={clsx('alignLeft', classes.cardName)} hidden={!this.state.cols.includes('cardName')} >
                                 {item.name}
                             </Typography>
+                            {/* MANA COST */}
                             <Typography component='td' color='textSecondary' className={clsx('alignRight', classes.mana_cost)} hidden={!this.state.cols.includes('mana_cost')} >
-                            {
-                                this.manaCostToSpan(item.mana_cost)
-                            }
+                                {this.manaCostToSpan(item.mana_cost)}
                             </Typography>
+                            {/* PRICE */}
                             <Typography component='td' color='textSecondary' className={clsx('alignRight', classes.price)} hidden={!this.state.cols.includes('price')} >
                             {
                                 item.prices && item.prices.usd
@@ -236,6 +268,7 @@ class Cardlist extends Component
                                     : '-'
                             }
                             </Typography>
+                            {/* OPTIONS */}
                             <Typography component='td' color='textSecondary' hidden={!this.state.cols.includes('options')} >
                                 <IconButton size='small' color={this.state.mouseOn === i ? 'default' : 'secondary'} >
                                     <ArrowDropDownCircleOutlinedIcon /> {/* //TODO add dropdown list with options */}

@@ -36,9 +36,13 @@ class CollectionMain extends Component
                 'cardName',
                 'mana_cost',
                 'price',
+                'set',
                 'options'
             ],
         }
+
+        this.listenersAddCard = []
+        this.listenersSetCardlist = []
 
         CollectionService.getCollectionData()
             .then(collection => {
@@ -47,11 +51,8 @@ class CollectionMain extends Component
                     cardlist: collection.cards,
                 })
 
-                this.listenersSetCardlist.forEach((listener) => listener(collection.cards)) //notify all listeners
+                this.notifySetCardlist(collection.cards)
             })
-
-        this.listenersAddCard = []
-        this.listenersSetCardlist = []
 
         // console.log(props) //DEBUG
     }
@@ -74,7 +75,17 @@ class CollectionMain extends Component
         // console.log('from scryfall:', card) //DEBUG
 
         // this.setState({cardlist})
-        this.listenersAddCard.forEach((listener) => listener(card)) //notify all listeners
+        this.notifyAddCard(card)
+    }
+
+    notifySetCardlist = (cardlist) =>
+    {
+        this.listenersSetCardlist.forEach((listener) => listener(cardlist))
+    }
+
+    notifyAddCard = (card) =>
+    {
+        this.listenersAddCard.forEach((listener) => listener(card))
     }
 
     listenAddCard = (listener) =>
