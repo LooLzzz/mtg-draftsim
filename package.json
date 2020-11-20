@@ -35,6 +35,11 @@
         "nodemon": "^2.0.4",
         "validator": "^13.1.17"
     },
+    "eslintConfig": {
+        "rules": {
+            "no-unused-vars": "off"
+        }
+    },
     "devDependencies": {},
     "engines": {
         "node": "12.x",

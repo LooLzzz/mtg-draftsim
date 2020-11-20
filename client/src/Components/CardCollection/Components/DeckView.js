@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { Component } from 'react'
 import { AppBar, Breadcrumbs, Toolbar } from '@material-ui/core';
 import Cardlist from './Cardlist';
@@ -53,6 +54,7 @@ class DeckView extends Component
 
         while (i !== j+1)
         {
+            // eslint-disable-next-line default-case
             switch (curr) {
                 case 'H':
                     newlist.push(cardlist[i++])

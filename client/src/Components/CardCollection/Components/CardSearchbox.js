@@ -37,16 +37,20 @@ class CardSearchbox extends Component
                     ? null
                     : v
             )
+            e.target.select()
         }
     }
 
     handleKeyDown = async (e) =>
     {
+        this.enter = (e.key === 'Enter')
+        
         if (e.key === 'Enter')
         {
             if (this.searchPromise.isPending())
             {
                 e.persist()
+                console.log('waiting for promise to reslove..')
                 try
                 {
                     await this.searchPromise
@@ -62,8 +66,11 @@ class CardSearchbox extends Component
         //     this.setState({options: []})
     }
 
+    // target = null
     handleInputChange = (e, v) =>
     {
+        if (e)
+            this.target = e.target
         // if (this.searchPromise.isPending())
         this.searchPromise.cancel()
 
@@ -81,7 +88,9 @@ class CardSearchbox extends Component
             this.searchPromise = 
                 MtgCard.autocomplete(v)
                     .then( (res) => {
-                        // console.log('this should happen only once')
+                        // console.log('this should happen only once') //DEBUG
+                        if (this.target && this.enter)
+                            this.target.select()
                         this.setState({
                             loading: false,
                             options: res,
