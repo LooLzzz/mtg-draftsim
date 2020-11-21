@@ -1,10 +1,12 @@
 /* eslint-disable default-case, jsx-a11y/alt-text */
 import React, { Component } from 'react'
-import { IconButton, InputBase, Menu, MenuItem, Typography, Grow, Dialog, DialogTitle, List, ListItem, ListItemText, ListItemIcon } from '@material-ui/core'
-import { ArrowDropDownCircleOutlined as ArrowDropDownCircleOutlinedIcon } from '@material-ui/icons'
+import { IconButton, InputBase, Menu, MenuItem, Typography, Grow, Dialog, DialogTitle, List, ListItem, ListItemText, ListItemIcon, Icon } from '@material-ui/core'
+import {
+    ArrowDropDownCircleOutlined as ArrowDropDownCircleOutlinedIcon,
+    Delete as DeleteIcon
+} from '@material-ui/icons'
 import clsx from 'clsx'
 import { MtgCard } from 'Objects'
-import { Dummy } from 'Components'
 
 import { withStyles } from '@material-ui/core/styles'
 import getStyles from './styles'
@@ -226,7 +228,7 @@ class Cardlist extends Component
         })
     }
 
-    handleMenuClose = (e, i) =>
+    handleMenuClose = (e) =>
     {
         this.setState({
             anchorEl: null,
@@ -252,8 +254,16 @@ class Cardlist extends Component
         {
             let cardlist = this.state.cardlist
             cardlist[selectedCardIndex].foil = !cardlist[selectedCardIndex].foil
+            this.handleOnMouseEnter(e, selectedCardIndex) //update preview image
             this.setState({cardlist})
-            this.handleOnMouseEnter(e, selectedCardIndex)
+        }
+        else if (v.includes('remove'))
+        {
+            let cardlist = this.state.cardlist
+            cardlist.splice(selectedCardIndex, 1)
+            this.props.setCardImage(null) //update preview image
+            this.handleMenuClose(e) //close menu
+            this.setState({cardlist})
         }
     }
 
@@ -271,7 +281,7 @@ class Cardlist extends Component
         // e.persist()
         requestAnimationFrame( () => {
             let offsetX = (this.state.mouseX+rect.width) > window.innerWidth ? -rect.width : 0
-            let offsetY = (this.state.mouseY+rect.height) > window.innerHeight ? -rect.height : 0
+            let offsetY = (this.state.mouseY+rect.height) > window.innerHeight ? -rect.height*1.05 : 0
 
             this.previewCardRef.current.style.WebkitTransform = `translate(${this.state.mouseX+(offsetX+rect.width*0.05)}px, ${offsetY+this.state.mouseY+(rect.height*0.05)}px)`
             this.setState({
@@ -404,12 +414,17 @@ class Cardlist extends Component
                     TransitionComponent = {Grow}
                 >
                 {
-                    ['Change a Set', 'Toggle Foil'].map( (v, i) =>
+                    [{txt:'Change Set'}, {txt:'Toggle Foil'}, {txt:'Remove',icon:'delete'}].map( (item, i) =>
                         <MenuItem dense
                             key = {i}
-                            onClick = {e => this.handleMenuItemClick(e, v, this.state.selectedIndex)}
+                            onClick = {e => this.handleMenuItemClick(e, item.txt, this.state.selectedIndex)}
                         >
-                            {v}
+                            {item.icon
+                                ? <ListItemIcon style={{minWidth:'30px'}}>
+                                    <Icon>{item.icon}</Icon>
+                                  </ListItemIcon>
+                                : ''}
+                            {item.txt}
                         </MenuItem>
                     )
                 }
@@ -420,7 +435,7 @@ class Cardlist extends Component
                     onMouseMove = {this.handleOnMouseMoveDialog}
                 >
                     <DialogTitle>
-                        Choose Set
+                        Choose a Set
                     </DialogTitle>
                     <List>
                     {
