@@ -1,4 +1,4 @@
-/* eslint-disable default-case */
+/* eslint-disable default-case, jsx-a11y/alt-text */
 import React, { Component } from 'react'
 import { IconButton, InputBase, Menu, MenuItem, Typography, Grow, Dialog, DialogTitle, List, ListItem, ListItemText, ListItemIcon } from '@material-ui/core'
 import { ArrowDropDownCircleOutlined as ArrowDropDownCircleOutlinedIcon } from '@material-ui/icons'
@@ -161,16 +161,6 @@ class Cardlist extends Component
             cardSets = await MtgCard.getCardSets(this.state.cardlist[selectedIndex].name)
         
         this.setState({cardSets})
-        // cardSets.map((card, i) => (
-        //     <ListItem button dense key={i}>
-        //         <ListItemIcon>
-        //             {card.set}
-        //         </ListItemIcon>
-        //         <ListItemText>
-        //             {card.set_name}
-        //         </ListItemText>
-        //     </ListItem>
-        // ))
     }
 
     manaCostToSpan = (manaCost) =>
@@ -370,21 +360,6 @@ class Cardlist extends Component
                                         onClick = { e => {
                                             e.currentTarget.children[0].value = stripStr(e.currentTarget.children[0].value, 'x')
                                         }}
-                                        // onBlur = { e => {
-                                        //     let val = e.currentTarget.value
-                                        //     if (Number(val))
-                                        //         e.currentTarget.value += 'x'
-                                        //     else
-                                        //     {
-                                        //         val = String(val).toLowerCase()
-                                                
-                                        //         e.currentTarget.value = (
-                                        //             val.match(/^[0-9]+x+$/g)
-                                        //                 ? val.substring(0, val.indexOf('x')) + 'x'
-                                        //                 : '1x'
-                                        //         )
-                                        //     }
-                                        // }}
                                         onKeyDown = { e => {
                                             if (e.key === 'Enter')
                                                 e.target.blur()
@@ -429,7 +404,7 @@ class Cardlist extends Component
                     TransitionComponent = {Grow}
                 >
                 {
-                    ['Change Set', 'Toggle Foil'].map( (v, i) =>
+                    ['Change a Set', 'Toggle Foil'].map( (v, i) =>
                         <MenuItem dense
                             key = {i}
                             onClick = {e => this.handleMenuItemClick(e, v, this.state.selectedIndex)}
@@ -473,7 +448,7 @@ class Cardlist extends Component
                     style = {{
                         top: 0,
                         left: 0,
-                        width: '15%',
+                        maxHeight: '311px',
                         position: 'absolute',
                         zIndex: 999999,
                         visibility: this.state.showCardPreview ? 'visible' : 'hidden',
