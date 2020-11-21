@@ -28,11 +28,54 @@ class MtgCard
         )
     }
 
+    static async getCardSets(name)
+    {
+        // https://api.scryfall.com/cards/search?q="sol ring"&unique=prints
+        try
+        {
+            let cards = await Promise.resolve(
+                axios.get(`https://api.scryfall.com/cards/search?unique=prints&q="${name}"`)
+                    .then( res => res.data.data )
+                    .catch( err => {
+                        console.error("error in 'MtgCard.getCardSets()':", err)
+                        return []
+                    })
+            )
+            // cards = cards.map( cardData => new MtgCard(cardData) )
+            return cards
+        } catch (err)
+        {
+            console.error("error in 'MtgCard.getCardSets()':", err)
+            return null
+        }
+    }
+
+    async getCardSets()
+    {
+        // https://api.scryfall.com/cards/search?q="sol ring"&unique=prints
+        try
+        {
+            let cards = await Promise.resolve(
+                axios.get(`https://api.scryfall.com/cards/search?unique=prints&q="${this.data.name}"`)
+                    .then( res => res.data )
+                    .catch( err => {
+                        console.error("error in 'MtgCard.getCardSets()':", err)
+                        return []
+                    })
+            )
+            // cards = cards.map( cardData => new MtgCard(cardData) )
+            return cards
+        } catch (err)
+        {
+            console.error("error in 'MtgCard.getCardSets()':", err)
+            return null
+        }
+    }
+
     static async getCard(name, set)
     {
         try
         {
-            name = name.replace(' ', '+')
             set = set ? `;set=${set}` : ''
             let cardData = await Promise.resolve(
                 axios.get('https://api.scryfall.com/cards/named?exact=' + name + set)

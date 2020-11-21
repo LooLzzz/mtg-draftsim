@@ -1,9 +1,10 @@
 /* eslint-disable default-case */
 import React, { Component } from 'react'
-import { IconButton, InputBase, Menu, MenuItem, Typography, Grow } from '@material-ui/core'
+import { IconButton, InputBase, Menu, MenuItem, Typography, Grow, Dialog, DialogTitle, List, ListItem, ListItemText, ListItemIcon } from '@material-ui/core'
 import { ArrowDropDownCircleOutlined as ArrowDropDownCircleOutlinedIcon } from '@material-ui/icons'
 import clsx from 'clsx'
 import { MtgCard } from 'Objects'
+import { Dummy } from 'Components'
 
 import { withStyles } from '@material-ui/core/styles'
 import getStyles from './styles'
@@ -55,12 +56,15 @@ class Cardlist extends Component
             cardlist: [],
             mouseOn: null,
             menuOpen: false,
+            dialogOpen: false,
             anchorEl: null,
             selectedIndex: -1,
+            cardSets: [],
         }
         
         props.listenAddCard(this.addCard)
         props.listenSetCardlist(this.setCardlist)
+        this.previewCardRef = React.createRef()
     }
 
     addCard = async (newCard) =>
@@ -119,7 +123,7 @@ class Cardlist extends Component
     //     }
     // }
 
-    setToSpan = (set, rarity) =>
+    setToSpan = (set, rarity, fontSize=0.9, padding=0.1) =>
     {
         set = 'ss-' + set.toLowerCase()
         rarity = rarity ? 'ss-' + rarity.toLowerCase() : ''
@@ -128,11 +132,11 @@ class Cardlist extends Component
             <span
                 className = {`ss ${set} ${rarity}`}
                 style = {{
-                    fontSize: '0.9rem',
+                    fontSize: `${fontSize}rem`,
                     backgroundColor: 'rgba(255,255,255,0.1)',
                     // backgroundBlendMode: 'color',
                     borderRadius: '100%',
-                    padding: '0.1rem',
+                    padding: `${padding}rem`
                     // border: 'solid white 1px',
                 }}
             />
@@ -148,6 +152,25 @@ class Cardlist extends Component
             return prices.usd ? prices.usd+'$' : '-'
         }
         return '-'
+    }
+
+    genSetList = async (selectedIndex) =>
+    {
+        let cardSets = []
+        if (selectedIndex !== -1)
+            cardSets = await MtgCard.getCardSets(this.state.cardlist[selectedIndex].name)
+        
+        this.setState({cardSets})
+        // cardSets.map((card, i) => (
+        //     <ListItem button dense key={i}>
+        //         <ListItemIcon>
+        //             {card.set}
+        //         </ListItemIcon>
+        //         <ListItemText>
+        //             {card.set_name}
+        //         </ListItemText>
+        //     </ListItem>
+        // ))
     }
 
     manaCostToSpan = (manaCost) =>
@@ -222,20 +245,88 @@ class Cardlist extends Component
         })
     }
 
-    handleMenuItemClick = (e, v, i) =>
+    handleMenuItemClick = async (e, v, selectedCardIndex) =>
     {
+        // console.log(this.state.cardlist[selectedCardIndex]) //DEBUG
+
         v = v.toLowerCase()
         if (v.includes('set'))
         {
-            //TODO popup menu to change set of the card
+            await this.genSetList(selectedCardIndex)
+            this.setState({
+                menuOpen: false,
+                dialogOpen: true,
+            })
         }
         else if (v.includes('foil'))
         {
             let cardlist = this.state.cardlist
-            cardlist[i].foil = !cardlist[i].foil
+            cardlist[selectedCardIndex].foil = !cardlist[selectedCardIndex].foil
             this.setState({cardlist})
-            this.handleOnMouseEnter(e, i)
+            this.handleOnMouseEnter(e, selectedCardIndex)
         }
+    }
+
+    handleOnMouseMoveDialog = (e) => 
+    {
+        let rect = this.previewCardRef.current.getBoundingClientRect()
+        
+        // let mouseX = e.screenX
+        // let mouseY = e.screenY
+        let mouseX = e.nativeEvent.clientX
+        let mouseY = e.nativeEvent.clientY
+
+        console.log(rect)
+
+        // e.persist()
+        requestAnimationFrame( () => {
+            let offsetX = (this.state.mouseX+rect.width) > window.innerWidth ? -rect.width : 0
+            let offsetY = (this.state.mouseY+rect.height) > window.innerHeight ? -rect.height : 0
+
+            this.previewCardRef.current.style.WebkitTransform = `translate(${this.state.mouseX+(offsetX+rect.width*0.05)}px, ${offsetY+this.state.mouseY+(rect.height*0.05)}px)`
+            this.setState({
+                // mouseX: e.nativeEvent.clientX,
+                // mouseY: e.nativeEvent.clientY,
+                mouseX,
+                mouseY,
+            })
+        })
+    }
+
+    handleOnClickDialog = (e, i) =>
+    {
+        let cardlist = this.state.cardlist
+        let newCard = this.state.cardSets[i]
+        cardlist[this.state.selectedIndex] = newCard
+
+        this.props.setCardImage(newCard?.image_uris?.normal, newCard.foil)
+
+        this.setState({
+            cardlist,
+            dialogOpen: false,
+            menuOpen: false,
+            showCardPreview: false,
+            cardSets: [],
+        })
+    }
+
+    handleOnMouseLeaveDialog = (e) =>
+    {
+        requestAnimationFrame( () => {
+            this.setState({
+                showCardPreview: false,
+            })
+        })
+    }
+
+    handleOnMouseEnterDialog = (e, i) =>
+    {
+        requestAnimationFrame( () => {
+            this.previewCardRef.current.src = this.state.cardSets[i]?.image_uris?.normal            
+            this.setState({
+                showCardPreview: true,
+            })
+        })
     }
 
     render()
@@ -315,7 +406,7 @@ class Cardlist extends Component
                                 {/* OPTIONS */}
                                 <Typography component='td' color='textSecondary' hidden={!this.state.cols.includes('options')} >
                                     <IconButton size='small' color={this.state.mouseOn === i ? 'default' : 'secondary'} onClick={e => this.handleMenuOpen(e, i)}>
-                                        <ArrowDropDownCircleOutlinedIcon /> {/* //TODO add dropdown list with options */}
+                                        <ArrowDropDownCircleOutlinedIcon />
                                     </IconButton>
                                 </Typography>
                             </tr>
@@ -339,16 +430,55 @@ class Cardlist extends Component
                 >
                 {
                     ['Change Set', 'Toggle Foil'].map( (v, i) =>
-                        <MenuItem
-                        dense
-                        key = {i}
-                        onClick = {e => this.handleMenuItemClick(e, v, this.state.selectedIndex)}
+                        <MenuItem dense
+                            key = {i}
+                            onClick = {e => this.handleMenuItemClick(e, v, this.state.selectedIndex)}
                         >
                             {v}
                         </MenuItem>
                     )
                 }
                 </Menu>
+                <Dialog
+                    open = {this.state.dialogOpen}
+                    onClose = {e => this.setState({dialogOpen:false, cardSets:[], showCardPreview:false})}
+                    onMouseMove = {this.handleOnMouseMoveDialog}
+                >
+                    <DialogTitle>
+                        Choose Set
+                    </DialogTitle>
+                    <List>
+                    {
+                        this.state.cardSets.map( (card, i) => (
+                            <ListItem button dense
+                                key = {i}
+                                onClick = {e => this.handleOnClickDialog(e, i)}
+                                onMouseEnter = {e => this.handleOnMouseEnterDialog(e, i)}
+                                onMouseLeave = {this.handleOnMouseLeaveDialog}
+                            >
+                                <ListItemIcon>
+                                    {this.setToSpan(card.set, card.rarity, 1.5, 0.2)}
+                                </ListItemIcon>
+                                <ListItemText>
+                                    {`${card.set_name} (#${card.collector_number})`}
+                                </ListItemText>
+                            </ListItem>
+                        ))
+                    }
+                    </List>
+                </Dialog>
+                <img
+                    ref = {this.previewCardRef}
+                    onMouseMove = {this.handleOnMouseMoveDialog}
+                    style = {{
+                        top: 0,
+                        left: 0,
+                        width: '15%',
+                        position: 'absolute',
+                        zIndex: 999999,
+                        visibility: this.state.showCardPreview ? 'visible' : 'hidden',
+                    }}
+                />
             </>
         )
     }
