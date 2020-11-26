@@ -52,7 +52,7 @@ function createCollection(user, res)
 {
     const newCollection = new Collection({
         userid: mongoose.Types.ObjectId(user.id),
-        cards: {}
+        // cards: []
     })
     
     newCollection

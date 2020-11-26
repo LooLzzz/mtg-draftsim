@@ -8,9 +8,12 @@ const CollectionSchema = new Schema({
         required: true
     },
     cards: {
-        type: Object,
+        type: Array,
+        default: () => []
     }
-});
+}
+// ,{ versionKey: false }
+);
 
 const Collection = mongoose.model('collections', CollectionSchema)
 module.exports = Collection

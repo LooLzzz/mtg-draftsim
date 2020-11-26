@@ -50,7 +50,7 @@ class CardSearchbox extends Component
             if (this.searchPromise.isPending())
             {
                 e.persist()
-                console.log('waiting for promise to reslove..')
+                // console.log('waiting for promise to reslove..') //DEBUG
                 try
                 {
                     await this.searchPromise

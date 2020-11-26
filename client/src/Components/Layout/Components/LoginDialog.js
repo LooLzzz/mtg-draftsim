@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { UserService } from 'Auth/'
-import { Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Divider, InputAdornment, Typography } from '@material-ui/core'
-import { AccountCircle as AccountCircleIcon } from '@material-ui/icons'
+import { Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Divider, InputAdornment, Typography, Icon } from '@material-ui/core'
 import { TextValidator, ValidatorForm } from 'react-material-ui-form-validator'
 import { withRouter } from 'react-router'
 import { withSnackbar } from 'notistack'
@@ -131,9 +130,10 @@ class LoginDialog extends Component
                                 }}
                                 InputProps = {{
                                     startAdornment: (
-                                      <InputAdornment position="start">
-                                        <AccountCircleIcon />
-                                      </InputAdornment>
+                                        <InputAdornment position="start">
+                                            {/* <AccountCircleIcon /> */}
+                                            <Icon>account_circle</Icon>
+                                        </InputAdornment>
                                     ),
                                 }}
                                 value = {this.state.username}

@@ -15,11 +15,11 @@ import getStyles from './styles'
 
 const useStylesLOC = (theme) => getStyles(theme)
 
-function randInt(min, max)
-{
-    //TODO remove this
-    return Math.round(min + Math.random() * (max - min))
-}
+// function randInt(min, max)
+// {
+//     //TODO remove this
+//     return Math.round(min + Math.random() * (max - min))
+// }
 
 class DeckView extends Component
 {
