@@ -81,12 +81,14 @@ class CollectionMain extends Component
 
     notifySetCardlist = (cardlist) =>
     {
-        this.listenersSetCardlist.forEach((listener) => listener(cardlist))
+        for (let listener of this.listenersSetCardlist)
+            listener(cardlist)
     }
 
     notifyAddCard = (card) =>
     {
-        this.listenersAddCard.forEach((listener) => listener(card))
+        for (let listener of this.listenersAddCard)
+            listener(card)
     }
 
     listenAddCard = (listener) =>
@@ -172,7 +174,9 @@ class CollectionMain extends Component
                 <div className={classes.contentSpacer} />
                 <AppBar className = {classes.bottomAppBar} >
                     <Toolbar variant="dense">
-                        collection-info
+                        collection-info                        
+                        {/* {this.state.cardlist?.length} */}
+                        {/* {console.log('cardlist', this.state.cardlist)} */}
                     </Toolbar>
                 </AppBar>
             </>

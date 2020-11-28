@@ -56,7 +56,7 @@ export default function getStyles(theme)
                         color: theme.palette.text.secondary,
                         fontSize: "0.875rem",
                         height: '1rem',
-                        width: '1.3rem',
+                        width: '1.75rem',
                     },
                     '& input': {
                         cursor: 'pointer',
@@ -88,6 +88,7 @@ export default function getStyles(theme)
         },
         set: {
             minWidth: '2rem',
+            cursor: 'pointer',
         },
         cardName: {
             flexGrow: 6,

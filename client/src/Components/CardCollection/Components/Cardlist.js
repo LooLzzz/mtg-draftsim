@@ -59,6 +59,7 @@ class Cardlist extends Component
             loading: false,
             anchorEl: null,
             selectedIndex: -1,
+            // countInputRefs: [],
             cardSets: [],
             cardPreviewSrc: null,
         }
@@ -66,22 +67,38 @@ class Cardlist extends Component
         props.listenAddCard(this.addCard)
         props.listenSetCardlist(this.setCardlist)
         this.cardPreviewRef = React.createRef()
+        this.countInputRefs = {}
     }
 
     addCard = async (newCard) =>
     {
-        // console.log('got card from sub:', card) //DEBUG
+        // console.log('got addCard() request from parent:', card) //DEBUG
         let {cardlist} = this.state
         let flag = false
-        for (let card of cardlist)
-        {
+
+        flag = cardlist.some( (card) => {
             if (card.id === newCard.id && card.foil === newCard.foil)
             {
-                card.count++
-                flag = true
-                break
+                // card.count++
+                // flag = true
+                let i = `${card.id}${card.foil?'_f':''}`
+                // this.countInputRefs[i].current.value = ++card.count + 'x'
+                this.countInputRefs[i].value = ++card.count + 'x'
+                return true
             }
-        }
+            else
+                return false
+        })
+
+        // for (let card of cardlist) //foreach
+        // {
+        //     if (card.id === newCard.id && card.foil === newCard.foil)
+        //     {
+        //         card.count++
+        //         flag = true
+        //         break
+        //     }
+        // }
 
         if (!flag)
         {
@@ -118,14 +135,15 @@ class Cardlist extends Component
     //     }
     // }
 
-    setToSpan = (set, rarity, fontSize=0.9, padding=0.1) =>
+    setToSpan = (setId, setName, rarity, fontSize=0.9, padding=0.1) =>
     {
-        set = 'ss-' + set.toLowerCase()
+        setId = 'ss-' + setId.toLowerCase()
         rarity = rarity ? 'ss-' + rarity.toLowerCase() : ''
 
         return (
             <span
-                className = {`ss ${set} ${rarity}`}
+                title = {setName}
+                className = {`ss ${setId} ${rarity}`}
                 style = {{
                     fontSize: `${fontSize}rem`,
                     backgroundColor: 'rgba(255,255,255,0.1)',
@@ -138,13 +156,16 @@ class Cardlist extends Component
         )
     }
 
-    genPriceLabel = (prices, foil) => {
-        if (prices)
+    genPriceLabel = (card) =>
+    {
+        // console.log(card.prices) //DEBUG
+
+        if (card.prices)
         {
-            if (foil)
-                return prices.usd_foil ? prices.usd_foil+'$' : '-'
+            if (card.foil)
+                return card.prices.usd_foil ? (card.count*card.prices.usd_foil)+'$' : '-'
             //else if (!item.foil)
-            return prices.usd ? prices.usd+'$' : '-'
+            return card.prices.usd ? (card.count*card.prices.usd)+'$' : '-'
         }
         return '-'
     }
@@ -184,23 +205,57 @@ class Cardlist extends Component
         // this.oldCount
         // console.log('changed', e.currentTarget) //DEBUG
 
-        let {cardlist} = this.state
-        cardlist[i].count = e.currentTarget.value
-        this.setState({cardlist})
+        // let {cardlist} = this.state
+        // cardlist[i].count = e.currentTarget.value
+        // this.setState({cardlist})
 
         // let val = e.currentTarget.value
-        // if (Number(val))
+        // if (!isNaN(val))
         //     e.currentTarget.value += 'x'
         // else
         // {
         //     val = String(val).toLowerCase()
-         
+
         //     e.currentTarget.value = (
         //         val.match(/^[0-9]+x+$/g)
         //             ? val.substring(0, val.indexOf('x')) + 'x'
         //             : '1x'
         //     )
         // }
+    }
+
+    handleCountClick = (e, i) =>
+    {
+        let val = stripStr(e.target.value, 'x')
+        
+        this.oldCount = e.target.value
+        e.target.value = val
+    }
+
+    handleCountBlur = (e, i) =>
+    {
+        let {cardlist} = this.state
+        let val = Number(stripStr(e.currentTarget.value, 'x'))
+
+        if (!isNaN(val) && val > 0)
+        {
+            cardlist[i].count = val
+            this.setState({cardlist})
+            e.target.value = val + 'x'
+        }
+        else
+            e.target.value = this.oldCount
+    }
+
+    handleCountKeyDown = (e, i) =>
+    {
+        if (e.key === 'Enter')
+            e.target.blur()
+        else if (e.key === 'Escape')
+        {
+            e.target.value = this.oldCount
+            e.target.blur()
+        }
     }
 
     handleOnMouseLeave = (e) =>
@@ -294,6 +349,8 @@ class Cardlist extends Component
     {
         let {cardlist, cardSets} = this.state
         let newCard = cardSets[i]
+        
+        newCard.count = cardlist[this.state.selectedIndex]
         cardlist[this.state.selectedIndex] = newCard
 
         this.props.setCardImage(newCard?.image_uris?.normal, newCard.foil)
@@ -359,39 +416,29 @@ class Cardlist extends Component
                                     }
                                 />
                                 {/* SET */}
-                                <Typography component='td' color='textSecondary' className={classes.set} hidden={!this.state.cols.includes('set')} >
-                                    {this.setToSpan(item.set, item.rarity)}
+                                <Typography component='td' color='textSecondary' className={classes.set} hidden={!this.state.cols.includes('set')}
+                                    onClick = {e => {
+                                            this.setState({selectedIndex: i})
+                                            this.handleMenuItemClick(e, 'set', i)
+                                        }
+                                    }
+                                >
+                                    {this.setToSpan(item.set, item.set_name, item.rarity)}
                                 </Typography>
                                 {/* COUNT */}
                                 <Typography component='td' color='textSecondary' className={classes.count} hidden={!this.state.cols.includes('count')} >
                                     <InputBase
-                                        value = {this.state.cardlist[i].count}
-                                        onChange = {e => this.handleCountChange(e, i)}
-                                        onClick = { e => {
-                                            // e.currentTarget.children[0].value = stripStr(e.currentTarget.children[0].value, 'x')
-                                            this.oldCount = e.currentTarget.children[0].value
-                                        }}
-                                        onKeyDown = { e => {
-                                            if (e.key === 'Enter')
-                                            {
-                                                // console.log('target', e.target)
-                                                // console.log('currTarger', e.currentTarget)
-                                                // console.log('old', this.oldCount)
-                                                // console.log('new', e.currentTarget.value)
-
-                                                let {cardlist} = this.state
-                                                // let flag = isNaN(e.currentTarget.value)
-                                                let val = e.currentTarget.value
-
-                                                if (!isNaN(val) && val > 0)
-                                                {
-                                                    cardlist[i].count = val
-                                                    this.setState({cardlist})
-                                                }
-                                                else
-                                                    e.target.value = this.oldCount
-                                                e.target.blur()
-                                            }
+                                        defaultValue = {this.state.cardlist[i].count + 'x'}
+                                        inputRef = {ref => this.countInputRefs[`${item.id}${item.foil?'_f':''}`] = ref}
+                                        inputProps = {{
+                                            // onChange: e => this.handleCountChange(e, i),
+                                            onBlur: e => this.handleCountBlur(e, i),
+                                            onKeyDown: e => this.handleCountKeyDown(e, i),
+                                            onClick: e => this.handleCountClick(e, i),
+                                            // {
+                                            //     e.currentTarget.children[0].value = stripStr(e.currentTarget.children[0].value, 'x')
+                                            //     this.oldCount = e.currentTarget.children[0].value
+                                            // }
                                         }}
                                     />
                                 </Typography>
@@ -405,7 +452,7 @@ class Cardlist extends Component
                                 </Typography>
                                 {/* PRICE */}
                                 <Typography component='td' color='textSecondary' className={clsx('alignRight', classes.price)} hidden={!this.state.cols.includes('price')} >
-                                { this.genPriceLabel(item.prices, item.foil) }
+                                    { this.genPriceLabel(item) }
                                 </Typography>
                                 {/* OPTIONS */}
                                 <Typography component='td' color='textSecondary' hidden={!this.state.cols.includes('options')} >
@@ -471,7 +518,7 @@ class Cardlist extends Component
                                     onMouseLeave = {this.handleOnMouseLeaveDialog}
                                 >
                                     <ListItemIcon>
-                                        {this.setToSpan(card.set, card.rarity, 1.5, 0.2)}
+                                        {this.setToSpan(card.set, '', card.rarity, 1.5, 0.2)}
                                     </ListItemIcon>
                                     <ListItemText>
                                         {`${card.set_name} (#${card.collector_number})`}
